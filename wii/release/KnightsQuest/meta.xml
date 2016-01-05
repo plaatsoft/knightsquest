@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<app version="1">
+  <name>KnightsQuest</name>
+  <coder>wplaat</coder>
+  <version>0.12</version>
+  <short_description>KnightsQuest for Wii</short_description> 
+  <long_description>KnightsQuest is an classic 2D action game. 
+
+Special thanks to my family for there support during the development</long_description>
+</app>
+
