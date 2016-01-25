@@ -40,7 +40,6 @@
 
 /**
  * @mainpage KnightsQuest Documentation
- * @image html KnightsQuest.jpg
  * Welcome to the KnightsQuest documentation.
  *
  * @section Introduction
