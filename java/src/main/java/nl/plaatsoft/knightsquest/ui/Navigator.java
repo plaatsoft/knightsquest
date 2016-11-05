@@ -12,6 +12,7 @@ public class Navigator {
 	
 	private static Scene scene;	
 			
+	public static final int NONE = 1;
 	public static final int GAME = 1;
 	public static final int EXIT = 2;
 			

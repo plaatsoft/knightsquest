@@ -7,11 +7,25 @@ public class Pieces {
 	private static Image tower = new Image("images/tower.png");
 	private static Image horse = new Image("images/horse.png");
 	
-	public static Image getTower() {
-		return tower;
-	}
+	public static Image getPieces(Army army) {
+	
+		switch(army) {
+	
+			case PRIVATE: 
+				return tower;
 		
-	public static Image getHorse() {
-		return horse;
-	}	
+			case COLONEL:
+				return horse;
+				
+			case GENERAL:
+				return tower;
+				
+			case QUEEN:
+				return tower;
+			
+			default:
+				break;
+		}
+		return null;
+	}		
 }

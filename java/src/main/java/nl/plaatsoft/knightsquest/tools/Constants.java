@@ -13,9 +13,10 @@ public class Constants {
 	public final static int HEIGHT = 600;	
 	
 	public final static double SEGMENT_SCALE = 1.1;
-	public final static int SEGMENT_SIZE = 15;
-	public final static int SEGMENT_X = 30;
-	public final static int SEGMENT_Y = 80;
+	public final static int SEGMENT_SIZE = 10;
+	public final static int SEGMENT_X = 40;
+	public final static int SEGMENT_Y = 120;
+	public final static int BORDER = 5;
 	
 	public final static int MAP_WIDTH = SEGMENT_SIZE * 4 * (SEGMENT_X+1);
 	public final static int MAP_HEIGHT = SEGMENT_SIZE * 2 * SEGMENT_Y;	

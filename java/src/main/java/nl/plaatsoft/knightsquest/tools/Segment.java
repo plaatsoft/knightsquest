@@ -13,9 +13,9 @@ public class Segment {
 
 	final static Logger log = Logger.getLogger( Segment.class);
 	
-	private int type;
+	private Types type = Types.NONE;
 	private int player;	
-	private int knight;	
+	private Army army;	
 	private int x;	
 	private int y;
 	private int size;
@@ -49,19 +49,7 @@ public class Segment {
 			
 		} else {
 			
-			switch(type) {
-				case 1: // Forest
-						gc.setFill(Color.GREEN);
-						break;	
-						
-				case 2: // Sea
-						gc.setFill(Color.BLUE);
-						break;	
-						
-				case 3: // Montain
-						gc.setFill(Color.GRAY);
-						break;	
-			}
+			MyGraphics.getTypeColor(gc, type);
 			
 			gc.fillPolygon(
 					new double[]{0+(x*(size*4))+offset, size+(x*(size*4))+offset, (size*2)+(x*(size*4))+offset, (size*3)+(x*(size*4))+offset, (size*2)+(x*(size*4))+offset, size+(x*(size*4))+offset, 0+(x*(size*4))+offset}, 
@@ -75,16 +63,8 @@ public class Segment {
 			new double[]{size+(y*size), (y*size), (y*size), size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7);
 				
 		if (player>0) {
-			Image image=null;
-			switch (knight) {
-			
-				case 1:	image= Pieces.getHorse();
-						break;
-						
-				case 2: image = Pieces.getTower();
-						break;
-			}		
-		
+			Image image=Pieces.getPieces(army);
+					
 			if (image!=null) {	
 				
 				double scale = Constants.SEGMENT_SCALE;
@@ -125,13 +105,13 @@ public class Segment {
 			}
 		}
 		
-	public Segment( int x, int y, int type, int player, int knight, int size) {
+	public Segment( int x, int y, Types type, int player, Army army, int size) {
 		
 		this.x = x;
 		this.y = y;
 		this.type = type;
 		this.player = player;
-		this.knight = knight;
+		this.army = army;
 		this.size = size;
 	}
 	
@@ -143,13 +123,13 @@ public class Segment {
 		this.player = player;
 	}
 
-	public int getKnight() {
-		return knight;
+	public Army getArmy() {
+		return army;
 	}
 
 
-	public void setKnight(int knight) {
-		this.knight = knight;
+	public void setArmy(Army army) {
+		this.army = army;
 	}
 
 
@@ -172,12 +152,12 @@ public class Segment {
 		this.y = y;
 	}
 	
-	public int getType() {
+	public Types getType() {
 		return type;
 	}
 
 
-	public void setType(int type) {
+	public void setType(Types type) {
 		this.type = type;
 	}
 	
