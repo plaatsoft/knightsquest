@@ -1,6 +1,6 @@
-package nl.plaatsoft.knightsquest.tools;
+package nl.plaatsoft.knightsquest.model;
 
-public enum MySegmentEnum {	
+public enum LandType {	
 	
 	NONE,
 	MOUNTAIN,

@@ -16,12 +16,14 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
-import nl.plaatsoft.knightsquest.tools.MyPlayers;
+import nl.plaatsoft.knightsquest.tools.PlayerUtils;
+import nl.plaatsoft.knightsquest.tools.SoldierUtils;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
-import nl.plaatsoft.knightsquest.tools.MyMap;
+import nl.plaatsoft.knightsquest.tools.LandUtils;
 
 public class Game extends MyPanel {
 
@@ -54,8 +56,7 @@ public class Game extends MyPanel {
 				
 		canvas2.setOnMouseDragged(new EventHandler<MouseEvent>() {
 	    	public void handle(MouseEvent me) {		 
-	    		
-	    		
+	    			    		
 	    		double tmpX = me.getSceneX() - offsetX;
 	    		double tmpY = me.getSceneY() - offsetY;
 
@@ -88,18 +89,19 @@ public class Game extends MyPanel {
 		getChildren().add(canvas1);
 		getChildren().add(canvas2);	    
 		
-	    MyMap.createMap();	  
-	    for(int i=1; i<=Constants.START_PLAYERS; i++) {
-	    	MyPlayers.createPlayer(i, this);
-	    }
-	    	
-	    MyMap.drawMap(gc1, gc2);
+	    LandUtils.createMap();
+	    LandUtils.drawMap(gc1, gc2);
 	    
+	    for(int i=1; i<=Constants.START_PLAYERS; i++) {
+	    	Player player = PlayerUtils.createPlayer(i, this);	    	
+			player.draw(gc2);
+		}
+			
 	    MyButton btn = new MyButton(Constants.WIDTH-230, Constants.HEIGHT-80, "Turn", 20, Navigator.NONE);
 	    btn.setOnAction(new EventHandler<ActionEvent>() { 
             public void handle(ActionEvent event) {
-            	MyPlayers.nextTurn();
-                MyMap.drawMap(gc1, gc2);
+            	PlayerUtils.nextTurn();
+                LandUtils.drawMap(gc1, gc2);
             }
         });
         getChildren().add(btn);	

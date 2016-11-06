@@ -11,12 +11,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import nl.plaatsoft.knightsquest.model.Land;
+import nl.plaatsoft.knightsquest.model.LandType;
+import nl.plaatsoft.knightsquest.model.SoldierType;
 
-public class MyMap {
+public class LandUtils {
 	
-	final static Logger log = Logger.getLogger( MyMap.class);
+	final static Logger log = Logger.getLogger( LandUtils.class);
 	
-	private static MySegment[][] segment = new MySegment[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
+	private static Land[][] land = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
 	private static Random rnd = new Random();
 	
 	//private static Image water = new Image("images/water.png");
@@ -26,7 +29,7 @@ public class MyMap {
 	private static Image rock = new Image("images/rock.png");
 	private static Image grass = new Image("images/grass.png");
 		
-	public static void getTexture(GraphicsContext gc, MySegmentEnum type) {
+	public static void getTexture(GraphicsContext gc, LandType type) {
 		
 		switch(type) {
 		
@@ -61,7 +64,24 @@ public class MyMap {
 					break;
 		}
 	}
+	
+	
+	public static List <Land> getFreeSegments(int x, int y) {
 		
+		List <Land> list2 = new ArrayList<Land>();
+		
+		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		Iterator<Land> iter1 = list1.iterator();
+						
+		while (iter1.hasNext()) {				
+			Land land = (Land) iter1.next();
+			if ((land.getSoldier()!=null) && (land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN)) {
+				list2.add(land);		
+			}
+		}	
+		return list2;
+	}
+	
 		
 	/**
 	 * Get Neighers of select x,y coordinate
@@ -69,42 +89,42 @@ public class MyMap {
 	 * @param y
 	 * @return
 	 */
-	public static List <MySegment> getNeigbors(int x, int y) {
+	public static List <Land> getNeigbors(int x, int y) {
 		
-		List <MySegment> list = new <MySegment> ArrayList();
+		List <Land> list = new ArrayList<Land>();
 		
 		if (y+1<Constants.SEGMENT_Y) {
-			list.add(segment[x][y+1]);
+			list.add(land[x][y+1]);
 		}
 		
 		if (y-1>=0) {
-			list.add(segment[x][y-1]);
+			list.add(land[x][y-1]);
 		}
 		
 		if (y+2<Constants.SEGMENT_Y) {
-			list.add(segment[x][y+2]);
+			list.add(land[x][y+2]);
 		}
 		
 		if (y-2>=0) {
-			list.add(segment[x][y-2]);
+			list.add(land[x][y-2]);
 		}
 		
 		if (y%2==1) {	
 			if ((x+1<Constants.SEGMENT_X) && (y+1<Constants.SEGMENT_Y)) {
-				list.add(segment[x+1][y+1]);
+				list.add(land[x+1][y+1]);
 			}
 			
 			if ((x+1<Constants.SEGMENT_X) && (y-1>=0)) {
-				list.add(segment[x+1][y-1]);
+				list.add(land[x+1][y-1]);
 			}						
 		} else {
 			
 			if ((x-1>=0) && (y+1<Constants.SEGMENT_Y)) {
-				list.add(segment[x-1][y+1]);
+				list.add(land[x-1][y+1]);
 			}
 			
 			if ((x-1>=0) && (y-1>=0)) {
-				list.add(segment[x-1][y-1]);
+				list.add(land[x-1][y-1]);
 			}			
 		}
 		return list;
@@ -116,19 +136,19 @@ public class MyMap {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if (segment[x][y].getType()==MySegmentEnum.COAST) {
+				if (land[x][y].getType()==LandType.COAST) {
 					
 					int found=0;
-					List <MySegment> list = getNeigbors(x,y);
-					Iterator<MySegment> iter = list.iterator();    	
+					List <Land> list = getNeigbors(x,y);
+					Iterator<Land> iter = list.iterator();    	
 					while (iter.hasNext()) {
-						MySegment segment = (MySegment) iter.next();
-						if (segment.getType()==MySegmentEnum.WATER) {
+						Land land = (Land) iter.next();
+						if (land.getType()==LandType.WATER) {
 							found=1;
 						}
 					}				
 					if (found==0) {
-					 segment[x][y].setType(MySegmentEnum.GRASS);
+					    land[x][y].setType(LandType.GRASS);
 					}
 				};				
 			}
@@ -141,12 +161,12 @@ public class MyMap {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if ((segment[x][y].getType()==MySegmentEnum.GRASS) && (rnd.nextInt(2)==1)) {
+				if ((land[x][y].getType()==LandType.GRASS) && (rnd.nextInt(2)==1)) {
 					
 					if (rnd.nextInt(2)==1) {
-						segment[x][y].setType(MySegmentEnum.FOREST);
+						land[x][y].setType(LandType.FOREST);
 					} else {
-						segment[x][y].setType(MySegmentEnum.MOUNTAIN);
+						land[x][y].setType(LandType.MOUNTAIN);
 					}
 				};				
 			}
@@ -160,8 +180,8 @@ public class MyMap {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if (segment[x][y].getType()==MySegmentEnum.NONE) {					
-					segment[x][y].setType(MySegmentEnum.OCEAN);
+				if (land[x][y].getType()==LandType.NONE) {					
+					land[x][y].setType(LandType.OCEAN);
 				};				
 			}
 		}		
@@ -173,13 +193,13 @@ public class MyMap {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if (segment[x][y].getType()==MySegmentEnum.COAST) {					
-					List <MySegment> list = getNeigbors(x,y);
-					Iterator<MySegment> iter = list.iterator();    	
+				if (land[x][y].getType()==LandType.COAST) {					
+					List <Land> list = getNeigbors(x,y);
+					Iterator<Land> iter = list.iterator();    	
 					while (iter.hasNext()) {
-						MySegment segment = (MySegment) iter.next();
-						if (segment.getType()==MySegmentEnum.NONE) {
-							segment.setType(MySegmentEnum.WATER);
+						Land segment = (Land) iter.next();
+						if (segment.getType()==LandType.NONE) {
+							segment.setType(LandType.WATER);
 						}
 					}					
 				};				
@@ -193,13 +213,13 @@ public class MyMap {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if (segment[x][y].getType()==MySegmentEnum.GRASS) {					
-					List <MySegment> list = getNeigbors(x,y);
-					Iterator<MySegment> iter = list.iterator();    	
+				if (land[x][y].getType()==LandType.GRASS) {					
+					List <Land> list = getNeigbors(x,y);
+					Iterator<Land> iter = list.iterator();    	
 					while (iter.hasNext()) {
-						MySegment segment = (MySegment) iter.next();
-						if (segment.getType()==MySegmentEnum.NONE) {
-							segment.setType(MySegmentEnum.COAST);
+						Land segment = (Land) iter.next();
+						if (segment.getType()==LandType.NONE) {
+							segment.setType(LandType.COAST);
 						}
 					}
 					
@@ -218,21 +238,21 @@ public class MyMap {
 
 			for (int j=0; j<Constants.SEGMENT_Y; j++) {
 				
-				segment[x][y].setType(MySegmentEnum.GRASS);
+				land[x][y].setType(LandType.GRASS);
 		 
-				List <MySegment> list = getNeigbors(x,y);
-				Iterator<MySegment> iter = list.iterator();
+				List <Land> list = getNeigbors(x,y);
+				Iterator<Land> iter = list.iterator();
 						
 				int next = rnd.nextInt(list.size()); 
 				int count=0;
 				
 				while (iter.hasNext()) {				
-					MySegment segment = (MySegment) iter.next();
-					segment.setType(MySegmentEnum.GRASS);
+					Land land = (Land) iter.next();
+					land.setType(LandType.GRASS);
 					if (count++==next) {
 						
-						x=segment.getX();
-						y=segment.getY(); 
+						x=land.getX();
+						y=land.getY(); 
 
 						break;
 					}					
@@ -245,7 +265,7 @@ public class MyMap {
 					
 		for (int x=0; x<Constants.SEGMENT_X; x++) {	
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
-				segment[x][y] = new MySegment(x, y, MySegmentEnum.NONE, Constants.SEGMENT_SIZE);				
+				land[x][y] = new Land(x, y, LandType.NONE);				
 			}
 		}
 		
@@ -260,12 +280,12 @@ public class MyMap {
 	public static void drawMap(GraphicsContext gc1, GraphicsContext gc2) {
 		for (int x=0; x<Constants.SEGMENT_X; x++) {					
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {				
-				segment[x][y].draw(gc1, gc2);				
+				land[x][y].draw(gc1, gc2);				
 			}
 		}		
 	}
 	
-	public static MySegment[][] getSegment() {
-		return segment;
+	public static Land[][] getLand() {
+		return land;
 	}	
 }

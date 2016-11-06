@@ -8,14 +8,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import nl.plaatsoft.knightsquest.model.LandType;
+import nl.plaatsoft.knightsquest.model.SoldierType;
 
 public class MySegment {
 
 	final static Logger log = Logger.getLogger( MySegment.class);
 	
-	private MySegmentEnum type = MySegmentEnum.NONE;
+	private LandType type = LandType.NONE;
 	private int player;	
-	private MyArmyEnum army;	
+	private SoldierType army = SoldierType.NONE;	
 	private int x;	
 	private int y;
 	private int size;
@@ -28,7 +30,7 @@ public class MySegment {
 			offset = size*2;
 		} 
 		
-		MyMap.getTexture(gc1, type);
+		LandUtils.getTexture(gc1, type);
 		gc1.fillPolygon(
 			new double[]{0+(x*(size*4))+offset, size+(x*(size*4))+offset, (size*2)+(x*(size*4))+offset, (size*3)+(x*(size*4))+offset, (size*2)+(x*(size*4))+offset, size+(x*(size*4))+offset, 0+(x*(size*4))+offset}, 
 			new double[]{size+(y*size), (y*size), (y*size), size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7
@@ -42,7 +44,7 @@ public class MySegment {
 	
 		if (player>0) {
 			
-			MyPlayers.getTexture(gc2, player);
+			PlayerUtils.getTexture(gc2, player);
 			
 			gc2.setGlobalAlpha(0.7);
 			gc2.fillPolygon(
@@ -55,9 +57,18 @@ public class MySegment {
 				new double[]{size+(y*size), (y*size), (y*size), size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7
 				);		
 		}
+		
+		if (army!=SoldierType.NONE) {
+			
+			gc2.setGlobalAlpha(1.0);
+			double posX = x*(size*4) + offset+9;
+			double posY = (y*size)+1;
+						
+			gc2.drawImage(SoldierUtils.get(army), posX, posY);
+		}
 	}
 		
-	public MySegment( int x, int y, MySegmentEnum type, int size) {
+	public MySegment( int x, int y, LandType type, int size) {
 		
 		this.x = x;
 		this.y = y;
@@ -73,13 +84,13 @@ public class MySegment {
 		this.player = player;
 	}
 
-	public MyArmyEnum getArmy() {
+	public SoldierType getArmy() {
 		return army;
 	}
 
-	public void setArmy(MyArmyEnum army) {
+	public void setArmy(SoldierType army) {
 		this.army = army;
-		Image image=MyArmy.get(army);
+		Image image=SoldierUtils.get(army);
 		
 		if (image!=null) {	
 			
@@ -130,11 +141,11 @@ public class MySegment {
 		this.y = y;
 	}
 	
-	public MySegmentEnum getType() {
+	public LandType getType() {
 		return type;
 	}
 
-	public void setType(MySegmentEnum type) {
+	public void setType(LandType type) {
 		this.type = type;
 	}
 	
