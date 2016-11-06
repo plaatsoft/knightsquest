@@ -1,6 +1,6 @@
 package nl.plaatsoft.knightsquest.tools;
 
-public enum Types {	
+public enum MySegmentEnum {	
 	
 	NONE,
 	MOUNTAIN,
