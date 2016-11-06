@@ -43,7 +43,7 @@ public class Navigator {
 	                  	page.setScaleX(scale);
 	                	page.setScaleY(scale);
 	                	
-	                	log.info("scale="+page.getScaleX());
+	                	//log.info("scale="+page.getScaleX());
 	                	
 	                	event.consume();
 	                }

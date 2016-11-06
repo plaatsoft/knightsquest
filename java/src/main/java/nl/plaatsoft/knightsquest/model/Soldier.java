@@ -19,7 +19,7 @@ public class Soldier {
 	
 	public void draw(GraphicsContext gc, int x, int y) {
 		
-		log.info("draw castle");
+		log.info("draw Soldier");
 		
 		gc.setGlobalAlpha(1.0);
 		

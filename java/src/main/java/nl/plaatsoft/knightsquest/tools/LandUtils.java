@@ -75,7 +75,7 @@ public class LandUtils {
 						
 		while (iter1.hasNext()) {				
 			Land land = (Land) iter1.next();
-			if ((land.getSoldier()!=null) && (land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN)) {
+			if ((land.getSoldier()==null) && (land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN)) {
 				list2.add(land);		
 			}
 		}	

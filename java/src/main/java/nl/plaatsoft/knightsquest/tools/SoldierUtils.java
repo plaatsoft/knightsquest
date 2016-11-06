@@ -70,14 +70,16 @@ public class SoldierUtils {
 					
 					Iterator<Land> iter2 = list2.iterator();
 					int count=0;
-					while (iter2.hasNext()) {	
-						if (nr==count++) {
-							Land land2 = (Land) iter2.next();
+					while (iter2.hasNext()) {
+						Land land2 = (Land) iter2.next();
+						if (nr==count++) {							
 							land2.setSoldier(land.getSoldier());
 							land.setSoldier(null);
-							//castle.getLand().add(land2);
+							iter1=null;
+							iter2=null;
+							castle.getLand().add(land2);
 							log.info("Move soldier from ["+land.getX()+","+land.getY()+"] to ["+land.getX()+","+land.getY()+"]");
-							break;
+							return;
 						}
 					}																		
 				}

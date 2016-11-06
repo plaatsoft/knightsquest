@@ -16,6 +16,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.MyButton;
@@ -66,7 +67,7 @@ public class Game extends MyPanel {
 	    		canvas2.setLayoutX(tmpX);
 	    		canvas2.setLayoutY(tmpY);
 	    		
-	    		log.info(canvas2.getLayoutX()+" "+canvas2.getLayoutY());
+	    		//log.info(canvas2.getLayoutX()+" "+canvas2.getLayoutY());
 	    		
 	    		Iterator<Node> iter = getChildren().iterator();	    				
 	    		while (iter.hasNext()) {	    			
@@ -101,7 +102,12 @@ public class Game extends MyPanel {
 	    btn.setOnAction(new EventHandler<ActionEvent>() { 
             public void handle(ActionEvent event) {
             	PlayerUtils.nextTurn();
-                LandUtils.drawMap(gc1, gc2);
+            	
+				Iterator <Player> iter = PlayerUtils.getPlayers().iterator();
+				while (iter.hasNext()) {
+					Player player = (Player) iter.next();
+        			player.draw(gc2);
+        		}
             }
         });
         getChildren().add(btn);	
