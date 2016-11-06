@@ -36,7 +36,6 @@ public class Game extends MyPanel {
 	private double offsetX = 0;
 	private double offsetY = 0;
 	
-		
 	public void draw() {
 		
 		setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -96,10 +95,11 @@ public class Game extends MyPanel {
 	    	
 	    MyMap.drawMap(gc1, gc2);
 	    
-	    MyButton btn = new MyButton(Constants.WIDTH-250, Constants.HEIGHT-80, "Turn", 20, Navigator.NONE);
+	    MyButton btn = new MyButton(Constants.WIDTH-230, Constants.HEIGHT-80, "Turn", 20, Navigator.NONE);
 	    btn.setOnAction(new EventHandler<ActionEvent>() { 
             public void handle(ActionEvent event) {
-
+            	MyPlayers.nextTurn();
+                MyMap.drawMap(gc1, gc2);
             }
         });
         getChildren().add(btn);	

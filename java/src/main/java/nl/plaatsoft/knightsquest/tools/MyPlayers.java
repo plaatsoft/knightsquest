@@ -1,5 +1,6 @@
 package nl.plaatsoft.knightsquest.tools;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -12,8 +13,9 @@ import javafx.scene.paint.Color;
 
 public class MyPlayers {
 
-	final static Logger log = Logger.getLogger( MyPlayers.class);	
-	final private static Random rnd = new Random();
+	final private static Logger log = Logger.getLogger( MyPlayers.class);	
+	final private static Random rnd = new Random();	
+	final private static List <MyPlayer> players = new ArrayList<MyPlayer>() ;
 	
 	public static void getTexture(GraphicsContext gc, int player) { 
 	
@@ -37,8 +39,12 @@ public class MyPlayers {
 		}
 	}	
 	
-	public static void createPlayer(int player, Pane panel) {
+	public static void createPlayer(int nr, Pane panel) {
 			
+		MyPlayer player = new MyPlayer();
+		player.setNumber(nr);		
+		players.add(player);
+		
 		for (int i=0; i<Constants.START_TOWERS; i++) {
 			boolean done = false;
 			while (!done) {
@@ -60,19 +66,62 @@ public class MyPlayers {
 					
 					if (good==true) {
 						
-						MyMap.getSegment()[x][y].setPlayer(player);
+						MyTown town = new MyTown("",x,y);
+						player.getTowns().add(town);
+						
+						MyMap.getSegment()[x][y].setPlayer(nr);
 						MyMap.getSegment()[x][y].setArmy(MyArmyEnum.TOWER);
 						panel.getChildren().add(MyMap.getSegment()[x][y].getImageView());
+						
+						town.getSegments().add(MyMap.getSegment()[x][y]);
 						
 						list = MyMap.getNeigbors(x,y);
 						iter = list.iterator();						
 						while (iter.hasNext()) {				
 							MySegment segment = (MySegment) iter.next();
-							segment.setPlayer(player);							
+							segment.setPlayer(nr);			
+							town.getSegments().add(segment);											
 						}
 						done=true;
 					}
 				}
+			}
+		}
+	}
+	
+	
+	public static void nextTurn() {
+					
+		Iterator<MyPlayer> iter1 = players.iterator();  	
+		while (iter1.hasNext()) {
+			MyPlayer player = (MyPlayer) iter1.next();			
+			
+			Iterator<MyTown> iter2 = player.getTowns().iterator();  
+			while (iter2.hasNext()) {
+				MyTown town = (MyTown) iter2.next();
+				
+								
+				int armySize = 0;
+				Iterator<MySegment> iter3 = town.getSegments().iterator();  
+				while (iter3.hasNext()) {
+					MySegment segment = (MySegment) iter3.next();			
+					armySize += MyArmy.getFoodNeeds(segment.getArmy());
+				}
+				log.info("Player="+player.getNumber()+" Size="+town.getSize()+" armySize="+armySize);
+					
+				/* Check if next soldier can live */  
+				if (armySize<=town.getSize()) {
+							
+					Iterator<MySegment> iter4 = town.getSegments().iterator();  						
+					while (iter4.hasNext()) {				
+						MySegment segment = (MySegment) iter4.next();
+						if (segment.getArmy()==null) {
+							segment.setArmy(MyArmyEnum.SOLDIER);
+							log.info("Player="+player.getNumber()+" New Soldier");
+							break;
+						}							
+					}
+				}					
 			}
 		}
 	}

@@ -38,5 +38,36 @@ public class MyArmy {
 		}
 		return null;
 	}		
+	
+	public static int getFoodNeeds(MyArmyEnum army) {
+		
+		if (army==null) {
+			return 0;
+		}
+	
+		switch(army) {
+	
+			case TOWER: 
+				return 0;
+		
+			case SOLDIER:
+				return 1;
+				
+			case HORSE:
+				return 2;
+				
+			case BISHOP:
+				return 3;
+				
+			case QUEEN:
+				return 4;
+				
+			case KING:
+				return 5;
+				
+			default:
+				return 0;			
+		}
+	}		
 }
 
