@@ -1,5 +1,7 @@
 package nl.plaatsoft.knightsquest.ui;
 
+import org.apache.log4j.Logger;
+
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.ScrollEvent;
@@ -8,6 +10,8 @@ import nl.plaatsoft.knightsquest.tools.MyPanel;
 
 public class Navigator {
 		
+	final static Logger log = Logger.getLogger( Navigator.class);
+	
 	private static Game game;	
 	
 	private static Scene scene;	
@@ -20,8 +24,8 @@ public class Navigator {
 		return scene;
 	}
 	
-	private static void setSceneEvents(final Scene scene, MyPanel page) {
-	    //handles mouse scrolling
+	//handles mouse scrolling
+	private static void setSceneEvents(final Scene scene, MyPanel page) {	    
 	    scene.setOnScroll(
 	            new EventHandler<ScrollEvent>() {
 	              @Override
@@ -31,10 +35,18 @@ public class Navigator {
 	                if (deltaY < 0){
 	                  zoomFactor = 2.0 - zoomFactor;
 	                }
-	                System.out.println(zoomFactor);
-	                page.setScaleX(page.getScaleX() * zoomFactor);
-	                page.setScaleY(page.getScaleY() * zoomFactor);
-	                event.consume();
+	                
+	                double scale = page.getScaleX() * zoomFactor;
+	                
+	                if ((scale>=1) && (scale<=2)) {
+	                	
+	                  	page.setScaleX(scale);
+	                	page.setScaleY(scale);
+	                	
+	                	log.info("scale="+page.getScaleX());
+	                	
+	                	event.consume();
+	                }
 	              }
 	            });
 
@@ -47,6 +59,8 @@ public class Navigator {
 			case GAME:
 				
 				game = new Game();
+				game.setScaleX(1.5);
+            	game.setScaleY(1.5);
 				game.draw();		
 				scene = new Scene(game, Constants.WIDTH, Constants.HEIGHT);	
 				

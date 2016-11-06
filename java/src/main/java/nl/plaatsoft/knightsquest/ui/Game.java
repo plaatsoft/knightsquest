@@ -9,11 +9,16 @@ import org.apache.log4j.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import nl.plaatsoft.knightsquest.tools.Army;
 import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
@@ -250,7 +255,11 @@ public class Game extends MyPanel {
 		
 	public void draw() {
 		
+		setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+			
 		canvas = new Canvas(Constants.MAP_WIDTH,Constants.MAP_HEIGHT);
+		//canvas.setLayoutX(Constants.SEGMENT_SIZE*-1);
+		//canvas.setLayoutY(Constants.SEGMENT_SIZE*-1);
 		gc = canvas.getGraphicsContext2D();
 		 				
 		canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -262,9 +271,14 @@ public class Game extends MyPanel {
 		});
 				
 		canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
-	    	public void handle(MouseEvent me) {		    	
-	    		canvas.setLayoutX(me.getSceneX()-offsetX);
-	    		canvas.setLayoutY(me.getSceneY()-offsetY);
+	    	public void handle(MouseEvent me) {		 
+	    		
+	    		
+	    		double tmpX = me.getSceneX() - offsetX;
+	    		double tmpY = me.getSceneY() - offsetY;
+
+	    		canvas.setLayoutX(tmpX);
+	    		canvas.setLayoutY(tmpY);
 	    		log.info(canvas.getLayoutX()+" "+canvas.getLayoutY());
 	    		
 	    		Iterator<Node> iter = getChildren().iterator();	    				
