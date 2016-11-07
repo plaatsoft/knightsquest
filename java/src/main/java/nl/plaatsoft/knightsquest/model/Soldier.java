@@ -19,18 +19,18 @@ public class Soldier {
 	
 	public void draw(GraphicsContext gc, int x, int y) {
 		
-		log.info("draw Soldier");
+		log.info("draw "+type+" [x="+x+"|y="+y+"]");
 		
 		gc.setGlobalAlpha(1.0);
-		
+			
 		int offset = 0;
 		if ((y % 2)==1) {
 			offset = Constants.SEGMENT_SIZE*2;
 		} 
-		
+			
 		double posX = x*(Constants.SEGMENT_SIZE*4) + offset + 9;
 		double posY = (y*Constants.SEGMENT_SIZE)+1;
-		
+	
 		gc.drawImage(SoldierUtils.get(type), posX, posY);
 	}
 		

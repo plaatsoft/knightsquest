@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import javafx.scene.image.Image;
 import nl.plaatsoft.knightsquest.model.Castle;
 import nl.plaatsoft.knightsquest.model.Land;
+import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierType;
 
@@ -25,36 +26,32 @@ public class SoldierUtils {
 	private static Image king = new Image("images/king.png", 12, 16,false, false);
 	
 	public static void createSoldier(Castle castle) {
+	
+		log.info("soldier create start");
 		
-		int armySize = 0;
-		Iterator<Land> iter3 = castle.getLand().iterator();  
-		while (iter3.hasNext()) {
-			Land land = (Land) iter3.next();			
-			if (land.getSoldier()!=null) {			
-				armySize += SoldierUtils.getFoodNeeds(land.getSoldier().getType());
-			}			
+		/* Create new Soldier if there is enough food */  
+		if (castle.foodAvailable()>=SoldierUtils.getFoodNeeds(SoldierType.SOLDIER)) {
+				
+			/* Create new Soldier if there is room around the castle */  
+			List <Land> list = LandUtils.getFreeSegments(castle.getX(), castle.getY());			
+			Iterator<Land> iter = list.iterator();  						
+			if (iter.hasNext()) {				
+				Land land = (Land) iter.next();
+				
+				Soldier soldier = new Soldier(SoldierType.SOLDIER);
+				land.setSoldier(soldier);
+				log.info("New Soldier [x="+land.getX()+"|y="+land.getY()+"|castleId="+castle.getId()+"] created!");
+			}							
 		}
-		armySize += SoldierUtils.getFoodNeeds(SoldierType.SOLDIER);
-					
-		/* Create new Soldier if land size allows it */  
-		if (armySize < castle.getLandSize()) {
-					
-			Iterator<Land> iter4 = castle.getLand().iterator();  						
-			while (iter4.hasNext()) {				
-				Land land = (Land) iter4.next();
-				if (land.getSoldier()==null) {
-					Soldier soldier = new Soldier(SoldierType.SOLDIER);
-					land.setSoldier(soldier);
-					log.info("New Soldier [x="+land.getX()+"|y="+land.getY()+"|castle="+castle.getNr()+"] created!");
-					break;
-				}							
-			}
-		}
+		
+		log.info("soldier create end");
 	}
 	
 	public static void moveSoldier(Castle castle) {
 		
-		Iterator<Land> iter1 = castle.getLand().iterator();  
+		log.info("soldier move start");
+		
+		Iterator<Land> iter1 = castle.getLands().iterator();  
 		while (iter1.hasNext()) {
 			Land land = (Land) iter1.next();
 			
@@ -64,27 +61,37 @@ public class SoldierUtils {
 								
 				log.info(land.getSoldier().getType()+" found [x="+land.getX()+"|y="+land.getY()+"|move option="+list2.size()+"]");
 				
-				if (list2.size()!=0) {
-								
+				// Only move when move option are available
+				if (list2.size()>0) {
 					int nr = rnd.nextInt(list2.size());
+					int count=0;
 					
 					Iterator<Land> iter2 = list2.iterator();
-					int count=0;
 					while (iter2.hasNext()) {
 						Land land2 = (Land) iter2.next();
 						if (nr==count++) {							
 							land2.setSoldier(land.getSoldier());
 							land.setSoldier(null);
-							iter1=null;
-							iter2=null;
-							castle.getLand().add(land2);
-							log.info("Move soldier from ["+land.getX()+","+land.getY()+"] to ["+land.getX()+","+land.getY()+"]");
+														
+							if (castle.checkNewLand(land2)) {
+								
+								// Remove land from current owner, if any
+								Castle castle2 = PlayerUtils.getPlayer(land2);
+								if (castle2!=null) {
+									castle2.getLands().remove(land2);
+								}	
+								
+								// Add land to castle
+								castle.getLands().add(land2);	
+							}
+							log.info("Move soldier from ["+land.getX()+","+land.getY()+"] to ["+land2.getX()+","+land2.getY()+"]");
 							return;
 						}
-					}																		
-				}
+					}
+				}																		
 			}
-		}		
+		}	
+		log.info("soldier move end");
 	}
 
 	public static Image get(SoldierType army) {
@@ -110,40 +117,49 @@ public class SoldierUtils {
 				return king;
 			
 			default:
+				log.error("Unknown soldier found!");
 				break;
 		}
 		return null;
 	}		
 	
 	public static int getFoodNeeds(SoldierType army) {
-		
-		if (army==null) {
-			return 0;
-		}
-	
+			
+		int value = 0;
+				
 		switch(army) {
 	
 			case TOWER: 
-				return 0;
-		
+				break;
+						
 			case SOLDIER:
-				return 5;
-				
+				value = 5;
+				break;
+								
 			case HORSE:
-				return 5;
+				value = 5;
+				break;
 				
 			case BISHOP:
-				return 5;
+				value = 5;
+				break;
 				
 			case QUEEN:
-				return 10;
+				value = 10;
+				break;
 				
 			case KING:
-				return 12;
+				value = 15;
+				break;
 				
 			default:
+				log.error("Unknown soldier found!");
 				return 0;			
 		}
+		
+		log.info(army+" foodNeeds="+value);
+		
+		return value;
 	}		
 }
 

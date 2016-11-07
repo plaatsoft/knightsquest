@@ -1,51 +1,46 @@
 package nl.plaatsoft.knightsquest.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import javafx.scene.canvas.GraphicsContext;
-import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.SoldierUtils;
 
 public class Castle {
 
 	final static Logger log = Logger.getLogger( Castle.class);
 	
-	private int nr;	
+	private int id;	
 	private int x;
 	private int y;
-	private List <Land> land = new ArrayList<Land>();
+	private List <Land> lands = new ArrayList<Land>();
 
-	public Castle(int nr, int x, int y) {
-		this.nr = nr;
+	public Castle(int id, int x, int y) {
+		this.id = id;
 		this.x = x;
 		this.y = y;
 	}
 	
-	public void draw(GraphicsContext gc) {
+	public void draw(GraphicsContext gc, Player player) {
 			
-		log.info("draw castle");
-		gc.setGlobalAlpha(1.0);
+		log.info("draw castle [id="+id+"]");
 		
-		int offset = 0;
-		if ((y % 2)==1) {
-			offset = Constants.SEGMENT_SIZE*2;
-		} 
-				
-		double posX = x*(Constants.SEGMENT_SIZE*4) + offset + 9;
-		double posY = (y*Constants.SEGMENT_SIZE)+1;
-		
-		gc.drawImage(SoldierUtils.get(SoldierType.TOWER), posX, posY);
+		Iterator<Land> iter1 = lands.iterator();  
+		while (iter1.hasNext()) {
+			Land land = (Land) iter1.next();
+			land.draw(gc, player);
+		}
 	}
 
-	public int getNr() {
-		return nr;
+	public int getId() {
+		return id;
 	}
 
-	public void setNr(int nr) {
-		this.nr = nr;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getX() {
@@ -64,15 +59,42 @@ public class Castle {
 		this.y = y;
 	}
 
-	public int getLandSize() {
-		return land.size()-1;
+	public int foodAvailable() {
+				
+		int foodDemand = 0;
+		
+		Iterator<Land> iter = lands.iterator();						
+		while (iter.hasNext()) {				
+			Land land = (Land) iter.next();
+			if (land.getSoldier()!=null) {					
+				foodDemand += SoldierUtils.getFoodNeeds(land.getSoldier().getType());
+			}		
+		}	
+				
+		int foodAvailable = lands.size()- foodDemand;	
+		
+		log.info("foodDemand="+foodDemand+" foodProduction="+lands.size()+" foodAvailable="+foodAvailable);
+		
+		return foodAvailable;
 	}
 	
-	public List<Land> getLand() {
-		return land;
-	}
+	public boolean checkNewLand(Land newLand) {
 
-	public void setLand(List<Land> land) {
-		this.land = land;
+		boolean value = true;
+		
+		Iterator<Land> iter = lands.iterator();						
+		while (iter.hasNext()) {				
+			Land land = (Land) iter.next();
+			if (land.equals(newLand)) {						
+				value = false;
+			}		
+		}	
+		
+		log.info("checkNewLand="+value);
+		return value;
+	}
+			
+	public List<Land> getLands() {
+		return lands;
 	}
 }

@@ -38,7 +38,8 @@ public class Navigator {
 	                
 	                double scale = page.getScaleX() * zoomFactor;
 	                
-	                if ((scale>=1) && (scale<=2)) {
+	                //if ((scale>=1) && (scale<=2)) 
+	                {
 	                	
 	                  	page.setScaleX(scale);
 	                	page.setScaleY(scale);

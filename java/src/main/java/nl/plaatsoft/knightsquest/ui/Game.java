@@ -16,13 +16,12 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import nl.plaatsoft.knightsquest.model.Land;
+
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.tools.PlayerUtils;
-import nl.plaatsoft.knightsquest.tools.SoldierUtils;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.LandUtils;
 
@@ -45,7 +44,6 @@ public class Game extends MyPanel {
 		canvas1 = new Canvas(Constants.MAP_WIDTH,Constants.MAP_HEIGHT);
 		canvas2 = new Canvas(Constants.MAP_WIDTH,Constants.MAP_HEIGHT);
 		gc1 = canvas1.getGraphicsContext2D();
-		gc2 = canvas2.getGraphicsContext2D();
 		 				
 		canvas2.setOnMousePressed(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
@@ -91,8 +89,10 @@ public class Game extends MyPanel {
 		getChildren().add(canvas2);	    
 		
 	    LandUtils.createMap();
-	    LandUtils.drawMap(gc1, gc2);
+	    LandUtils.drawMap(gc1);
 	    
+	    gc2 = canvas2.getGraphicsContext2D();
+		
 	    for(int i=1; i<=Constants.START_PLAYERS; i++) {
 	    	Player player = PlayerUtils.createPlayer(i, this);	    	
 			player.draw(gc2);
@@ -101,10 +101,17 @@ public class Game extends MyPanel {
 	    MyButton btn = new MyButton(Constants.WIDTH-230, Constants.HEIGHT-80, "Turn", 20, Navigator.NONE);
 	    btn.setOnAction(new EventHandler<ActionEvent>() { 
             public void handle(ActionEvent event) {
+            	               	  
+            	// Move bot players
             	PlayerUtils.nextTurn();
             	
+            	// Clear canvas
+            	gc2.clearRect(0, 0, canvas2.getWidth(), canvas2.getHeight());
+
+            	// Draw new canvas
 				Iterator <Player> iter = PlayerUtils.getPlayers().iterator();
 				while (iter.hasNext()) {
+							
 					Player player = (Player) iter.next();
         			player.draw(gc2);
         		}

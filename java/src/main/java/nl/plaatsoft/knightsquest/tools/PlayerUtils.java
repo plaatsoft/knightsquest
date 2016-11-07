@@ -3,7 +3,6 @@ package nl.plaatsoft.knightsquest.tools;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -12,15 +11,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import nl.plaatsoft.knightsquest.model.Castle;
 import nl.plaatsoft.knightsquest.model.Land;
-import nl.plaatsoft.knightsquest.model.LandType;
 import nl.plaatsoft.knightsquest.model.Player;
-import nl.plaatsoft.knightsquest.model.Soldier;
-import nl.plaatsoft.knightsquest.model.SoldierType;
 
 public class PlayerUtils {
 
 	final private static Logger log = Logger.getLogger( PlayerUtils.class);		
-	final private static Random rnd = new Random();	
 	final private static List <Player> players = new ArrayList<Player>() ;
 	
 	public static void getTexture(GraphicsContext gc, int player) { 
@@ -35,7 +30,7 @@ public class PlayerUtils {
 					gc.setFill(Color.RED);
 					break;
 			
-			case 3:
+			case 3: // Player 3
 					gc.setFill(Color.CYAN);
 					break;
 		
@@ -45,11 +40,11 @@ public class PlayerUtils {
 		}		
 	}	
 	
-	public static Player createPlayer(int nr, Pane panel) {
+	public static Player createPlayer(int id, Pane panel) {
 			
-		Player player = new Player("Player"+nr, nr);
+		Player player = new Player(id);
 		players.add(player);
-		log.info("Player"+nr+" created");
+		log.info("Player [id="+id+"] created");
 		
 		for (int i=0; i<Constants.START_TOWERS; i++) {
 			Castle castle = CastleUtils.createCastle(player);		
@@ -70,17 +65,43 @@ public class PlayerUtils {
 			Iterator<Castle> iter2 = player.getCastle().iterator();  
 			while (iter2.hasNext()) {
 				Castle castle = (Castle) iter2.next();
-				log.info("Player="+player.getNumber()+" Castle="+castle.getNr());
+				log.info("PlayerId="+player.getId()+" CastleId="+castle.getId());
 												
 				/* Move Soldiers */
 				SoldierUtils.moveSoldier(castle);
 				
 				/* Create Soldiers */
-				SoldierUtils.createSoldier(castle);				
+				//SoldierUtils.createSoldier(castle);				
 			}
 		}
 	}
 	
+	public static Castle getPlayer(Land newLand) {
+		
+		log.info("-----------------");
+		
+		Iterator<Player> iter1 = players.iterator();  	
+		while (iter1.hasNext()) {
+			Player player = (Player) iter1.next();			
+			
+			Iterator<Castle> iter2 = player.getCastle().iterator();  
+			while (iter2.hasNext()) {
+				Castle castle = (Castle) iter2.next();
+				
+				Iterator<Land> iter3 = castle.getLands().iterator();  
+				while (iter3.hasNext()) {
+					Land land = (Land) iter3.next();
+					
+					if (land.equals(newLand)) {
+						return castle;
+					}
+				}
+			}
+		}
+		return null;
+	}
+		
+			
 	public static List<Player> getPlayers() {
 		return players;
 	}

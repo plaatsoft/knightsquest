@@ -1,12 +1,17 @@
 package nl.plaatsoft.knightsquest.model;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.LandUtils;
+import nl.plaatsoft.knightsquest.tools.PlayerUtils;
 
 public class Land {
 
+	final static Logger log = Logger.getLogger( Land.class);
+	
 	private int x;
 	private int y;
 	private LandType type; 
@@ -18,16 +23,16 @@ public class Land {
 		this.type = type;
 	}
 	
-	public void draw(GraphicsContext gc1, GraphicsContext gc2) {
+	public void draw(GraphicsContext gc) {
 		
 		int offset = 0;
 		if ((y % 2)==1) {
 			offset = Constants.SEGMENT_SIZE*2;
 		} 
 		
-		LandUtils.getTexture(gc1, type);
+		LandUtils.getTexture(gc, type);
 		
-		gc1.fillPolygon(
+		gc.fillPolygon(
 			new double[]{(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset,
 					(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, (Constants.SEGMENT_SIZE*3)+(x*(Constants.SEGMENT_SIZE*4))+offset, 
 					(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset, 
@@ -37,8 +42,8 @@ public class Land {
 					Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7
 			);
 				
-		gc1.setFill(Color.BLACK);		
-		gc1.strokePolyline(
+		gc.setFill(Color.BLACK);		
+		gc.strokePolyline(
 				new double[]{(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset,
 						(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, (Constants.SEGMENT_SIZE*3)+(x*(Constants.SEGMENT_SIZE*4))+offset, 
 						(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset, 
@@ -47,11 +52,45 @@ public class Land {
 						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
 						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7
 		);	
+	}
+		
+	public void draw(GraphicsContext gc,Player player) {
+		
+		gc.setGlobalAlpha(0.75);
+		
+		log.info("draw land [x="+x+"|y="+y+"]");
+		
+		int offset = 0;
+		if ((y % 2)==1) {
+			offset = Constants.SEGMENT_SIZE*2;
+		} 
+		
+		PlayerUtils.getTexture(gc, player.getId());
+		
+		gc.fillPolygon(
+						new double[]{(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset,
+								(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, (Constants.SEGMENT_SIZE*3)+(x*(Constants.SEGMENT_SIZE*4))+offset, 
+								(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset, 
+								0+(x*(Constants.SEGMENT_SIZE*4))+offset}, 
+						new double[]{Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), 
+								Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
+								Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7);	
+	
+		gc.setFill(Color.BLACK);
+		
+		gc.strokePolyline(
+				new double[]{(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset,
+						(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, (Constants.SEGMENT_SIZE*3)+(x*(Constants.SEGMENT_SIZE*4))+offset, 
+						(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset, 
+						0+(x*(Constants.SEGMENT_SIZE*4))+offset}, 
+				new double[]{Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), 
+						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
+						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7);	
 		
 		if (soldier!=null) {
-			soldier.draw(gc2, x, y);
+			
+			getSoldier().draw(gc, x, y);
 		}
-		
 	}
 		
 	public int getX() {

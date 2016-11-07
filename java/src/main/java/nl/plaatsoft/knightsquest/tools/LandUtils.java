@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.LandType;
-import nl.plaatsoft.knightsquest.model.SoldierType;
 
 public class LandUtils {
 	
@@ -79,6 +78,7 @@ public class LandUtils {
 				list2.add(land);		
 			}
 		}	
+		
 		return list2;
 	}
 	
@@ -277,10 +277,10 @@ public class LandUtils {
 		optimizeMap();			
 	}		
 		
-	public static void drawMap(GraphicsContext gc1, GraphicsContext gc2) {
+	public static void drawMap(GraphicsContext gc) {
 		for (int x=0; x<Constants.SEGMENT_X; x++) {					
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {				
-				land[x][y].draw(gc1, gc2);				
+				land[x][y].draw(gc);				
 			}
 		}		
 	}

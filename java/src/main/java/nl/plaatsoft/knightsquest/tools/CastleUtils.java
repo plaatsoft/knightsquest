@@ -34,7 +34,7 @@ public class CastleUtils {
 				Iterator<Land> iter = list.iterator();
 												
 				castle = new Castle(player.getCastle().size(),x,y);
-				castle.getLand().add(LandUtils.getLand()[x][y]);
+				castle.getLands().add(LandUtils.getLand()[x][y]);
 				Soldier soldier = new Soldier(SoldierType.TOWER);
 				LandUtils.getLand()[x][y].setSoldier(soldier);
 				
@@ -44,15 +44,14 @@ public class CastleUtils {
 				iter = list.iterator();						
 				while (iter.hasNext()) {				
 					Land land = (Land) iter.next();
-					castle.getLand().add(land);											
+					castle.getLands().add(land);											
 				}
 				
-				log.info("New Castle [castle="+castle.getNr()+"|x="+x+"|y="+y+"|player="+player.getNumber()+"] created!");
+				log.info("New Castle [id="+castle.getId()+"|x="+x+"|y="+y+"|playerId="+player.getId()+"] created!");
 				
 				done=true;
 			}
 		}
 		return castle;
 	}
-
 }
