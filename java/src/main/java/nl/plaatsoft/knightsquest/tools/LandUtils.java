@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.LandType;
+import nl.plaatsoft.knightsquest.model.Player;
 
 public class LandUtils {
 	
@@ -65,7 +66,7 @@ public class LandUtils {
 	}
 	
 	
-	public static List <Land> getFreeSegments(int x, int y) {
+	public static List <Land> getFreeSegments(int x, int y, Player player) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
@@ -74,10 +75,18 @@ public class LandUtils {
 						
 		while (iter1.hasNext()) {				
 			Land land = (Land) iter1.next();
-			if ((land.getSoldier()==null) && (land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN)) {
-				list2.add(land);		
+			if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN)) {
+				
+				if (  (land.getPlayer()==null) ||
+				 	 ((land.getPlayer()!=null) && !land.getPlayer().equals(player)) ||
+				 	 ((land.getSoldier()==null) && (land.getPlayer()!=null) && land.getPlayer().equals(player))
+				   ) { 
+					list2.add(land);
+				}
 			}
 		}	
+		
+		// TODO: Land from other player is available 
 		
 		return list2;
 	}

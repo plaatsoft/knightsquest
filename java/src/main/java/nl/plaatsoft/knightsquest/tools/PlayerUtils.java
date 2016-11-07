@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import nl.plaatsoft.knightsquest.model.Castle;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
+import nl.plaatsoft.knightsquest.model.SoldierType;
 
 public class PlayerUtils {
 
@@ -52,8 +53,27 @@ public class PlayerUtils {
 		}		
 		return player;
 	}
-	
 
+	public static int activateMoveSoldier(Player player) {
+			
+		int count = 0;
+		Iterator<Castle> iter2 = player.getCastle().iterator();  
+		while (iter2.hasNext()) {
+			Castle castle = (Castle) iter2.next();
+			
+			Iterator<Land> iter3 = castle.getLands().iterator();  
+			while (iter3.hasNext()) {
+				Land land = (Land) iter3.next();
+				
+				if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierType.TOWER)) {
+					land.getSoldier().setMoved(false);
+					 count++;
+				}
+			}
+		}
+		return count;
+	}
+			
 	public static void nextTurn() {
 					
 		log.info("-----------------");
@@ -67,11 +87,19 @@ public class PlayerUtils {
 				Castle castle = (Castle) iter2.next();
 				log.info("PlayerId="+player.getId()+" CastleId="+castle.getId());
 												
-				/* Move Soldiers */
-				SoldierUtils.moveSoldier(castle);
+				/* Activate Soldiers to Move */
+				int amount = activateMoveSoldier(player);
+				
+				/* Move all soldiers of bot players */
+				for (int i=0; i<amount; i++) {
+					SoldierUtils.moveSoldier(castle);
+				}
 				
 				/* Create Soldiers */
-				//SoldierUtils.createSoldier(castle);				
+				SoldierUtils.createSoldier(castle);		
+				
+				/* Check Food */
+				CastleUtils.checkFood(castle);		
 			}
 		}
 	}

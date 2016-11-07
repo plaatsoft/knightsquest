@@ -16,6 +16,7 @@ public class Land {
 	private int y;
 	private LandType type; 
 	private Soldier soldier;
+	private Player player;
 		
 	public Land(int x, int y, LandType type) {
 		this.x = x;
@@ -56,9 +57,9 @@ public class Land {
 		
 	public void draw(GraphicsContext gc,Player player) {
 		
-		gc.setGlobalAlpha(0.75);
+		gc.setGlobalAlpha(0.70);
 		
-		log.info("draw land [x="+x+"|y="+y+"]");
+		//log.info("draw land [x="+x+"|y="+y+"]");
 		
 		int offset = 0;
 		if ((y % 2)==1) {
@@ -123,5 +124,13 @@ public class Land {
 	
 	public void setSoldier(Soldier soldier) {
 		this.soldier = soldier;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}	
 }

@@ -4,10 +4,11 @@ public enum SoldierType {
 	
 	NONE,
 	TOWER,
+	CROSS,
 	
 	SOLDIER,
 	HORSE,
 	BISHOP,
 	QUEEN,
-	KING
+	KING,	
 }

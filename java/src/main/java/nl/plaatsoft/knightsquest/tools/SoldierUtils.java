@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import javafx.scene.image.Image;
 import nl.plaatsoft.knightsquest.model.Castle;
 import nl.plaatsoft.knightsquest.model.Land;
-import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierType;
 
@@ -18,48 +17,50 @@ public class SoldierUtils {
 	final private static Logger log = Logger.getLogger( SoldierUtils.class);		
 	final private static Random rnd = new Random();	
 	
-	private static Image tower = new Image("images/tower.png", 12, 16,false, false);
-	private static Image soldier = new Image("images/soldier.png", 12, 16,false, false);
-	private static Image horse = new Image("images/horse.png", 12, 16,false, false);
-	private static Image bishop = new Image("images/bishop.png", 12, 16,false, false);
-	private static Image queen = new Image("images/queen.png", 12, 16,false, false);
-	private static Image king = new Image("images/king.png", 12, 16,false, false);
-	
+	private static Image tower = new Image("images/tower.png", 12, 16, false, false);
+	private static Image soldier = new Image("images/soldier.png", 12, 16, false, false);
+	private static Image horse = new Image("images/horse.png", 12, 16, false, false);
+	private static Image bishop = new Image("images/bishop.png", 12, 16, false, false);
+	private static Image queen = new Image("images/queen.png", 12, 16, false, false);
+	private static Image king = new Image("images/king.png", 12, 16, false, false);
+	private static Image cross = new Image("images/cross.png", 12, 16, false, false);
+			
 	public static void createSoldier(Castle castle) {
 	
-		log.info("soldier create start");
+		//log.info("soldier create start");
 		
 		/* Create new Soldier if there is enough food */  
 		if (castle.foodAvailable()>=SoldierUtils.getFoodNeeds(SoldierType.SOLDIER)) {
 				
 			/* Create new Soldier if there is room around the castle */  
-			List <Land> list = LandUtils.getFreeSegments(castle.getX(), castle.getY());			
+			List <Land> list = LandUtils.getFreeSegments(castle.getX(), castle.getY(), castle.getPlayer());			
 			Iterator<Land> iter = list.iterator();  						
 			if (iter.hasNext()) {				
 				Land land = (Land) iter.next();
 				
-				Soldier soldier = new Soldier(SoldierType.SOLDIER);
+				Soldier soldier = new Soldier(SoldierType.SOLDIER, castle.getPlayer());
 				land.setSoldier(soldier);
 				log.info("New Soldier [x="+land.getX()+"|y="+land.getY()+"|castleId="+castle.getId()+"] created!");
 			}							
 		}
 		
-		log.info("soldier create end");
+		//log.info("soldier create end");
 	}
+	
 	
 	public static void moveSoldier(Castle castle) {
 		
-		log.info("soldier move start");
+		//log.info("soldier move start");
 		
 		Iterator<Land> iter1 = castle.getLands().iterator();  
 		while (iter1.hasNext()) {
-			Land land = (Land) iter1.next();
+			Land land1 = (Land) iter1.next();
 			
-			if ((land.getSoldier()!=null) && (land.getSoldier().getType()==SoldierType.SOLDIER)) {
+			if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierType.SOLDIER) && !land1.getSoldier().isMoved() && land1.getSoldier().isLife()) {
 					
-				List <Land> list2 = LandUtils.getFreeSegments(land.getX(), land.getY());
+				List <Land> list2 = LandUtils.getFreeSegments(land1.getX(), land1.getY(), castle.getPlayer());
 								
-				log.info(land.getSoldier().getType()+" found [x="+land.getX()+"|y="+land.getY()+"|move option="+list2.size()+"]");
+				//log.info(land1.getSoldier().getType()+" found [x="+land1.getX()+"|y="+land1.getY()+"|move option="+list2.size()+"]");
 				
 				// Only move when move option are available
 				if (list2.size()>0) {
@@ -69,9 +70,12 @@ public class SoldierUtils {
 					Iterator<Land> iter2 = list2.iterator();
 					while (iter2.hasNext()) {
 						Land land2 = (Land) iter2.next();
-						if (nr==count++) {							
-							land2.setSoldier(land.getSoldier());
-							land.setSoldier(null);
+						if (nr==count++) {				
+							
+							land1.getSoldier().setMoved(true);
+							land2.setSoldier(land1.getSoldier());
+							land2.setPlayer(castle.getPlayer());
+							land1.setSoldier(null);
 														
 							if (castle.checkNewLand(land2)) {
 								
@@ -81,17 +85,17 @@ public class SoldierUtils {
 									castle2.getLands().remove(land2);
 								}	
 								
-								// Add land to castle
+								// Add land to player castle								
 								castle.getLands().add(land2);	
 							}
-							log.info("Move soldier from ["+land.getX()+","+land.getY()+"] to ["+land2.getX()+","+land2.getY()+"]");
+							//log.info("Move soldier from ["+land1.getX()+","+land1.getY()+"] to ["+land2.getX()+","+land2.getY()+"]");
 							return;
 						}
 					}
 				}																		
 			}
 		}	
-		log.info("soldier move end");
+		//log.info("soldier move end");
 	}
 
 	public static Image get(SoldierType army) {
@@ -115,6 +119,9 @@ public class SoldierUtils {
 				
 			case KING:
 				return king;
+				
+			case CROSS:
+				return cross;
 			
 			default:
 				log.error("Unknown soldier found!");
@@ -131,34 +138,34 @@ public class SoldierUtils {
 	
 			case TOWER: 
 				break;
+				
+			case CROSS: 
+				break;
 						
 			case SOLDIER:
-				value = 5;
+				value = 2;
 				break;
 								
 			case HORSE:
-				value = 5;
+				value = 4;
 				break;
 				
 			case BISHOP:
-				value = 5;
+				value = 8;
 				break;
 				
 			case QUEEN:
-				value = 10;
+				value = 16;
 				break;
 				
 			case KING:
-				value = 15;
+				value = 32;
 				break;
 				
 			default:
 				log.error("Unknown soldier found!");
 				return 0;			
-		}
-		
-		log.info(army+" foodNeeds="+value);
-		
+		}		
 		return value;
 	}		
 }

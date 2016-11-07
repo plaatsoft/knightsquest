@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -118,5 +119,29 @@ public class Game extends MyPanel {
             }
         });
         getChildren().add(btn);	
+        
+        AnimationTimer timer = new AnimationTimer() {			 
+			 	
+			@Override
+			public void handle(long now) {
+	            		
+				// Move bot players
+            	PlayerUtils.nextTurn();
+            	
+            	// Clear canvas
+            	gc2.clearRect(0, 0, canvas2.getWidth(), canvas2.getHeight());
+
+            	// Draw new canvas
+				Iterator <Player> iter = PlayerUtils.getPlayers().iterator();
+				while (iter.hasNext()) {
+							
+					Player player = (Player) iter.next();
+        			player.draw(gc2);
+        		}
+			}
+		};
+		timer.start();
+		
+		
 	}
 }

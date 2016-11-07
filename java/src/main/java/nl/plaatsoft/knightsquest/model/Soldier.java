@@ -11,15 +11,19 @@ public class Soldier {
 	final static Logger log = Logger.getLogger( Soldier.class);
 	
 	private SoldierType type;
+	private boolean moved = false;
+	private boolean life = true;
+	private Player player;
 
-	public Soldier(SoldierType type) {
-		super();
+	public Soldier(SoldierType type, Player player) {
+
 		this.type = type;
+		this.player = player;
 	}
 	
 	public void draw(GraphicsContext gc, int x, int y) {
 		
-		log.info("draw "+type+" [x="+x+"|y="+y+"]");
+		//log.info("draw "+type+" [x="+x+"|y="+y+"]");
 		
 		gc.setGlobalAlpha(1.0);
 			
@@ -31,7 +35,11 @@ public class Soldier {
 		double posX = x*(Constants.SEGMENT_SIZE*4) + offset + 9;
 		double posY = (y*Constants.SEGMENT_SIZE)+1;
 	
-		gc.drawImage(SoldierUtils.get(type), posX, posY);
+		if (life) {
+			gc.drawImage(SoldierUtils.get(type), posX, posY);
+		} else {
+			gc.drawImage(SoldierUtils.get(SoldierType.CROSS), posX, posY);
+		}
 	}
 		
 	public SoldierType getType() {
@@ -40,5 +48,29 @@ public class Soldier {
 
 	public void setType(SoldierType type) {
 		this.type = type;
-	}	
+	}
+
+	public boolean isMoved() {
+		return moved;
+	}
+
+	public void setMoved(boolean moved) {
+		this.moved = moved;
+	}
+
+	public boolean isLife() {
+		return life;
+	}
+
+	public void setLife(boolean life) {
+		this.life = life;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 }

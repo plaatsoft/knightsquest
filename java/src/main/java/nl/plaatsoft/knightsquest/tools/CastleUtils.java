@@ -19,6 +19,29 @@ public class CastleUtils {
 	
 	final private static Random rnd = new Random();	
 	
+	public static void checkFood(Castle castle) {
+		
+		log.info("check food [player="+castle.getPlayer().getId()+" castle="+castle.getId()+" size="+castle.getLands().size()+" foodAvailable="+castle.foodAvailable()+"]");
+		
+		if (castle.foodAvailable()<0) {
+				
+			/* Too less food for all soldiers of castle, they all die */			
+			Iterator<Land> iter = castle.getLands().iterator();  						
+			while(iter.hasNext()) {			
+				Land land = (Land) iter.next();
+				if (land.getSoldier()!=null) {
+					Soldier soldier = land.getSoldier();
+					if (soldier.getType()!=SoldierType.TOWER) {
+						soldier.setLife(false);
+						//log.info("Soldier [x="+land.getX()+"|y="+land.getY()+"|castleId="+castle.getId()+"] died!");
+					}
+				}									
+			}							
+		}
+		
+		//log.info("check food end");		
+	}
+
 	public static Castle createCastle(Player player) {
 		
 		Castle castle = null;
@@ -33,10 +56,11 @@ public class CastleUtils {
 				List <Land> list = LandUtils.getNeigbors(x,y);
 				Iterator<Land> iter = list.iterator();
 												
-				castle = new Castle(player.getCastle().size(),x,y);
+				castle = new Castle(player.getCastle().size(),x,y, player);
 				castle.getLands().add(LandUtils.getLand()[x][y]);
-				Soldier soldier = new Soldier(SoldierType.TOWER);
+				Soldier soldier = new Soldier(SoldierType.TOWER, player);
 				LandUtils.getLand()[x][y].setSoldier(soldier);
+				LandUtils.getLand()[x][y].setPlayer(player);
 				
 				player.getCastle().add(castle);
 				
@@ -44,6 +68,7 @@ public class CastleUtils {
 				iter = list.iterator();						
 				while (iter.hasNext()) {				
 					Land land = (Land) iter.next();
+					land.setPlayer(player);
 					castle.getLands().add(land);											
 				}
 				
