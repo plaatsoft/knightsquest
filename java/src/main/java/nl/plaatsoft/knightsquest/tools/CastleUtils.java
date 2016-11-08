@@ -53,23 +53,21 @@ public class CastleUtils {
 				
 			if (LandUtils.getLand()[x][y].getType()==LandType.GRASS) {
 																	
-				List <Land> list = LandUtils.getNeigbors(x,y);
-				Iterator<Land> iter = list.iterator();
-												
-				castle = new Castle(player.getCastle().size(),x,y, player);
+				castle = new Castle(player.getCastle().size(), x, y, player);
 				castle.getLands().add(LandUtils.getLand()[x][y]);
 				Soldier soldier = new Soldier(SoldierType.TOWER, player);
 				LandUtils.getLand()[x][y].setSoldier(soldier);
 				LandUtils.getLand()[x][y].setPlayer(player);
 				
 				player.getCastle().add(castle);
-				
-				list = LandUtils.getNeigbors(x,y);
-				iter = list.iterator();						
-				while (iter.hasNext()) {				
-					Land land = (Land) iter.next();
+								
+				List <Land> list1 = LandUtils.getNeigbors(x,y);
+				Iterator<Land> iter1 = list1.iterator();				
+				while (iter1.hasNext()) {				
+					Land land = (Land) iter1.next();
 					land.setPlayer(player);
-					castle.getLands().add(land);											
+					castle.getLands().add(land);
+					break;
 				}
 				
 				log.info("New Castle [id="+castle.getId()+"|x="+x+"|y="+y+"|playerId="+player.getId()+"] created!");

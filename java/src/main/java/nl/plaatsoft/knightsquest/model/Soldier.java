@@ -14,6 +14,11 @@ public class Soldier {
 	private boolean moved = false;
 	private Player player;
 
+	@Override
+	public String toString() {
+		return ""+type;
+	}
+
 	public Soldier(SoldierType type, Player player) {
 
 		this.type = type;
@@ -22,7 +27,7 @@ public class Soldier {
 	
 	public void draw(GraphicsContext gc, int x, int y) {
 		
-		//log.info("draw "+type+" [x="+x+"|y="+y+"]");
+		log.info("draw soldier "+type+" [x="+x+"|y="+y+"]");
 		
 		gc.setGlobalAlpha(1.0);
 			
@@ -30,9 +35,9 @@ public class Soldier {
 		if ((y % 2)==1) {
 			offset = Constants.SEGMENT_SIZE*2;
 		} 
-			
-		double posX = x*(Constants.SEGMENT_SIZE*4) + offset + 9;
-		double posY = (y*Constants.SEGMENT_SIZE)+1;
+		             
+		double posX = Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset-2;
+		double posY = (y*Constants.SEGMENT_SIZE)+(Constants.SEGMENT_SIZE/2)-2;
 	
 		gc.drawImage(SoldierUtils.get(type), posX, posY);
 	}

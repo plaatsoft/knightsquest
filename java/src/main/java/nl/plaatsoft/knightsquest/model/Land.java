@@ -26,6 +26,8 @@ public class Land {
 	
 	public void draw(GraphicsContext gc) {
 		
+		log.info("draw land ["+x+","+y+"]");
+		
 		int offset = 0;
 		if ((y % 2)==1) {
 			offset = Constants.SEGMENT_SIZE*2;
@@ -53,13 +55,18 @@ public class Land {
 						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
 						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7
 		);	
+		
+		if (Constants.SEGMENT_SIZE>=20) {
+			gc.setFill(Color.WHITE);
+			gc.fillText("["+x+","+y+"]",(x*(Constants.SEGMENT_SIZE*4))+offset+20,Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE));
+		}
 	}
 		
 	public void draw(GraphicsContext gc,Player player) {
 		
-		gc.setGlobalAlpha(0.70);
+		log.info("draw land player ["+x+","+y+"]");
 		
-		//log.info("draw land [x="+x+"|y="+y+"]");
+		gc.setGlobalAlpha(0.70);
 		
 		int offset = 0;
 		if ((y % 2)==1) {
@@ -91,6 +98,11 @@ public class Land {
 		if (soldier!=null) {
 			
 			getSoldier().draw(gc, x, y);
+		}
+		
+		if (Constants.SEGMENT_SIZE>=20) {
+			gc.setFill(Color.WHITE);
+			gc.fillText("["+x+","+y+"]",(x*(Constants.SEGMENT_SIZE*4))+offset+20,Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE));
 		}
 	}
 		

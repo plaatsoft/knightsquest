@@ -102,7 +102,7 @@ public class Game extends MyPanel {
 	    MyButton btn = new MyButton(Constants.WIDTH-230, Constants.HEIGHT-80, "Turn", 20, Navigator.NONE);
 	    btn.setOnAction(new EventHandler<ActionEvent>() { 
             public void handle(ActionEvent event) {
-            	               	  
+            	               	              	
             	// Move bot players
             	PlayerUtils.nextTurn();
             	
@@ -140,7 +140,7 @@ public class Game extends MyPanel {
         		}
 			}
 		};
-		timer.start();
+		//timer.start();
 		
 		
 	}

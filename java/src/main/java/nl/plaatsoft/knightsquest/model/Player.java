@@ -20,9 +20,14 @@ public class Player {
 		this.id = id;
 	}
 	
+	@Override
+	public String toString() {
+		return ""+id;
+	}
+
 	public void draw(GraphicsContext gc) {
 			
-		//log.info("draw player [id="+id+"]");
+		log.info("draw player [id="+id+"]");
 
 		Iterator<Castle> iter1 = castle.iterator();  
 		while (iter1.hasNext()) {

@@ -87,8 +87,7 @@ public class LandUtils {
 		return list2;
 	}
 
-	
-	public static List <Land> getFreeSegments(int x, int y, Player player) {
+	public static List <Land> getEnemyLand(int x, int y, Player player) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
@@ -99,17 +98,55 @@ public class LandUtils {
 			Land land = (Land) iter1.next();
 			if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN)) {
 				
-				if (  (land.getPlayer()==null) ||
-				 	 ((land.getPlayer()!=null) && !land.getPlayer().equals(player)) ||
-				 	 ((land.getPlayer()!=null) && land.getPlayer().equals(player) && ((land.getSoldier()==null) || (land.getSoldier().getType()==SoldierType.CROSS)))
-				   ) { 
-					list2.add(land);
+			 	 if ((land.getPlayer()!=null) && !land.getPlayer().equals(player)) {
+			 		if ((land.getSoldier()!=null) && (land.getSoldier().getType()==SoldierType.TOWER)) {
+			 			// no nothing
+			 		} else {
+			 			list2.add(land);
+			 		}
 				}
 			}
 		}	
+		return list2;
+	}
+
+	public static List <Land> getOwnLand(int x, int y, Player player) {
 		
-		// TODO: Land from other player is available 
+		List <Land> list2 = new ArrayList<Land>();
 		
+		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		Iterator<Land> iter1 = list1.iterator();
+						
+		while (iter1.hasNext()) {				
+			Land land = (Land) iter1.next();
+			if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN)) {				
+				if ((land.getPlayer()!=null) && land.getPlayer().equals(player)) {
+					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierType.CROSS)) {
+						// do nothing because soldier is on land.
+					} else {
+						log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
+						list2.add(land);
+					}
+				}
+			}
+		}			
+		return list2;
+	}
+
+	
+	public static List <Land> getNewLand(int x, int y) {
+		
+		List <Land> list2 = new ArrayList<Land>();
+		
+		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		Iterator<Land> iter1 = list1.iterator();						
+		while (iter1.hasNext()) {			
+			Land land = (Land) iter1.next();			
+			if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN) && (land.getPlayer()==null)) {
+				log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
+				list2.add(land);				
+			}
+		}			
 		return list2;
 	}
 	
