@@ -27,7 +27,7 @@ public class Player {
 
 	public void draw(GraphicsContext gc) {
 			
-		log.info("draw player [id="+id+"]");
+		//log.info("draw player [id="+id+"]");
 
 		Iterator<Castle> iter1 = castle.iterator();  
 		while (iter1.hasNext()) {

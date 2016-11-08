@@ -28,7 +28,7 @@ public class Castle {
 	
 	public void draw(GraphicsContext gc, Player player) {
 			
-		log.info("draw castle [id="+id+"|landSize="+lands.size()+"]");
+		//log.info("draw castle [id="+id+"|landSize="+lands.size()+"]");
 		
 		Iterator<Land> iter1 = lands.iterator();  
 		while (iter1.hasNext()) {

@@ -26,7 +26,7 @@ public class Land {
 	
 	public void draw(GraphicsContext gc) {
 		
-		log.info("draw land ["+x+","+y+"]");
+		//log.info("draw land ["+x+","+y+"]");
 		
 		int offset = 0;
 		if ((y % 2)==1) {
@@ -64,7 +64,7 @@ public class Land {
 		
 	public void draw(GraphicsContext gc,Player player) {
 		
-		log.info("draw land player ["+x+","+y+"]");
+		//log.info("draw land player ["+x+","+y+"]");
 		
 		gc.setGlobalAlpha(0.70);
 		

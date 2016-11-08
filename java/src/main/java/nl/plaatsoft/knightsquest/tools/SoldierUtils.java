@@ -61,7 +61,7 @@ public class SoldierUtils {
 				(land1.getSoldier().getType()!=SoldierType.CROSS) && 
 				(land1.getSoldier().getType()!=SoldierType.TOWER)) {
 					
-				log.info(land1.getSoldier().getType()+" found [x="+land1.getX()+"|y="+land1.getY()+"]");	
+				//log.info(land1.getSoldier().getType()+" found [x="+land1.getX()+"|y="+land1.getY()+"]");	
 				
 				/* Upgrade soldier if possible */
 				if (land1.getSoldier().getType()!=SoldierType.KING) {
@@ -78,7 +78,7 @@ public class SoldierUtils {
 													
 						land2.setSoldier(land1.getSoldier());
 						land2.getSoldier().setType(nextType);
-						log.info("Move ["+land1.getX()+","+land1.getY()+"]->["+land2.getX()+","+land2.getY()+"] Upgrade soldier ["+currentType+"->"+nextType+"]");
+						//log.info("Move ["+land1.getX()+","+land1.getY()+"]->["+land2.getX()+","+land2.getY()+"] Upgrade soldier ["+currentType+"->"+nextType+"]");
 						
 						land1.setSoldier(null);						
 						return;				
@@ -87,11 +87,11 @@ public class SoldierUtils {
 				
 				
 				// Conquer enemy land or defend own land
-				/*List <Land> list2 = LandUtils.getEnemyLand(land1.getX(), land1.getY(), castle.getPlayer());			
+				List <Land> list2 = LandUtils.getEnemyLand(land1.getX(), land1.getY(), castle.getPlayer());			
 				Iterator<Land> iter2 = list2.iterator();
 				while (iter2.hasNext()) {
 					
-					log.info("Soldier fight or defend ["+land1.getX()+","+land1.getY()+"]");
+					//log.info("Soldier fight or defend ["+land1.getX()+","+land1.getY()+"]");
 					
 					Land land2 = (Land) iter2.next();									
 					land1.getSoldier().setMoved(true);
@@ -113,12 +113,12 @@ public class SoldierUtils {
 											
 						return;
 					}			
-				}*/
+				}
 									
 				
 				// Move soldier to new land
 				List <Land> list4 = LandUtils.getNewLand(land1.getX(), land1.getY());	
-				log.info("Soldier move to new land ["+list4.size()+"]");		
+				//log.info("Soldier move to new land ["+list4.size()+"]");		
 				if (list4.size()>0) {
 					int nr = rnd.nextInt(list4.size());
 					int count=0;
@@ -137,15 +137,15 @@ public class SoldierUtils {
 							// Add land to player castle								
 							castle.getLands().add(land4);
 							
-							log.info("Move soldier from ["+land1.getX()+","+land1.getY()+"]->["+land4.getX()+","+land4.getY()+"]");
+							//log.info("Move soldier from ["+land1.getX()+","+land1.getY()+"]->["+land4.getX()+","+land4.getY()+"]");
 							return;
 						}
 					}
 				}		
 				
 				// Move soldier on own land
-				List <Land> list5 = LandUtils.getOwnLand(castle.getX(), castle.getY(), castle.getPlayer());	
-				log.info("Soldier move on own land ["+list5.size()+"]");		
+				List <Land> list5 = LandUtils.getOwnLand(land1.getX(), land1.getY(), castle.getPlayer());	
+				//log.info("Soldier move on own land ["+list5.size()+"]");		
 				if (list5.size()>0) {
 					int nr = rnd.nextInt(list5.size());
 					int count=0;
@@ -161,7 +161,7 @@ public class SoldierUtils {
 							land5.setPlayer(castle.getPlayer());
 							land1.setSoldier(null);
 
-							log.info("Move soldier from ["+land1.getX()+","+land1.getY()+"]->["+land5.getX()+","+land5.getY()+"]");
+							//log.info("Move soldier from ["+land1.getX()+","+land1.getY()+"]->["+land5.getX()+","+land5.getY()+"]");
 							return;
 						}
 					}

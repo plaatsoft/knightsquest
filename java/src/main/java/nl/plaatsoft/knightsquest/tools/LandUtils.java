@@ -124,7 +124,7 @@ public class LandUtils {
 					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierType.CROSS)) {
 						// do nothing because soldier is on land.
 					} else {
-						log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
+						//log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
 						list2.add(land);
 					}
 				}
@@ -143,7 +143,7 @@ public class LandUtils {
 		while (iter1.hasNext()) {			
 			Land land = (Land) iter1.next();			
 			if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN) && (land.getPlayer()==null)) {
-				log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
+				//log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
 				list2.add(land);				
 			}
 		}			
@@ -158,7 +158,7 @@ public class LandUtils {
 	 * @return
 	 */
 	public static List <Land> getNeigbors(int x, int y) {
-		
+				
 		List <Land> list = new ArrayList<Land>();
 		
 		if (y+1<Constants.SEGMENT_Y) {
@@ -195,6 +195,8 @@ public class LandUtils {
 				list.add(land[x-1][y-1]);
 			}			
 		}
+		
+		//log.info("getNeigbors [x="+x+"|y="+y+"|size="+list.size()+"]");
 		return list;
 	}
 	
@@ -301,8 +303,8 @@ public class LandUtils {
 						
 		for (int i=0; i<=Constants.SEGMENT_X/2; i++) {
 			
-			int x = rnd.nextInt(Constants.SEGMENT_X-(Constants.BORDER/2));
-			int y = rnd.nextInt(Constants.SEGMENT_Y-(Constants.BORDER*2));
+			int x = rnd.nextInt(Constants.SEGMENT_X);
+			int y = rnd.nextInt(Constants.SEGMENT_Y);
 
 			for (int j=0; j<Constants.SEGMENT_Y; j++) {
 				

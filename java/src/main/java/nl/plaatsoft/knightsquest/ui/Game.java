@@ -140,7 +140,7 @@ public class Game extends MyPanel {
         		}
 			}
 		};
-		//timer.start();
+		timer.start();
 		
 		
 	}

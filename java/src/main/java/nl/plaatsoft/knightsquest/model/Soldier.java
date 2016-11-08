@@ -27,7 +27,7 @@ public class Soldier {
 	
 	public void draw(GraphicsContext gc, int x, int y) {
 		
-		log.info("draw soldier "+type+" [x="+x+"|y="+y+"]");
+		//log.info("draw soldier "+type+" [x="+x+"|y="+y+"]");
 		
 		gc.setGlobalAlpha(1.0);
 			
