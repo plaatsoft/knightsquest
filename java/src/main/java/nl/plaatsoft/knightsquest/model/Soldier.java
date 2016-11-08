@@ -12,7 +12,6 @@ public class Soldier {
 	
 	private SoldierType type;
 	private boolean moved = false;
-	private boolean life = true;
 	private Player player;
 
 	public Soldier(SoldierType type, Player player) {
@@ -35,11 +34,7 @@ public class Soldier {
 		double posX = x*(Constants.SEGMENT_SIZE*4) + offset + 9;
 		double posY = (y*Constants.SEGMENT_SIZE)+1;
 	
-		if (life) {
-			gc.drawImage(SoldierUtils.get(type), posX, posY);
-		} else {
-			gc.drawImage(SoldierUtils.get(SoldierType.CROSS), posX, posY);
-		}
+		gc.drawImage(SoldierUtils.get(type), posX, posY);
 	}
 		
 	public SoldierType getType() {
@@ -56,14 +51,6 @@ public class Soldier {
 
 	public void setMoved(boolean moved) {
 		this.moved = moved;
-	}
-
-	public boolean isLife() {
-		return life;
-	}
-
-	public void setLife(boolean life) {
-		this.life = life;
 	}
 
 	public Player getPlayer() {

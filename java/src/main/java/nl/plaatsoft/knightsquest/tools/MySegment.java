@@ -17,7 +17,7 @@ public class MySegment {
 	
 	private LandType type = LandType.NONE;
 	private int player;	
-	private SoldierType army = SoldierType.NONE;	
+	private SoldierType soldierType;	
 	private int x;	
 	private int y;
 	private int size;
@@ -58,13 +58,12 @@ public class MySegment {
 				);		
 		}
 		
-		if (army!=SoldierType.NONE) {
-			
+		if (soldierType!=null) {			
 			gc2.setGlobalAlpha(1.0);
 			double posX = x*(size*4) + offset+9;
 			double posY = (y*size)+1;
 						
-			gc2.drawImage(SoldierUtils.get(army), posX, posY);
+			gc2.drawImage(SoldierUtils.get(soldierType), posX, posY);
 		}
 	}
 		
@@ -84,13 +83,13 @@ public class MySegment {
 		this.player = player;
 	}
 
-	public SoldierType getArmy() {
-		return army;
+	public SoldierType getSoldierType() {
+		return soldierType;
 	}
 
-	public void setArmy(SoldierType army) {
-		this.army = army;
-		Image image=SoldierUtils.get(army);
+	public void setArmy(SoldierType soldiertype) {
+		this.soldierType = soldiertype;
+		Image image=SoldierUtils.get(soldierType);
 		
 		if (image!=null) {	
 			

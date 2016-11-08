@@ -85,7 +85,7 @@ public class PlayerUtils {
 			Iterator<Castle> iter2 = player.getCastle().iterator();  
 			while (iter2.hasNext()) {
 				Castle castle = (Castle) iter2.next();
-				log.info("PlayerId="+player.getId()+" CastleId="+castle.getId());
+				//log.info("PlayerId="+player.getId()+" CastleId="+castle.getId());
 												
 				/* Activate Soldiers to Move */
 				int amount = activateMoveSoldier(player);
@@ -105,9 +105,7 @@ public class PlayerUtils {
 	}
 	
 	public static Castle getPlayer(Land newLand) {
-		
-		log.info("-----------------");
-		
+				
 		Iterator<Player> iter1 = players.iterator();  	
 		while (iter1.hasNext()) {
 			Player player = (Player) iter1.next();			

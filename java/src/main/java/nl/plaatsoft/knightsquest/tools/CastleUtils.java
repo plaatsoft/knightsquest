@@ -31,8 +31,8 @@ public class CastleUtils {
 				Land land = (Land) iter.next();
 				if (land.getSoldier()!=null) {
 					Soldier soldier = land.getSoldier();
-					if (soldier.getType()!=SoldierType.TOWER) {
-						soldier.setLife(false);
+					if (soldier.getType()!=SoldierType.TOWER) {						
+						soldier.setType(SoldierType.CROSS);								
 						//log.info("Soldier [x="+land.getX()+"|y="+land.getY()+"|castleId="+castle.getId()+"] died!");
 					}
 				}									

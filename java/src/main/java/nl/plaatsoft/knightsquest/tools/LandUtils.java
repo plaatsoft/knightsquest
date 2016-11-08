@@ -14,6 +14,7 @@ import javafx.scene.paint.ImagePattern;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.LandType;
 import nl.plaatsoft.knightsquest.model.Player;
+import nl.plaatsoft.knightsquest.model.SoldierType;
 
 public class LandUtils {
 	
@@ -65,6 +66,27 @@ public class LandUtils {
 		}
 	}
 	
+	public static List <Land> getUpgradeSoldiers(int x, int y, Player player) {
+		
+		List <Land> list2 = new ArrayList<Land>();
+		
+		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		Iterator<Land> iter1 = list1.iterator();
+						
+		while (iter1.hasNext()) {				
+			Land land = (Land) iter1.next();
+			if ((land.getPlayer()!=null) &&
+				land.getPlayer().equals(player) &&
+				(land.getSoldier()!=null) && 
+				(land.getSoldier().getType()==SoldierType.SOLDIER)) 
+			{
+					list2.add(land);
+			}
+		}	
+
+		return list2;
+	}
+
 	
 	public static List <Land> getFreeSegments(int x, int y, Player player) {
 		
@@ -79,7 +101,7 @@ public class LandUtils {
 				
 				if (  (land.getPlayer()==null) ||
 				 	 ((land.getPlayer()!=null) && !land.getPlayer().equals(player)) ||
-				 	 ((land.getSoldier()==null) && (land.getPlayer()!=null) && land.getPlayer().equals(player))
+				 	 ((land.getPlayer()!=null) && land.getPlayer().equals(player) && ((land.getSoldier()==null) || (land.getSoldier().getType()==SoldierType.CROSS)))
 				   ) { 
 					list2.add(land);
 				}

@@ -40,7 +40,7 @@ public class SoldierUtils {
 				
 				Soldier soldier = new Soldier(SoldierType.SOLDIER, castle.getPlayer());
 				land.setSoldier(soldier);
-				log.info("New Soldier [x="+land.getX()+"|y="+land.getY()+"|castleId="+castle.getId()+"] created!");
+				//log.info("New Soldier [x="+land.getX()+"|y="+land.getY()+"|castleId="+castle.getId()+"] created!");
 			}							
 		}
 		
@@ -56,13 +56,33 @@ public class SoldierUtils {
 		while (iter1.hasNext()) {
 			Land land1 = (Land) iter1.next();
 			
-			if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierType.SOLDIER) && !land1.getSoldier().isMoved() && land1.getSoldier().isLife()) {
+			if ((land1.getSoldier()!=null) && 
+				!land1.getSoldier().isMoved() && 
+				(land1.getSoldier().getType()!=SoldierType.CROSS) && 
+				(land1.getSoldier().getType()!=SoldierType.TOWER)) {
 					
-				List <Land> list2 = LandUtils.getFreeSegments(land1.getX(), land1.getY(), castle.getPlayer());
-								
-				//log.info(land1.getSoldier().getType()+" found [x="+land1.getX()+"|y="+land1.getY()+"|move option="+list2.size()+"]");
+				//log.info(land1.getSoldier().getType()+" found [x="+land1.getX()+"|y="+land1.getY()+"|move option="+list2.size()+"]");		
 				
-				// Only move when move option are available
+				/* Upgrade soldier if possible */
+				if (land1.getSoldier().getType()!=SoldierType.KING) {
+					List <Land> list2 = LandUtils.getUpgradeSoldiers(land1.getX(), land1.getY(), castle.getPlayer());
+					Iterator<Land> iter2 = list2.iterator();
+					while (iter2.hasNext()) {
+						Land land2 = (Land) iter2.next();
+											
+						land1.getSoldier().setMoved(true);
+													
+						land2.setSoldier(land1.getSoldier());
+						land2.getSoldier().setType(upgrade(land2.getSoldier().getType()));
+						land1.setSoldier(null);
+						return;				
+					}
+				}
+				
+				
+				// Move Soldier
+				List <Land> list2 = LandUtils.getFreeSegments(land1.getX(), land1.getY(), castle.getPlayer());								
+						
 				if (list2.size()>0) {
 					int nr = rnd.nextInt(list2.size());
 					int count=0;
@@ -73,6 +93,15 @@ public class SoldierUtils {
 						if (nr==count++) {				
 							
 							land1.getSoldier().setMoved(true);
+							
+							if (land2.getPlayer()!=null && !land2.getPlayer().equals(land1.getPlayer())) { 
+							
+								if ((land2.getSoldier()!=null) && (land1.getSoldier().getType().getValue()<=land2.getSoldier().getType().getValue())) {
+									//Enemy solder is strong. Do not attack
+									return;
+								}
+							}
+							
 							land2.setSoldier(land1.getSoldier());
 							land2.setPlayer(castle.getPlayer());
 							land1.setSoldier(null);
@@ -107,12 +136,12 @@ public class SoldierUtils {
 		
 			case SOLDIER:
 				return soldier;
+								
+			case BISHOP:
+				return bishop;
 				
 			case HORSE:
 				return horse;
-				
-			case BISHOP:
-				return bishop;
 				
 			case QUEEN:
 				return queen;
@@ -130,41 +159,66 @@ public class SoldierUtils {
 		return null;
 	}		
 	
-	public static int getFoodNeeds(SoldierType army) {
-			
-		int value = 0;
-				
-		switch(army) {
-	
-			case TOWER: 
-				break;
-				
-			case CROSS: 
-				break;
-						
+	public static SoldierType upgrade(SoldierType type) {
+		
+		SoldierType value;
+		
+		switch(type) {
+		
 			case SOLDIER:
-				value = 2;
+				value = SoldierType.BISHOP;
 				break;
-								
-			case HORSE:
-				value = 4;
+			
+			case BISHOP:
+				value = SoldierType.HORSE;
 				break;
 				
-			case BISHOP:
-				value = 8;
+			case HORSE:
+				value = SoldierType.QUEEN;
 				break;
 				
 			case QUEEN:
-				value = 16;
-				break;
-				
-			case KING:
-				value = 32;
+				value = SoldierType.KING;
 				break;
 				
 			default:
-				log.error("Unknown soldier found!");
-				return 0;			
+				value=null;
+				break;
+		}
+			
+		return value;
+	}
+	
+	public static int getFoodNeeds(SoldierType type) {
+			
+		int value=0;
+				
+		switch(type) {
+	
+			case SOLDIER:
+				value = 2;
+				break;
+				
+			case BISHOP:
+				value = 4;
+				break;
+				
+			case HORSE:
+				value = 6;
+				break;
+				
+			case QUEEN:
+				value = 8;
+				break;
+				
+			case KING:
+				value = 10;
+				break;
+				
+			default:
+				value = 0;					
+				break;
+						
 		}		
 		return value;
 	}		
