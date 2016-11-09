@@ -41,7 +41,8 @@ public class Game extends MyPanel {
 	
 	public void draw() {
 		
-		setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+		setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+		
 		canvas1 = new Canvas(Constants.MAP_WIDTH,Constants.MAP_HEIGHT);
 		canvas2 = new Canvas(Constants.MAP_WIDTH,Constants.MAP_HEIGHT);
 		gc1 = canvas1.getGraphicsContext2D();
@@ -118,7 +119,10 @@ public class Game extends MyPanel {
         		}
             }
         });
-        getChildren().add(btn);	
+	    
+	    if (Constants.BOTS_MODE==0) {
+	    	getChildren().add(btn);
+	    }
         
         AnimationTimer timer = new AnimationTimer() {			 
 			 	
@@ -140,8 +144,9 @@ public class Game extends MyPanel {
         		}
 			}
 		};
-		timer.start();
 		
-		
+		if (Constants.BOTS_MODE==1) {
+			timer.start();
+		}
 	}
 }

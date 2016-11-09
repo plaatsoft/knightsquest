@@ -3,7 +3,6 @@ package nl.plaatsoft.knightsquest.tools;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -21,8 +20,7 @@ public class LandUtils {
 	final static Logger log = Logger.getLogger( LandUtils.class);
 	
 	private static Land[][] land = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
-	private static Random rnd = new Random();
-	
+		
 	//private static Image water = new Image("images/water.png");
 	//private static Image ocean = new Image("images/ocean.png");
 	private static Image forest = new Image("images/forest.png");
@@ -122,7 +120,7 @@ public class LandUtils {
 			if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN)) {				
 				if ((land.getPlayer()!=null) && land.getPlayer().equals(player)) {
 					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierType.CROSS)) {
-						// do nothing because soldier is on land.
+						// Soldier on own land, skip it.
 					} else {
 						//log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
 						list2.add(land);
@@ -199,6 +197,75 @@ public class LandUtils {
 		//log.info("getNeigbors [x="+x+"|y="+y+"|size="+list.size()+"]");
 		return list;
 	}
+		
+	public static List <Land> getNeigbors2(int x, int y) {
+		
+		List <Land> list = new ArrayList<Land>();
+		
+		if (y-4>=0) {
+			list.add(land[x][y-4]);
+		}
+		
+		if (y-3>=0) {
+			list.add(land[x][y-3]);
+		}
+		
+		if ((x+1<Constants.SEGMENT_X) && (y-2>=0)) {
+			list.add(land[x+1][y-2]);
+		}
+				
+		if (x+1<Constants.SEGMENT_X) {
+			list.add(land[x+1][y]);
+		}
+		
+		if ((x+1<Constants.SEGMENT_X) && (y+2<Constants.SEGMENT_Y)) {
+			list.add(land[x+1][y+2]);
+		}
+		
+		if (y+3<Constants.SEGMENT_Y) {
+			list.add(land[x][y+3]);
+		}
+		
+		if (y+4<Constants.SEGMENT_Y) {
+			list.add(land[x][y+4]);
+		}
+			
+		if ((x-1>=0) && (y+2<Constants.SEGMENT_Y)) {
+			list.add(land[x-1][y+2]);
+		}
+				
+		if (x-1>=0) {
+			list.add(land[x-1][y]);
+		}
+		
+		if ((x-1>=0) && (y-2>=0)) {
+			list.add(land[x-1][y-2]);
+		}
+				
+		if (y%2==1) {	
+			
+			if ((x+1<Constants.SEGMENT_X) && (y-3>=0)) {
+				list.add(land[x+1][y-3]);
+			}
+			
+			if ((x+1<Constants.SEGMENT_X) && (y+3<Constants.SEGMENT_Y)) {
+				list.add(land[x+1][y+3]);
+			}
+		} else {
+			if ((x-1>=0) && (y+3<Constants.SEGMENT_Y)) {
+				list.add(land[x-1][y+3]);
+			}
+						
+			if ((x-1>=0) && (y-3>=0)) {
+				list.add(land[x-1][y-3]);
+			}
+		}
+				
+		//log.info("getNeigbors [x="+x+"|y="+y+"|size="+list.size()+"]");
+		return list;
+	}
+	
+	
 	
 	private static void optimizeMap() {
 		
@@ -231,9 +298,9 @@ public class LandUtils {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if ((land[x][y].getType()==LandType.GRASS) && (rnd.nextInt(2)==1)) {
+				if ((land[x][y].getType()==LandType.GRASS) && (MyRandom.nextInt(2)==1)) {
 					
-					if (rnd.nextInt(2)==1) {
+					if (MyRandom.nextInt(2)==1) {
 						land[x][y].setType(LandType.FOREST);
 					} else {
 						land[x][y].setType(LandType.MOUNTAIN);
@@ -301,10 +368,10 @@ public class LandUtils {
 	
 	private static void createGrass() {
 						
-		for (int i=0; i<=Constants.SEGMENT_X/2; i++) {
+		for (int i=0; i<(Constants.SEGMENT_X*0.75); i++) {
 			
-			int x = rnd.nextInt(Constants.SEGMENT_X);
-			int y = rnd.nextInt(Constants.SEGMENT_Y);
+			int x = MyRandom.nextInt(Constants.SEGMENT_X);
+			int y = MyRandom.nextInt(Constants.SEGMENT_Y);
 
 			for (int j=0; j<Constants.SEGMENT_Y; j++) {
 				
@@ -312,8 +379,8 @@ public class LandUtils {
 		 
 				List <Land> list = getNeigbors(x,y);
 				Iterator<Land> iter = list.iterator();
-						
-				int next = rnd.nextInt(list.size()); 
+									
+				int next = MyRandom.nextInt(list.size()); 
 				int count=0;
 				
 				while (iter.hasNext()) {				

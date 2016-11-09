@@ -2,7 +2,6 @@ package nl.plaatsoft.knightsquest.tools;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -16,8 +15,6 @@ import nl.plaatsoft.knightsquest.model.SoldierType;
 public class CastleUtils {
 
 	final private static Logger log = Logger.getLogger(CastleUtils.class);	
-	
-	final private static Random rnd = new Random();	
 	
 	public static void checkFood(Castle castle) {
 		
@@ -48,8 +45,8 @@ public class CastleUtils {
 		
 		boolean done = false;
 		while (!done) {
-			int x = rnd.nextInt(Constants.SEGMENT_X);
-			int y = rnd.nextInt(Constants.SEGMENT_Y);
+			int x = MyRandom.nextInt(Constants.SEGMENT_X);
+			int y = MyRandom.nextInt(Constants.SEGMENT_Y);
 				
 			if (LandUtils.getLand()[x][y].getType()==LandType.GRASS) {
 																	
@@ -62,14 +59,12 @@ public class CastleUtils {
 				player.getCastle().add(castle);
 								
 				List <Land> list1 = LandUtils.getNeigbors(x,y);
-				Iterator<Land> iter1 = list1.iterator();				
-				while (iter1.hasNext()) {				
-					Land land = (Land) iter1.next();
+				Land land = MyRandom.nextLand(list1);
+				if (land!=null) {
 					land.setPlayer(player);
-					castle.getLands().add(land);
-					break;
+					castle.getLands().add(land);					
 				}
-				
+							
 				log.info("New Castle [id="+castle.getId()+"|x="+x+"|y="+y+"|playerId="+player.getId()+"] created!");
 				
 				done=true;

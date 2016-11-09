@@ -58,7 +58,7 @@ public class Land {
 		
 		if (Constants.SEGMENT_SIZE>=20) {
 			gc.setFill(Color.WHITE);
-			gc.fillText("["+x+","+y+"]",(x*(Constants.SEGMENT_SIZE*4))+offset+20,Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE));
+			gc.fillText("["+x+","+y+"]",(x*(Constants.SEGMENT_SIZE*4))+offset+15,Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE));
 		}
 	}
 		
@@ -66,7 +66,7 @@ public class Land {
 		
 		//log.info("draw land player ["+x+","+y+"]");
 		
-		gc.setGlobalAlpha(0.70);
+		gc.setGlobalAlpha(0.60);
 		
 		int offset = 0;
 		if ((y % 2)==1) {
@@ -98,11 +98,6 @@ public class Land {
 		if (soldier!=null) {
 			
 			getSoldier().draw(gc, x, y);
-		}
-		
-		if (Constants.SEGMENT_SIZE>=20) {
-			gc.setFill(Color.WHITE);
-			gc.fillText("["+x+","+y+"]",(x*(Constants.SEGMENT_SIZE*4))+offset+20,Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE));
 		}
 	}
 		

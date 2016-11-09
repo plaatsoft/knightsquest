@@ -18,6 +18,7 @@ public class Castle {
 	private int y;
 	private Player player;
 	private List <Land> lands = new ArrayList<Land>();
+	private int newSoldierCounter=0;
 
 	public Castle(int id, int x, int y, Player player) {
 		this.id = id;
@@ -106,5 +107,13 @@ public class Castle {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	public int getNewSoldierCounter() {
+		return newSoldierCounter;
+	}
+
+	public void setNewSoldierCounter(int newSoldierCounter) {
+		this.newSoldierCounter = newSoldierCounter;
 	}
 }

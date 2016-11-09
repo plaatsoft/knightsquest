@@ -52,6 +52,56 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<plugin>
+				<groupId>com.github.wvengen</groupId>
+				<artifactId>proguard-maven-plugin</artifactId>
+				<version>2.0.13</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>proguard</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<obfuscate>true</obfuscate>
+					<injar>${project.build.finalName}-jar-with-dependencies.jar</injar>
+					<outjar>${project.build.finalName}-proguard.jar</outjar>
+					<includeDependency>false</includeDependency>
+					<options>
+						<option>-allowaccessmodification</option>
+						<option>-dontnote</option>
+						<option>-dontwarn</option>
+						<option>-keepattributes</option>
+						<option>-keep public class nl.plaatsoft.knightsquest.ui.Main { *; }</option>
+						<option>-keep class org.apache.log4j.** { *; }</option>
+						<option>-keep class javax.** { *; }</option>
+						<option>-keep class org.json.** { *; }</option>
+						<option>-keep class javafx.** { *; }</option>
+					</options>
+					<libs>
+						<lib>${java.home}/lib/rt.jar</lib>
+						<lib>${java.home}/lib/ext/jfxrt.jar</lib>
+					</libs>
+					<archive>
+						<manifest>
+							<mainClass>Main</mainClass>
+							<packageName>nl.plaatsoft.knightsquest.ui</packageName>
+						</manifest>
+					</archive>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.proguard</groupId>
+						<artifactId>proguard-base</artifactId>
+						<version>5.3.1</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
+			
 		</plugins>				
 	</build>
 </project>
