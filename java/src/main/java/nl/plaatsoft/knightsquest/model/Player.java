@@ -13,7 +13,7 @@ public class Player {
 	final static Logger log = Logger.getLogger( Player.class);
 	
 	private int id;		
-	private List <Castle> castle = new ArrayList<Castle>();
+	private List <Region> region = new ArrayList<Region>();
 	
 	public Player(int id) {
 		super();
@@ -25,14 +25,11 @@ public class Player {
 		return ""+id;
 	}
 
-	public void draw(GraphicsContext gc) {
-			
-		//log.info("draw player [id="+id+"]");
-
-		Iterator<Castle> iter1 = castle.iterator();  
-		while (iter1.hasNext()) {
-			Castle castle = (Castle) iter1.next();
-			castle.draw(gc, this);
+	public void draw(GraphicsContext gc) {			
+		Iterator<Region> iter = region.iterator();  
+		while (iter.hasNext()) {
+			Region region = (Region) iter.next();
+			region.draw(gc, this);
 		}
 	}
 						
@@ -44,11 +41,11 @@ public class Player {
 		this.id = id;
 	}
 	
-	public List<Castle> getCastle() {
-		return castle;
+	public List<Region> getRegion() {
+		return region;
 	}
 	
-	public void setCastle(List<Castle> castle) {
-		this.castle = castle;
+	public void setRegion(List<Region> region) {
+		this.region = region;
 	}	
 }

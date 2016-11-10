@@ -122,7 +122,7 @@ public class LandUtils {
 					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierType.CROSS)) {
 						// Soldier on own land, skip it.
 					} else {
-						//log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
+						log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
 						list2.add(land);
 					}
 				}
@@ -143,6 +143,22 @@ public class LandUtils {
 			if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN) && (land.getPlayer()==null)) {
 				//log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
 				list2.add(land);				
+			}
+		}			
+		return list2;
+	}
+	
+	public static List <Land> getRegionLand(int x, int y, Player player) {
+		
+		List <Land> list2 = new ArrayList<Land>();
+		
+		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		Iterator<Land> iter1 = list1.iterator();						
+		while (iter1.hasNext()) {			
+			Land land = (Land) iter1.next();			
+			if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN) && 
+				(land.getPlayer()!=null) && land.getPlayer().equals(player) && land.getRegion()==0) {				
+					list2.add(land);				
 			}
 		}			
 		return list2;

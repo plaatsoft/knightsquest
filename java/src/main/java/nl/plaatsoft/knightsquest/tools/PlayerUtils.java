@@ -9,9 +9,10 @@ import org.apache.log4j.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import nl.plaatsoft.knightsquest.model.Castle;
+import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
+import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierType;
 
 public class PlayerUtils {
@@ -47,9 +48,10 @@ public class PlayerUtils {
 		players.add(player);
 		log.info("Player [id="+id+"] created");
 		
-		for (int i=0; i<Constants.START_TOWERS; i++) {
-			Castle castle = CastleUtils.createCastle(player);		
-			SoldierUtils.createSoldier(castle);	
+		for (int i=1; i<=Constants.START_TOWERS; i++) {
+						
+			Region region = RegionUtils.createRegion(i, player);		
+			SoldierUtils.createSoldier(region);	
 		}		
 		return player;
 	}
@@ -57,11 +59,11 @@ public class PlayerUtils {
 	public static int activateMoveSoldier(Player player) {
 			
 		int count = 0;
-		Iterator<Castle> iter2 = player.getCastle().iterator();  
+		Iterator<Region> iter2 = player.getRegion().iterator();  
 		while (iter2.hasNext()) {
-			Castle castle = (Castle) iter2.next();
+			Region region = (Region) iter2.next();
 			
-			Iterator<Land> iter3 = castle.getLands().iterator();  
+			Iterator<Land> iter3 = region.getLands().iterator();  
 			while (iter3.hasNext()) {
 				Land land = (Land) iter3.next();
 				
@@ -73,7 +75,9 @@ public class PlayerUtils {
 		}
 		return count;
 	}
-			
+	
+
+		
 	public static void nextTurn() {
 					
 		log.info("-------------");
@@ -82,9 +86,9 @@ public class PlayerUtils {
 		while (iter1.hasNext()) {
 			Player player = (Player) iter1.next();			
 						
-			Iterator<Castle> iter2 = player.getCastle().iterator();  
+			Iterator<Region> iter2 = player.getRegion().iterator();  
 			while (iter2.hasNext()) {
-				Castle castle = (Castle) iter2.next();
+				Region region = (Region) iter2.next();
 				//log.info("###### PlayerId="+player.getId()+" CastleId="+castle.getId());
 												
 				/* Activate Soldiers to Move */
@@ -92,27 +96,27 @@ public class PlayerUtils {
 				
 				/* Move all soldiers of bot players */
 				for (int i=0; i<amount; i++) {
-					SoldierUtils.moveSoldier(castle);
+					SoldierUtils.moveSoldier(region);
 				}
 							
 				/* Create soldier */
-				SoldierUtils.createSoldier(castle);		
-				
-				/* Check Food */
-				CastleUtils.checkFood(castle);		
+				SoldierUtils.createSoldier(region);							
 			}
 		}
+		
+		int regions = RegionUtils.detectedRegions();
+		RegionUtils.rebuildRegions(regions);		
 	}
 	
-	public static Castle getPlayer(Land newLand) {
+	public static Region getPlayer(Land newLand) {
 				
 		Iterator<Player> iter1 = players.iterator();  	
 		while (iter1.hasNext()) {
 			Player player = (Player) iter1.next();			
 			
-			Iterator<Castle> iter2 = player.getCastle().iterator();  
+			Iterator<Region> iter2 = player.getRegion().iterator();  
 			while (iter2.hasNext()) {
-				Castle castle = (Castle) iter2.next();
+				Region castle = (Region) iter2.next();
 				
 				Iterator<Land> iter3 = castle.getLands().iterator();  
 				while (iter3.hasNext()) {
@@ -127,7 +131,6 @@ public class PlayerUtils {
 		return null;
 	}
 		
-			
 	public static List<Player> getPlayers() {
 		return players;
 	}

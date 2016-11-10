@@ -9,27 +9,22 @@ import org.apache.log4j.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import nl.plaatsoft.knightsquest.tools.SoldierUtils;
 
-public class Castle {
+public class Region {
 
-	final static Logger log = Logger.getLogger( Castle.class);
+	final static Logger log = Logger.getLogger( Region.class);
 	
 	private int id;	
-	private int x;
-	private int y;
 	private Player player;
 	private List <Land> lands = new ArrayList<Land>();
-	private int newSoldierCounter=0;
 
-	public Castle(int id, int x, int y, Player player) {
+	public Region(int id, Player player) {
 		this.id = id;
-		this.x = x;
-		this.y = y;
 		this.player = player;
 	}
 	
 	public void draw(GraphicsContext gc, Player player) {
 			
-		//log.info("draw castle [id="+id+"|landSize="+lands.size()+"]");
+		//log.info("draw region [id="+id+"|landSize="+lands.size()+"]");
 		
 		Iterator<Land> iter1 = lands.iterator();  
 		while (iter1.hasNext()) {
@@ -52,7 +47,7 @@ public class Castle {
 				
 		int foodAvailable = lands.size()- foodDemand;	
 		
-		//log.info("foodDemand="+foodDemand+" foodProduction="+lands.size()+" foodAvailable="+foodAvailable);
+		log.info("foodDemand="+foodDemand+" foodProduction="+lands.size()+" foodAvailable="+foodAvailable);
 		
 		return foodAvailable;
 	}
@@ -80,21 +75,9 @@ public class Castle {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
+	
+	public void setLands(List<Land> lands) {
+		this.lands = lands;
 	}
 	
 	public List<Land> getLands() {
@@ -107,13 +90,5 @@ public class Castle {
 
 	public void setPlayer(Player player) {
 		this.player = player;
-	}
-
-	public int getNewSoldierCounter() {
-		return newSoldierCounter;
-	}
-
-	public void setNewSoldierCounter(int newSoldierCounter) {
-		this.newSoldierCounter = newSoldierCounter;
 	}
 }

@@ -17,6 +17,7 @@ public class Land {
 	private LandType type; 
 	private Soldier soldier;
 	private Player player;
+	private int region;
 		
 	public Land(int x, int y, LandType type) {
 		this.x = x;
@@ -139,5 +140,13 @@ public class Land {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	public int getRegion() {
+		return region;
+	}
+
+	public void setRegion(int region) {
+		this.region = region;
 	}	
 }
