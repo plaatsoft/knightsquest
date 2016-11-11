@@ -47,7 +47,7 @@ public class Region {
 				
 		int foodAvailable = lands.size()- foodDemand;	
 		
-		log.info("foodDemand="+foodDemand+" foodProduction="+lands.size()+" foodAvailable="+foodAvailable);
+		//log.info("regionId="+id+" foodDemand="+foodDemand+" foodProduction="+lands.size()+" foodAvailable="+foodAvailable);
 		
 		return foodAvailable;
 	}

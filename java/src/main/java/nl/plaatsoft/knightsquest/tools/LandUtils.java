@@ -122,7 +122,7 @@ public class LandUtils {
 					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierType.CROSS)) {
 						// Soldier on own land, skip it.
 					} else {
-						log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
+						// log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
 						list2.add(land);
 					}
 				}

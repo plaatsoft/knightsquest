@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 
 import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.Land;
+import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierType;
 
@@ -29,26 +30,47 @@ public class SoldierUtils {
 		//log.info("soldier create start");
 					
 		/* Create new Soldier if there is enough food */  
-		if (region.foodAvailable()>=SoldierUtils.getFoodNeeds(SoldierType.SOLDIER)) {
+		if (region.foodAvailable()>=getFoodNeeds(SoldierType.SOLDIER)) {
 						
 			Land land1 = RegionUtils.getTowerPosition(region);
-			
-			/* Create new Soldier if there is room around the castle */  
-			List <Land> list2 = LandUtils.getOwnLand(land1.getX(), land1.getY(), region.getPlayer());			
-			Iterator<Land> iter2 = list2.iterator();  						
-			if (iter2.hasNext()) {				
-				Land land2 = (Land) iter2.next();
-				
-				Soldier soldier = new Soldier(SoldierType.SOLDIER, region.getPlayer());
-				land2.setSoldier(soldier);
-				log.info("New Soldier [x="+land2.getX()+"|y="+land2.getY()+"|regionId="+region.getId()+"] created!");
+			if (land1!=null) {
+				/* Create new Soldier if there is room around the castle */  
+				List <Land> list2 = LandUtils.getOwnLand(land1.getX(), land1.getY(), region.getPlayer());			
+				Iterator<Land> iter2 = list2.iterator();  						
+				if (iter2.hasNext()) {				
+					Land land2 = (Land) iter2.next();
+					
+					Soldier soldier = new Soldier(SoldierType.SOLDIER, region.getPlayer());
+					land2.setSoldier(soldier);
+					
+					//log.info("New Soldier [x="+land2.getX()+"|y="+land2.getY()+"|regionId="+region.getId()+"] created!");
+				}
 			}							
 		}
 		
 		//log.info("soldier create end");
 	}
 	
-	
+	public static int activateMoveSoldier(Player player) {
+		
+		int count = 0;
+		Iterator<Region> iter2 = player.getRegion().iterator();  
+		while (iter2.hasNext()) {
+			Region region = (Region) iter2.next();
+			
+			Iterator<Land> iter3 = region.getLands().iterator();  
+			while (iter3.hasNext()) {
+				Land land = (Land) iter3.next();
+				
+				if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierType.TOWER)) {
+					land.getSoldier().setMoved(false);
+					 count++;
+				}
+			}
+		}
+		return count;
+	}
+		
 	public static void moveSoldier(Region region) {
 		
 		//log.info("soldier move start");
@@ -79,6 +101,7 @@ public class SoldierUtils {
 						
 							land1.getSoldier().setMoved(true);
 							
+							@SuppressWarnings("unused")
 							SoldierType currentType = land1.getSoldier().getType();
 							SoldierType nextType = upgrade(land1.getSoldier().getType());
 														

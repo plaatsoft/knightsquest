@@ -96,6 +96,13 @@ public class Land {
 						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
 						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7);	
 		
+		if (Constants.SEGMENT_SIZE>=20) {
+			
+			gc.setGlobalAlpha(1);
+			gc.setFill(Color.WHITE);
+			gc.fillText(""+region,(x*(Constants.SEGMENT_SIZE*4))+offset+25,Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)+15);
+		}
+		
 		if (soldier!=null) {
 			
 			getSoldier().draw(gc, x, y);

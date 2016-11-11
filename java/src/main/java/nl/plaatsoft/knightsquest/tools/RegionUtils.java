@@ -40,38 +40,69 @@ public class RegionUtils {
 		//log.info("check food end");		
 	}
 
-	public static Region createRegion(int regionId, Player player) {
+	public static Region createStartRegion(int regionId, Player player) {
 		
 		Region region = null;
 		
 		boolean done = false;
 		while (!done) {
+			
+			boolean bad = false; 
+			
 			int x = MyRandom.nextInt(Constants.SEGMENT_X);
 			int y = MyRandom.nextInt(Constants.SEGMENT_Y);
-								
-			Land land = LandUtils.getLand()[x][y];
-					
-			if (land.getType()==LandType.GRASS) {
-									
-				Soldier soldier = new Soldier(SoldierType.TOWER, player);
-				land.setSoldier(soldier);
-				land.setPlayer(player);
-				
-				region = new Region(regionId, player);
-				region.getLands().add(land);
-				
-				player.getRegion().add(region);
-										
-				List <Land> list2 = LandUtils.getNeigbors(x,y);
-				Land land2 = MyRandom.nextLand(list2);
-				if (land2!=null) {
-					land.setPlayer(player);
-					region.getLands().add(land2);					
+			
+			// Each start region must have two lands between each other)
+			List <Land> list1 = LandUtils.getNeigbors(x, y);
+			Iterator <Land> iter1 = list1.iterator();	
+			while (iter1.hasNext()) {						
+				Land land1 = (Land) iter1.next();
+				if (land1.getPlayer()!=null) {
+					bad = true;
 				}
+			}
+			
+			List <Land> list2 = LandUtils.getNeigbors2(x, y);
+			Iterator <Land> iter2 = list2.iterator();	
+			while (iter2.hasNext()) {						
+				Land land2 = (Land) iter2.next();
+				if (land2.getPlayer()!=null) {
+					bad = true;
+				}
+			}
+			
+			if (!bad) {
+					
+				Land land3 = LandUtils.getLand()[x][y];					
+				if (land3.getType()==LandType.GRASS) {
+					
+					// Clain land		
+					land3.setPlayer(player);
+					
+					// Place Tower
+					Soldier soldier3 = new Soldier(SoldierType.TOWER, player);
+					land3.setSoldier(soldier3);
+										
+					// Create new region
+					region = new Region(player.getId(), player);
+					region.getLands().add(land3);
+					//log.info("New Region [id="+region.getId()+"|playerId="+player.getId()+"] created!");
+					
+					player.getRegion().add(region);
 							
-				log.info("New Region [id="+region.getId()+"|x="+x+"|y="+y+"|playerId="+player.getId()+"] created!");
-				
-				done=true;
+					// Add some more lands to region
+					List <Land> list4 = LandUtils.getNewLand(x, y);					
+					Land land4 = MyRandom.nextLand(list4);
+					if (land4!=null) {
+						land4.setPlayer(player);
+						region.getLands().add(land4);	
+						
+						Soldier soldier4 = new Soldier(SoldierType.SOLDIER, player);
+						land4.setSoldier(soldier4);
+					}
+									
+					done=true;
+				}
 			}
 		}
 		return region;
@@ -84,7 +115,7 @@ public class RegionUtils {
 			Land land = (Land) iter.next();
 			if ((land.getSoldier()!=null) && (land.getSoldier().getType()==SoldierType.TOWER)) {
 				
-				log.info("Tower ["+land.getX()+","+land.getY()+"]");
+				//log.info("Tower ["+land.getX()+","+land.getY()+"]");
 				return land;
 			}
 		}
@@ -111,8 +142,8 @@ public class RegionUtils {
 		// Reset all castles
 		Land lands [][] = LandUtils.getLand();
 		for (int x=0; x<Constants.SEGMENT_X; x++) {
-			for (int y=0; y<Constants.SEGMENT_Y; y++) {				
-				lands[x][y].setRegion(regionId);
+			for (int y=0; y<Constants.SEGMENT_Y; y++) {						
+					lands[x][y].setRegion(regionId);
 			}
 		}
 			
@@ -121,8 +152,7 @@ public class RegionUtils {
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {	
 							
 				Land land = lands[x][y];
-				if ((land.getRegion()==0) && (land.getPlayer()!=null)) {
-					
+				if ((land.getType()!=LandType.WATER) && (land.getType()!=LandType.OCEAN) && (land.getRegion()==0) && (land.getPlayer()!=null)) {					
 					regionId++;
 					search(land, regionId);
 				}
@@ -142,6 +172,7 @@ public class RegionUtils {
 			List <Region> list2 = player.getRegion();
 			Iterator <Region> iter2 = list2.iterator();	
 			while (iter2.hasNext()) {	
+				@SuppressWarnings("unused")
 				Region region = (Region) iter2.next();
 				iter2.remove();
 			}

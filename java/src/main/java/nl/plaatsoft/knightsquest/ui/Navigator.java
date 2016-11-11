@@ -30,7 +30,7 @@ public class Navigator {
 	            new EventHandler<ScrollEvent>() {
 	              @Override
 	              public void handle(ScrollEvent event) {
-	                double zoomFactor = 1.05;
+	                double zoomFactor = 1.20;
 	                double deltaY = event.getDeltaY();
 	                if (deltaY < 0){
 	                  zoomFactor = 2.0 - zoomFactor;
@@ -38,14 +38,9 @@ public class Navigator {
 	                
 	                double scale = page.getScaleX() * zoomFactor;
 	                
-	                //if ((scale>=1) && (scale<=2)) 
-	                {
-	                	
+	                if (scale>(Constants.SCALE-0.05)) {	                	
 	                  	page.setScaleX(scale);
 	                	page.setScaleY(scale);
-	                	
-	                	//log.info("scale="+page.getScaleX());
-	                	
 	                	event.consume();
 	                }
 	              }
@@ -60,8 +55,8 @@ public class Navigator {
 			case GAME:
 				
 				game = new Game();
-				game.setScaleX(1.5);
-            	game.setScaleY(1.5);
+				game.setScaleX(Constants.SCALE);
+            	game.setScaleY(Constants.SCALE);
 				game.draw();		
 				scene = new Scene(game, Constants.WIDTH, Constants.HEIGHT);	
 				

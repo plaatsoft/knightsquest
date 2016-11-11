@@ -39,12 +39,20 @@ public class Game extends MyPanel {
 	private double offsetX = 0;
 	private double offsetY = 0;
 	
+	private AnimationTimer timer;
+	  
 	public void draw() {
 		
 		setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 		
 		canvas1 = new Canvas(Constants.MAP_WIDTH,Constants.MAP_HEIGHT);
+		canvas1.setLayoutX(Constants.OFFSET_X);
+		canvas1.setLayoutY(Constants.OFFSET_Y);
+		
 		canvas2 = new Canvas(Constants.MAP_WIDTH,Constants.MAP_HEIGHT);
+		canvas2.setLayoutX(Constants.OFFSET_X);
+		canvas2.setLayoutY(Constants.OFFSET_Y);
+		
 		gc1 = canvas1.getGraphicsContext2D();
 		 				
 		canvas2.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -101,6 +109,7 @@ public class Game extends MyPanel {
 		}
 			
 	    MyButton btn = new MyButton(Constants.WIDTH-230, Constants.HEIGHT-80, "Turn", 20, Navigator.NONE);
+	    
 	    btn.setOnAction(new EventHandler<ActionEvent>() { 
             public void handle(ActionEvent event) {
             	               	              	
@@ -124,29 +133,30 @@ public class Game extends MyPanel {
 	    	getChildren().add(btn);
 	    }
         
-        AnimationTimer timer = new AnimationTimer() {			 
+        timer = new AnimationTimer() {			 
 			 	
-			@Override
-			public void handle(long now) {
+		@Override
+		public void handle(long now) {
 	            		
-				// Move bot players
-            	PlayerUtils.nextTurn();
+			// Move bot players
+           	if (PlayerUtils.nextTurn()==true) {
+           		timer.stop();
+           	}
             	
-            	// Clear canvas
-            	gc2.clearRect(0, 0, canvas2.getWidth(), canvas2.getHeight());
+           	// Clear canvas
+           	gc2.clearRect(0, 0, canvas2.getWidth(), canvas2.getHeight());
 
-            	// Draw new canvas
-				Iterator <Player> iter = PlayerUtils.getPlayers().iterator();
-				while (iter.hasNext()) {
-							
-					Player player = (Player) iter.next();
-        			player.draw(gc2);
-        		}
-			}
-		};
-		
-		if (Constants.BOTS_MODE==1) {
-			timer.start();
+           	// Draw new canvas
+			Iterator <Player> iter = PlayerUtils.getPlayers().iterator();
+			while (iter.hasNext()) {							
+				Player player = (Player) iter.next();
+        		player.draw(gc2);
+        	}
 		}
+	};
+		
+	if (Constants.BOTS_MODE==1) {
+		timer.start();
+	}
 	}
 }

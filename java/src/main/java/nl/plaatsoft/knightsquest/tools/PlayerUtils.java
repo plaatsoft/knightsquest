@@ -9,16 +9,16 @@ import org.apache.log4j.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
 import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
-import nl.plaatsoft.knightsquest.model.Soldier;
-import nl.plaatsoft.knightsquest.model.SoldierType;
 
 public class PlayerUtils {
 
 	final private static Logger log = Logger.getLogger( PlayerUtils.class);		
 	final private static List <Player> players = new ArrayList<Player>() ;
+	private static int turnCount = 0;
 	
 	public static void getTexture(GraphicsContext gc, int player) { 
 	
@@ -46,53 +46,49 @@ public class PlayerUtils {
 			
 		Player player = new Player(id);
 		players.add(player);
-		log.info("Player [id="+id+"] created");
+		//log.info("Player [id="+id+"] created");
 		
 		for (int i=1; i<=Constants.START_TOWERS; i++) {
 						
-			Region region = RegionUtils.createRegion(i, player);		
-			SoldierUtils.createSoldier(region);	
+			RegionUtils.createStartRegion(i, player);		
 		}		
 		return player;
 	}
 
-	public static int activateMoveSoldier(Player player) {
-			
-		int count = 0;
-		Iterator<Region> iter2 = player.getRegion().iterator();  
-		while (iter2.hasNext()) {
-			Region region = (Region) iter2.next();
-			
-			Iterator<Land> iter3 = region.getLands().iterator();  
-			while (iter3.hasNext()) {
-				Land land = (Land) iter3.next();
-				
-				if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierType.TOWER)) {
-					land.getSoldier().setMoved(false);
-					 count++;
-				}
+	public static boolean checkGameOver() {
+		
+		boolean stop = false;
+		int killPlayerCount=0;
+		Iterator<Player> iter1 = players.iterator();  	
+		while (iter1.hasNext()) {
+			Player player = (Player) iter1.next();
+			if (player.getRegion().size()==0) {
+				killPlayerCount++;				
 			}
 		}
-		return count;
+		
+		if (killPlayerCount==(players.size()-1)) {
+			stop =true;
+		}		
+		return stop;		
 	}
 	
-
-		
-	public static void nextTurn() {
+	public static boolean nextTurn() {
 					
-		log.info("-------------");
+		log.info("---["+turnCount+"]---");
+		turnCount++;
 		
 		Iterator<Player> iter1 = players.iterator();  	
 		while (iter1.hasNext()) {
-			Player player = (Player) iter1.next();			
-						
+			Player player = (Player) iter1.next();		
+							
+			int landCount=0;
 			Iterator<Region> iter2 = player.getRegion().iterator();  
 			while (iter2.hasNext()) {
 				Region region = (Region) iter2.next();
-				//log.info("###### PlayerId="+player.getId()+" CastleId="+castle.getId());
-												
+				landCount+=region.getLands().size();
 				/* Activate Soldiers to Move */
-				int amount = activateMoveSoldier(player);
+				int amount = SoldierUtils.activateMoveSoldier(player);
 				
 				/* Move all soldiers of bot players */
 				for (int i=0; i<amount; i++) {
@@ -102,10 +98,14 @@ public class PlayerUtils {
 				/* Create soldier */
 				SoldierUtils.createSoldier(region);							
 			}
+			log.info("PlayerId="+player.getId()+" Regions="+player.getRegion().size()+" Lands="+landCount);
 		}
 		
 		int regions = RegionUtils.detectedRegions();
-		RegionUtils.rebuildRegions(regions);		
+		//log.info("Region active="+regions);
+		RegionUtils.rebuildRegions(regions);	
+		
+		return checkGameOver();
 	}
 	
 	public static Region getPlayer(Land newLand) {
