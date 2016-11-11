@@ -39,6 +39,14 @@ public class PlayerUtils {
 			case 4: // Player 4
 					gc.setFill(Color.MAGENTA);
 					break;
+					
+			case 5: // Player 5
+					gc.setFill(Color.BROWN);
+					break;
+					
+			case 6: // Player 6
+					gc.setFill(Color.LIGHTBLUE);
+					break;
 		}		
 	}	
 	

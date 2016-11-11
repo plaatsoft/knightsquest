@@ -21,8 +21,8 @@ public class LandUtils {
 	
 	private static Land[][] land = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
 		
-	//private static Image water = new Image("images/water.png");
-	//private static Image ocean = new Image("images/ocean.png");
+	private static Image water = new Image("images/water.png");
+	private static Image ocean = new Image("images/ocean.png");
 	private static Image forest = new Image("images/forest.png");
 	private static Image coast = new Image("images/coast.png");
 	private static Image rock = new Image("images/rock.png");
@@ -49,13 +49,13 @@ public class LandUtils {
 					break;
 				
 			case WATER:
-					gc.setFill(Color.BLUE);
-					//gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
+					//gc.setFill(Color.BLUE);
+					gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
 					break;
 					
 			case OCEAN:
-					gc.setFill(Color.DARKBLUE);
-					//gc.setFill(new ImagePattern(ocean, 0, 0, 1, 1, true));
+					//gc.setFill(Color.DARKBLUE);
+					gc.setFill(new ImagePattern(ocean, 0, 0, 1, 1, true));
 					break;
 					
 			default:
@@ -280,9 +280,7 @@ public class LandUtils {
 		//log.info("getNeigbors [x="+x+"|y="+y+"|size="+list.size()+"]");
 		return list;
 	}
-	
-	
-	
+		
 	private static void optimizeMap() {
 		
 		for (int x=0; x<Constants.SEGMENT_X; x++) {

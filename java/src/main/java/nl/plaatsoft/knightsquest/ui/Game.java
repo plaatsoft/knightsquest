@@ -108,7 +108,7 @@ public class Game extends MyPanel {
 			player.draw(gc2);
 		}
 			
-	    MyButton btn = new MyButton(Constants.WIDTH-230, Constants.HEIGHT-80, "Turn", 20, Navigator.NONE);
+	    MyButton btn = new MyButton(Constants.WIDTH+290, Constants.HEIGHT+290, "Turn", 20, Navigator.NONE);
 	    
 	    btn.setOnAction(new EventHandler<ActionEvent>() { 
             public void handle(ActionEvent event) {
