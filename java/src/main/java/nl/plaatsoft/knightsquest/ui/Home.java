@@ -21,73 +21,70 @@
 
 package nl.plaatsoft.knightsquest.ui;
 
-import javafx.animation.AnimationTimer;
+import org.apache.log4j.Logger;
+
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
+
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 
-import nl.plaatsoft.knightsquest.network.CloudProduct;
-import nl.plaatsoft.knightsquest.network.CloudScore;
-import nl.plaatsoft.knightsquest.network.CloudUser;
-import nl.plaatsoft.knightsquest.tools.MyImageView;
+import nl.plaatsoft.knightsquest.network.CloudNewVersion;
+import nl.plaatsoft.knightsquest.tools.Constants;
+import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 
-public class Intro1 extends MyPanel {
+public class Home extends MyPanel {
 
-	private MyImageView imageView1;
+	final static Logger log = Logger.getLogger( Home.class);
+		
+	private MyLabel label3;
+	private Task<Void> task;
 	
-	public void draw() {		
-				
+	Home () {
+		
 		Image image1 = new Image("images/background1.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
 		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
-		setBackground( new Background(backgroundImage));
+		Background background = new Background(backgroundImage);
+		setBackground(background);
 		
-		getChildren().add( new MyLabel(0,30,"Created by PlaatSoft",26));
-		getChildren().add( new MyLabel(0,70,"www.plaatsoft.nl",26));
-		imageView1 = new MyImageView(140,190, "images/logo1.png",1);		
-		getChildren().add(imageView1);
-		getChildren().add( new MyLabel(0,410,"This software is open source and may be copied, distributed or modified",16));
-		getChildren().add( new MyLabel(0,430,"under the terms of the GNU General Public License (GPL) version 3",16));
+		getChildren().add (new MyLabel(30, 30, Constants.APP_NAME+" v"+Constants.APP_VERSION, 30, "white", "-fx-font-weight: bold;"));		
+		getChildren().add (new MyLabel(30, 70, Constants.APP_BUILD, 20));
+		label3 = new MyLabel(30, 420, "", 20, "white");
+		getChildren().add(label3);
+				
+		int y = 30;
+		getChildren().add( new MyButton(430, y, "Play", 18, Navigator.GAME));
+		y += 45;
+		//getChildren().add( new MyButton(430, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
+		y += 45;	
+		getChildren().add( new MyButton(430, y, "Settings", 18, Navigator.SETTINGS));
+		y += 45;
+		getChildren().add( new MyButton(430, y, "Help", 18, Navigator.HELP));
+		y += 45;
+		getChildren().add( new MyButton(430, y, "Credits", 18, Navigator.CREDITS));
+		y += 45;
+		getChildren().add( new MyButton(430, y, "Release Notes", 18, Navigator.RELEASE_NOTES));
+		y += 45;
+		getChildren().add( new MyButton(430, y, "Donate", 18, Navigator.DONATE));
 		
-		setOnMousePressed(new EventHandler<MouseEvent>() {
-	        public void handle(MouseEvent t) {
-	        	Navigator.go(Navigator.INTRO2);			
-	        }
-	    });		
-		
-		AnimationTimer timer = new AnimationTimer() {			 
-			float size = (float) 0.025;
-			 	
-			@Override
-			public void handle(long now) {
-	            		
-				size+=0.02;
-				if (size>=1.3) {
-					size=(float) 1.3;
-				}
-				imageView1.setScaleX(size);
-				imageView1.setScaleY(size);
-			}
-		};
-	    
-		Task<Void> task = new Task<Void>() {
+		y = Constants.HEIGHT-70;
+		getChildren().add( new MyButton(430, y, "Exit", 18, Navigator.EXIT));	
+			
+	    task = new Task<Void>() {
 	        public Void call() {
-	           	CloudProduct.getPid(); 
-	            CloudUser.getUid();
-	            CloudScore.getLocal(); 	            
+	        	label3.setText(CloudNewVersion.get()); 
 	            return null;
 	        }
 		};
-		
-		timer.start();
+    }
+	
+	public void draw() {		
 		new Thread(task).start();
 	}
 }

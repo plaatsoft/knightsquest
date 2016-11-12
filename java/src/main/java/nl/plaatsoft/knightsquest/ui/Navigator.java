@@ -1,3 +1,24 @@
+/**
+ *  @file
+ *  @brief 
+ *  @author wplaat
+ *
+ *  Copyright (C) 2008-2016 PlaatSoft
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, version 3.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package nl.plaatsoft.knightsquest.ui;
 
 import java.util.Iterator;
@@ -18,15 +39,31 @@ public class Navigator {
 	
 	private static Intro1 intro1;
 	private static Intro2 intro2;
+	private static Home home;	
 	private static Game game;	
+	private static Donate donate;
+	//private static HighScore1 highScore1;
+	//private static HighScore2 highScore2;
+	private static Credits credits;	
+	private static ReleaseNotes releaseNotes;
+	private static Help help;
+	private static Settings settings;	
 	
 	private static Scene scene;	
 			
-	public static final int NONE = 1;
-	public static final int INTRO1 = 2;
-	public static final int INTRO2 = 3;
+	public static final int NONE = 0;
+	public static final int INTRO1 = 1;
+	public static final int INTRO2 = 2;
+	public static final int HOME = 3;
 	public static final int GAME = 4;
-	public static final int EXIT = 5;
+	public static final int DONATE = 5;
+	public static final int LOCAL_HIGHSCORE = 6;
+	public static final int GLOBAL_HIGHSCORE = 7;
+	public static final int CREDITS = 8;
+	public static final int RELEASE_NOTES = 9;
+	public static final int HELP = 10;
+	public static final int SETTINGS = 11;
+	public static final int EXIT = 12;
 			
 	public static Scene getScene() {
 		return scene;
@@ -93,12 +130,70 @@ public class Navigator {
 			});		
 			break;		
 			
+		case HOME:
+			if (home==null) {
+				home = new Home();
+			}
+			home.draw();
+			scene.setRoot(home);	
+			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			    public void handle(KeyEvent key) {
+			       // switch it off
+			    }
+			});		
+			break;		
+			
 		case GAME:
 			game = new Game();				
 			game.draw();						
 			scene.setRoot(game);	
 			setSceneEvents(scene, game);
+			break;	
+			
+		/*case LOCAL_HIGHSCORE:
+			ScoreGlobal.clear();
+			
+			highScore1 = new HighScore1();
+			highScore1.draw();
+			
+			scene.setRoot(highScore1);
+			break;
+			
+		case GLOBAL_HIGHSCORE:
+			highScore2 = new HighScore2();
+			scene.setRoot(highScore2);
+			highScore2.draw();
+			break;	*/	
+			
+		case DONATE:
+			donate = new Donate();
+			scene.setRoot(donate);
+			donate.draw();
+			break;
+							
+		case CREDITS:
+			credits = new Credits();
+			credits.draw();
+			scene.setRoot(credits);
+			break;	
+			
+		case RELEASE_NOTES:
+			releaseNotes = new ReleaseNotes();
+			releaseNotes.draw();
+			scene.setRoot(releaseNotes);				
 			break;		
+			
+		case SETTINGS:
+			settings = new Settings();
+			settings.draw();
+			scene.setRoot(settings);			
+			break;	
+			
+		case HELP:
+			help = new Help();
+			help.draw();
+			scene.setRoot(help);			
+			break;	
 								
 		case EXIT:
 			System.exit(0);
