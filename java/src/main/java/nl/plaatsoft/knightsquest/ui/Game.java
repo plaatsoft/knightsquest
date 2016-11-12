@@ -33,6 +33,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -43,7 +45,6 @@ import javafx.scene.paint.Color;
 
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.tools.Constants;
-import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.PlayerUtils;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.LandUtils;
@@ -89,6 +90,11 @@ public class Game extends StackPane {
 		   		offsetX = me.getSceneX() - canvas2.getLayoutX();
 		   		offsetY = me.getSceneY() - canvas2.getLayoutY();
 		   		getScene().setCursor(Cursor.HAND);
+		   		
+		   		if (me.getButton() == MouseButton.SECONDARY) {
+		   			Navigator.go(Navigator.HOME);	
+		        }
+		   		
 		   	}
 		});
 				
@@ -117,13 +123,7 @@ public class Game extends StackPane {
 	    		}   		
 	    	}
 		});
-				
-		canvas2.setOnMouseReleased(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent me) {		    	
-				getScene().setCursor(Cursor.DEFAULT);
-	    	}
-		});
-				
+										
 		pane2.getChildren().add(canvas1);
 		pane2.getChildren().add(canvas2);	    
 		
@@ -136,32 +136,7 @@ public class Game extends StackPane {
 	    	Player player = PlayerUtils.createPlayer(i, this);	    	
 			player.draw(gc2);
 		}
-			
-	    MyButton btn = new MyButton(Constants.WIDTH+290, Constants.HEIGHT+290, "Turn", 20, Navigator.NONE);
-	    
-	    btn.setOnAction(new EventHandler<ActionEvent>() { 
-            public void handle(ActionEvent event) {
-            	               	              	
-            	// Move bot players
-            	PlayerUtils.nextTurn();
-            	
-            	// Clear canvas
-            	gc2.clearRect(0, 0, canvas2.getWidth(), canvas2.getHeight());
-
-            	// Draw new canvas
-				Iterator <Player> iter = PlayerUtils.getPlayers().iterator();
-				while (iter.hasNext()) {
-							
-					Player player = (Player) iter.next();
-        			player.draw(gc2);
-        		}
-            }
-        });
-	    
-	    if (Constants.BOTS_MODE==0) {
-	    	getChildren().add(btn);
-	    }
-        
+				            
         timer = new AnimationTimer() {			 
 			 	
 		@Override

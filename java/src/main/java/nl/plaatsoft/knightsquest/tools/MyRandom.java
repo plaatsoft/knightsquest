@@ -27,8 +27,9 @@ import java.util.Random;
 import nl.plaatsoft.knightsquest.model.Land;
 
 public class MyRandom {
-
-	private static Random rnd = new Random();
+	
+	private static int seek;	
+	private static Random rnd;
 	
 	public static int nextInt(int value) {
 		return rnd.nextInt(value);
@@ -42,5 +43,14 @@ public class MyRandom {
 			land = list.get(rnd.nextInt(list.size()));
 		}
 		return land;
+	}
+
+	public static int getSeek() {
+		return seek;
+	}
+
+	public static void setSeek(int seek1) {
+		seek = seek1;
+		rnd = new Random(seek);
 	}
 }

@@ -40,6 +40,7 @@ public class Navigator {
 	private static Intro1 intro1;
 	private static Intro2 intro2;
 	private static Home home;	
+	private static MapSelector selector;	
 	private static Game game;	
 	private static Donate donate;
 	//private static HighScore1 highScore1;
@@ -56,14 +57,15 @@ public class Navigator {
 	public static final int INTRO2 = 2;
 	public static final int HOME = 3;
 	public static final int GAME = 4;
-	public static final int DONATE = 5;
-	public static final int LOCAL_HIGHSCORE = 6;
-	public static final int GLOBAL_HIGHSCORE = 7;
-	public static final int CREDITS = 8;
-	public static final int RELEASE_NOTES = 9;
-	public static final int HELP = 10;
-	public static final int SETTINGS = 11;
-	public static final int EXIT = 12;
+	public static final int MAP_SELECTOR = 5;
+	public static final int DONATE = 6;
+	public static final int LOCAL_HIGHSCORE = 7;
+	public static final int GLOBAL_HIGHSCORE = 8;
+	public static final int CREDITS = 9;
+	public static final int RELEASE_NOTES = 10;
+	public static final int HELP = 11;
+	public static final int SETTINGS = 12;
+	public static final int EXIT = 13;
 			
 	public static Scene getScene() {
 		return scene;
@@ -142,6 +144,12 @@ public class Navigator {
 			    }
 			});		
 			break;		
+			
+		case MAP_SELECTOR:
+			selector = new MapSelector();				
+			selector.draw();						
+			scene.setRoot(selector);	
+			break;	
 			
 		case GAME:
 			game = new Game();				

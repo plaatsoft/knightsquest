@@ -59,7 +59,7 @@ public class Home extends MyPanel {
 		getChildren().add(label3);
 				
 		int y = 30;
-		getChildren().add( new MyButton(430, y, "Play", 18, Navigator.GAME));
+		getChildren().add( new MyButton(430, y, "Play", 18, Navigator.MAP_SELECTOR));
 		y += 45;
 		//getChildren().add( new MyButton(430, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
 		y += 45;	

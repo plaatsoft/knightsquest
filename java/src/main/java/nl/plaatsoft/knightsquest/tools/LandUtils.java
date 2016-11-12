@@ -403,7 +403,7 @@ public class LandUtils {
 	
 	private static void createGrass() {
 						
-		for (int i=0; i<(Constants.SEGMENT_X*0.75); i++) {
+		for (int i=0; i<(Constants.SEGMENT_X*0.70); i++) {
 			
 			int x = MyRandom.nextInt(Constants.SEGMENT_X);
 			int y = MyRandom.nextInt(Constants.SEGMENT_Y);

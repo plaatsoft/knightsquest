@@ -45,7 +45,7 @@ public class Constants {
 	public final static int MAP_WIDTH = SEGMENT_SIZE * 4 * (SEGMENT_X+1);
 	public final static int MAP_HEIGHT = SEGMENT_SIZE * 2 * SEGMENT_Y;	
 	
-	public final static int START_PLAYERS = 2;
+	public final static int START_PLAYERS = 6;
 	public final static int START_TOWERS = 2;	
 	
 	public final static int CASTLE_NEW_SOLDIER_TURNS = 4;
