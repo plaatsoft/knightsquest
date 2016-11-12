@@ -28,7 +28,9 @@ import org.apache.log4j.Logger;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
 import nl.plaatsoft.knightsquest.tools.Constants;
+import nl.plaatsoft.knightsquest.tools.MyMusic;
 
 public class Main extends Application {
 
@@ -47,6 +49,8 @@ public class Main extends Application {
 		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("images/logo3.png"));
 		primaryStage.show();
+		
+		 MyMusic.play();        
 	}
 
 	public static void main(String[] args) {

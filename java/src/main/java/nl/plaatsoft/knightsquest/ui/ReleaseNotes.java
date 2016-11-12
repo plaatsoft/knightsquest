@@ -38,15 +38,9 @@ import nl.plaatsoft.knightsquest.tools.MyPanel;
 public class ReleaseNotes extends MyPanel {
 	
 	private static String[] version = {
-											
-	        "12-11-2016 (Version 0.2)\n"
-	      	+ "- Added setting page to control nickname.\n"
-			+ "- Added help, credits, release notes and donate page.\n"
-			+ "- Check java version. If version is outdated, warn user.\n"
-			+ "- Show warning when internet connection is down.\n"
-			+ "- Added two intro pages with basic animation.\n",
 	
-			"11-11-2016 (Version 0.1)\n"
+			"12-11-2016 (Version 0.1)\n"
+			+ "- Added map selector.\n"
 			+ "- Added basic game board.\n"
 			+ "- Added basic game controles.\n"
 			+ "- Added new version check thread to home page.\n"
@@ -57,7 +51,7 @@ public class ReleaseNotes extends MyPanel {
 	
 	public void draw() {
 		
-		Image image1 = new Image("images/background1.jpg");
+		Image image1 = new Image("images/background3.jpg");
     	BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
     	BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
     	Background background = new Background(backgroundImage);

@@ -40,7 +40,7 @@ public class Intro2 extends MyPanel {
 	
 	public void draw() {	
 		
-		Image image1 = new Image("images/background2.png");
+		Image image1 = new Image("images/background3.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
 		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);														
 		setBackground(new Background(backgroundImage));
@@ -49,7 +49,7 @@ public class Intro2 extends MyPanel {
 		getChildren().add(new MyLabel(0,70,"www.plaatsoft.nl",26));
 		imageView1 = new MyImageView(200,150, "images/logo2.png",1);		
 		getChildren().add(imageView1);
-		getChildren().add(new MyLabel(0,410,"RedSquare is also available for Nintendo Wii",16));
+		getChildren().add(new MyLabel(0,410,"KnightsQuest is also available for Nintendo Wii",16));
 		
 		setOnMousePressed(new EventHandler<MouseEvent>() {
 

@@ -35,6 +35,7 @@ import javafx.scene.layout.BackgroundSize;
 import nl.plaatsoft.knightsquest.network.CloudNewVersion;
 import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 
@@ -47,15 +48,15 @@ public class Home extends MyPanel {
 	
 	Home () {
 		
-		Image image1 = new Image("images/background1.jpg");
+		Image image1 = new Image("images/background3.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
 		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
 		Background background = new Background(backgroundImage);
 		setBackground(background);
 		
-		getChildren().add (new MyLabel(30, 30, Constants.APP_NAME+" v"+Constants.APP_VERSION, 30, "white", "-fx-font-weight: bold;"));		
-		getChildren().add (new MyLabel(30, 70, Constants.APP_BUILD, 20));
-		label3 = new MyLabel(30, 420, "", 20, "white");
+		getChildren().add (new MyLabel(30, 20, Constants.APP_NAME+" v"+Constants.APP_VERSION, 30, "white", "-fx-font-weight: bold;"));		
+		getChildren().add (new MyLabel(30, 60, Constants.APP_BUILD, 20));
+		label3 = new MyLabel(30, 425, "", 20, "white");
 		getChildren().add(label3);
 				
 		int y = 30;
@@ -75,7 +76,9 @@ public class Home extends MyPanel {
 		
 		y = Constants.HEIGHT-70;
 		getChildren().add( new MyButton(430, y, "Exit", 18, Navigator.EXIT));	
-			
+				
+		getChildren().add( new MyImageView(-10, 60, "images/knight1.png", 0.75));
+					
 	    task = new Task<Void>() {
 	        public Void call() {
 	        	label3.setText(CloudNewVersion.get()); 
