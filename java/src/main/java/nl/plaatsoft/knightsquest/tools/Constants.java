@@ -11,21 +11,21 @@ public class Constants {
 	
 	public final static int BOTS_MODE = 1;
 	
-	public final static int WIDTH = 800; 
-	public final static int HEIGHT = 600;		
-	public final static double SCALE = 0.42;
-	public final static int OFFSET_X = -520;
-	public final static int OFFSET_Y = -400;	
+	public final static int WIDTH = 640; 
+	public final static int HEIGHT = 480;		
+	public final static double SCALE = 0.55;
+	public final static double OFFSET_X = -260;
+	public final static double OFFSET_Y = -200;	
 	
 	public final static int SEGMENT_SIZE = 19;	
-	public final static int SEGMENT_X = 24;
-	public final static int SEGMENT_Y = 72;
+	public final static int SEGMENT_X = 15;
+	public final static int SEGMENT_Y = 45;
 	
 	public final static int MAP_WIDTH = SEGMENT_SIZE * 4 * (SEGMENT_X+1);
 	public final static int MAP_HEIGHT = SEGMENT_SIZE * 2 * SEGMENT_Y;	
 	
-	public final static int START_PLAYERS = 6;
-	public final static int START_TOWERS = 8;	
+	public final static int START_PLAYERS = 2;
+	public final static int START_TOWERS = 2;	
 	
 	public final static int CASTLE_NEW_SOLDIER_TURNS = 4;
 }

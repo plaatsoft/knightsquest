@@ -49,13 +49,13 @@ public class LandUtils {
 					break;
 				
 			case WATER:
-					//gc.setFill(Color.BLUE);
-					gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
+					gc.setFill(Color.BLUE);
+					//gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
 					break;
 					
 			case OCEAN:
-					//gc.setFill(Color.DARKBLUE);
-					gc.setFill(new ImagePattern(ocean, 0, 0, 1, 1, true));
+					gc.setFill(Color.DARKBLUE);
+					//gc.setFill(new ImagePattern(ocean, 0, 0, 1, 1, true));
 					break;
 					
 			default:

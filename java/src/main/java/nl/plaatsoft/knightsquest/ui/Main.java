@@ -18,7 +18,7 @@ public class Main extends Application {
 		
 		setUserAgentStylesheet(STYLESHEET_MODENA);
 
-		Navigator.go(Navigator.GAME);
+		Navigator.go(Navigator.INTRO1);
 
 		primaryStage.setTitle(Constants.APP_NAME + " v" + Constants.APP_VERSION);
 		primaryStage.setScene(Navigator.getScene());

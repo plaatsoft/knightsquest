@@ -16,17 +16,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.MyButton;
-import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.tools.PlayerUtils;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.LandUtils;
 
-public class Game extends MyPanel {
+public class Game extends StackPane {
 
 	final static Logger log = Logger.getLogger( Game.class);
 	
@@ -40,10 +41,17 @@ public class Game extends MyPanel {
 	private double offsetY = 0;
 	
 	private AnimationTimer timer;
-	  
+	  	
 	public void draw() {
-		
-		setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+				
+		Pane pane1 = new Pane();		
+		pane1.setBackground(new Background(new BackgroundFill(Color.DARKBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+		pane1.setId("background");
+
+		Pane pane2 = new Pane();			
+		pane2.setScaleX(Constants.SCALE);
+    	pane2.setScaleY(Constants.SCALE);
+    	pane2.setId("map");
 		
 		canvas1 = new Canvas(Constants.MAP_WIDTH,Constants.MAP_HEIGHT);
 		canvas1.setLayoutX(Constants.OFFSET_X);
@@ -95,8 +103,8 @@ public class Game extends MyPanel {
 	    	}
 		});
 				
-		getChildren().add(canvas1);
-		getChildren().add(canvas2);	    
+		pane2.getChildren().add(canvas1);
+		pane2.getChildren().add(canvas2);	    
 		
 	    LandUtils.createMap();
 	    LandUtils.drawMap(gc1);
@@ -158,5 +166,8 @@ public class Game extends MyPanel {
 	if (Constants.BOTS_MODE==1) {
 		timer.start();
 	}
+	
+	getChildren().add(pane1);
+	getChildren().add(pane2);	
 	}
 }

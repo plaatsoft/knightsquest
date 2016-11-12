@@ -17,6 +17,16 @@ public class MyImageView extends ImageView {
 		setScaleY(scale);
 	}
 	
+	public MyImageView(int x, int y, String resource, double scale) {
+        
+		Image image = new Image(resource);
+		setImage(image);
+		setLayoutX(x);
+		setLayoutY(y);
+		setScaleX(scale);
+		setScaleY(scale);
+	}
+	
 	public void move(double offsetX, double offsetY) {
 	
 			if ((this.origX==-1) && (this.origY==-1)) {
