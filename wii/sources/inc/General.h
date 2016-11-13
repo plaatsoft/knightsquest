@@ -28,8 +28,8 @@
 // -----------------------------------------------------------
 
 #define PROGRAM_NAME	   		"KnightsQuest"
-#define PROGRAM_VERSION     	"0.12"
-#define RELEASE_DATE        	"15-09-2010" 
+#define PROGRAM_VERSION     	"0.30"
+#define RELEASE_DATE        	"30-04-2010" 
 
 // Check latest available version 
 #define URL1                	"http://www.plaatsoft.nl/service/releasenotes6.html"
@@ -232,7 +232,7 @@ Game;
  * - Scrollable map
  * 
  * @section ReleaseNotes
- * <b>15-09-2010 Version 0.12</b>
+ * <b>30-04-2010 Version 0.3</b>
  * - GUI:
  *  - Update menu screen information.
  * - Core:
@@ -247,7 +247,7 @@ Game;
  * - General:
  *  - Build game with devkitPPC r21 compiler.
  *
- *  <b>31-03-2010 Version 0.11</b>
+ *  <b>31-03-2010 Version 0.2</b>
  *  - GUI:
  *   - Update menu screen information.
  *  - Core:
@@ -260,7 +260,7 @@ Game;
  *   - Make source code compliant with r21 compiler.
  *   - Build game with devkitPPC r21 compiler.
  *
- *  <b>04-02-2010 Version 0.10</b>
+ *  <b>04-02-2010 Version 0.1</b>
  *  - GUI:
  *   - General GUI basis.
  *  - Core:
