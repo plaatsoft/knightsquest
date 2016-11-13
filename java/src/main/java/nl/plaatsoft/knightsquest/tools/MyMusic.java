@@ -33,7 +33,10 @@ public class MyMusic {
         Media media = new Media(path);
         mp = new MediaPlayer(media);
         //mp.setCycleCount(MediaPlayer.INDEFINITE);
-        mp.play();
+        
+        if (Constants.MUSIC_MODE==1) {
+        	mp.play();
+        }
 	}
 	
 }

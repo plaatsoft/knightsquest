@@ -40,7 +40,7 @@ public class Intro2 extends MyPanel {
 	
 	public void draw() {	
 		
-		Image image1 = new Image("images/background3.jpg");
+		Image image1 = new Image("images/background2.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
 		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);														
 		setBackground(new Background(backgroundImage));
