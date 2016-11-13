@@ -72,10 +72,9 @@ public class Navigator {
 	}
 	
 	//handles mouse scrolling
-	private static void setSceneEvents(final Scene scene, Pane page) {	    
+	private static void setSceneEvents(final Scene scene, final Pane page) {	    
 	    scene.setOnScroll(
 	            new EventHandler<ScrollEvent>() {
-	              @Override
 	              public void handle(ScrollEvent event) {
 	                double zoomFactor = 1.10;
 	                double deltaY = event.getDeltaY();

@@ -42,8 +42,8 @@ public class LandUtils {
 	
 	private static Land[][] land = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
 		
-	private static Image water = new Image("images/water.png");
-	private static Image ocean = new Image("images/ocean.png");
+	//private static Image water = new Image("images/water.png");
+	//private static Image ocean = new Image("images/ocean.png");
 	private static Image forest = new Image("images/forest.png");
 	private static Image coast = new Image("images/coast.png");
 	private static Image rock = new Image("images/rock.png");

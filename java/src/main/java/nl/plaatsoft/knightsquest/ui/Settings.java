@@ -59,7 +59,7 @@ public class Settings extends MyPanel {
 		return label[pos];
 	}	
 	
-	private Button buttonSpecial(int pos, int x, int y, String text, boolean up) {
+	private Button buttonSpecial(final int pos, int x, int y, String text, final boolean up) {
 	
 		Button button = new Button();
 		

@@ -58,7 +58,7 @@ public class MapSelector extends MyPanel {
 		LandUtils.drawMap(gc);
 	}
 
-	private void createCanvas(int id, int x, int y, int seek) {
+	private void createCanvas(int id, int x, int y, final int seek) {
 
 		Canvas canvas = new Canvas((Constants.SEGMENT_X * Constants.SEGMENT_SIZE * 4),
 				(Constants.SEGMENT_Y * Constants.SEGMENT_SIZE * 2));
