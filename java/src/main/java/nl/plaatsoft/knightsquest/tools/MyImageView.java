@@ -21,6 +21,8 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
+import javafx.scene.CacheHint;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -36,6 +38,22 @@ public class MyImageView extends ImageView {
 		setLayoutY(y);
 		setScaleX(scale);
 		setScaleY(scale);
+	}
+		
+	public MyImageView(double x, double y, Image image, double scale, boolean invert) {
+        
+		ColorAdjust blackout = new ColorAdjust();
+	    blackout.setBrightness(1.0);
+	    
+		setImage(image);
+		setLayoutX(x);
+		setLayoutY(y);
+		setScaleX(scale);
+		setScaleY(scale);
+		
+		setEffect(blackout);
+	    setCache(true);
+	    setCacheHint(CacheHint.SPEED);
 	}
 	
 	public MyImageView(int x, int y, String resource, double scale) {

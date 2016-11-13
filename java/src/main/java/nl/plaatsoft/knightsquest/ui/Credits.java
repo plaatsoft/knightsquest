@@ -36,7 +36,7 @@ public class Credits extends MyPanel {
 	@Override
 	public void draw() {
 		
-		Image image1 = new Image("images/background3.jpg");
+		Image image1 = new Image("images/background4.jpg");
 	    BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
 	    BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
 	    Background background = new Background(backgroundImage);
@@ -47,20 +47,20 @@ public class Credits extends MyPanel {
 	    getChildren().add( new MyLabel(0, y, "Credits", 60, "white", "-fx-font-weight: bold;"));
 	    y+=80;
 	    getChildren().add( new MyLabel(0, y, "GAME LOGIC", 24, "white"));
-	    y+=30;
+	    y+=35;
 	    getChildren().add( new MyLabel(0, y, "wplaat", 18, "white"));
-	    y+=30;
+	    y+=35;
 	    getChildren().add( new MyLabel(0, y, "GAME GRAPHICS", 24, "white"));
-	    y+=30;    	 
+	    y+=35;    	 
 	    getChildren().add( new MyLabel(0, y, "wplaat", 18, "white"));
-	    y+=30;
+	    y+=35;
 	    getChildren().add( new MyLabel(0, y, "MUSIC & SOUND EFFECTS", 24, "white"));
-	    y+=30;
+	    y+=35;
 	    getChildren().add( new MyLabel(0, y, "wplaat", 18, "white"));
-	    y+=30;
+	    y+=35;
 	    getChildren().add( new MyLabel(0, y, "TESTERS", 24, "white"));
-	    y+=30;
-	    getChildren().add( new MyLabel(0, y, "wplaat, lplaat, splaat, bplaat,", 18, "white"));
+	    y+=35;
+	    getChildren().add( new MyLabel(0, y, "wplaat, lplaat, splaat, bplaat", 18, "white"));
 	    	     
 	    getChildren().add( new MyButton(230, 420, "Close", 18, Navigator.HOME));		
 	}

@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import nl.plaatsoft.knightsquest.tools.Constants;
@@ -39,6 +38,7 @@ public class Navigator {
 	
 	private static Intro1 intro1;
 	private static Intro2 intro2;
+	private static Intro3 intro3;
 	private static Home home;	
 	private static MapSelector selector;	
 	private static Game game;	
@@ -55,17 +55,18 @@ public class Navigator {
 	public static final int NONE = 0;
 	public static final int INTRO1 = 1;
 	public static final int INTRO2 = 2;
-	public static final int HOME = 3;
-	public static final int GAME = 4;
-	public static final int MAP_SELECTOR = 5;
-	public static final int DONATE = 6;
-	public static final int LOCAL_HIGHSCORE = 7;
-	public static final int GLOBAL_HIGHSCORE = 8;
-	public static final int CREDITS = 9;
-	public static final int RELEASE_NOTES = 10;
-	public static final int HELP = 11;
-	public static final int SETTINGS = 12;
-	public static final int EXIT = 13;
+	public static final int INTRO3 = 3;
+	public static final int HOME = 4;
+	public static final int GAME = 5;
+	public static final int MAP_SELECTOR = 6;
+	public static final int DONATE = 7;
+	public static final int LOCAL_HIGHSCORE = 8;
+	public static final int GLOBAL_HIGHSCORE = 9;
+	public static final int CREDITS = 10;
+	public static final int RELEASE_NOTES = 11;
+	public static final int HELP = 12;
+	public static final int SETTINGS = 13;
+	public static final int EXIT = 14;
 			
 	public static Scene getScene() {
 		return scene;
@@ -113,23 +114,19 @@ public class Navigator {
 			intro1 = new Intro1();
 			intro1.draw();
 			scene = new Scene(intro1, Constants.WIDTH, Constants.HEIGHT);	
-			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    public void handle(KeyEvent key) {
-			    	Navigator.go(Navigator.INTRO2);			
-			    }
-			});						
 			break;
-		
+			
 		case INTRO2:
 			intro2 = new Intro2();				
 			intro2.draw();
 			scene.setRoot(intro2);
-			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    public void handle(KeyEvent key) {
-			    	Navigator.go(Navigator.GAME);			
-			    }
-			});		
-			break;		
+			break;
+			
+		case INTRO3:
+			intro3 = new Intro3();				
+			intro3.draw();
+			scene.setRoot(intro3);
+			break;
 			
 		case HOME:
 			if (home==null) {
@@ -137,11 +134,6 @@ public class Navigator {
 			}
 			home.draw();
 			scene.setRoot(home);	
-			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    public void handle(KeyEvent key) {
-			       // switch it off
-			    }
-			});		
 			break;		
 			
 		case MAP_SELECTOR:

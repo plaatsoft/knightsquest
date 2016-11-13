@@ -36,51 +36,57 @@ import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 
 public class ReleaseNotes extends MyPanel {
-	
+
 	private static String[] version = {
-	
-			"12-11-2016 (Version 0.1)\n"
-			+ "- Added map selector.\n"
-			+ "- Added basic game board.\n"
-			+ "- Added basic game controles.\n"
-			+ "- Added new version check thread to home page.\n"
-			+ "- Added page navigator so pages are loaded just in time.\n"
-			+ "- Added game page with special effects.\n" };
+
+			"13-11-2016 (Version 0.2)\n" 
+					+ "- Added new background.\n" 
+					+ "- Improve help page.\n" 
+					+ "- Improve second intro page.\n",
+
+			"12-11-2016 (Version 0.1)\n" 
+					+ "- Added basic game engine (only bot mode for now).\n" 
+					+ "- Added six maps.\n"
+					+ "- Added intro background music.\n" 
+					+ "- Added new version detection.\n"
+					+ "- Added help, credits, release notes and donate page.\n"
+					+ "- Added two intro pages with basic animation.\n" };
 
 	private static MyLabel text;
-	
+
 	public void draw() {
-		
-		Image image1 = new Image("images/background3.jpg");
-    	BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
-    	BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
-    	Background background = new Background(backgroundImage);
-    	    	  
-    	setBackground(background);
-    	
-    	 ScrollBar s1 = new ScrollBar();
-    	 s1.setMin(0);
-    	 s1.setMax(version.length-1);         
-         s1.setValue(0);
-         s1.setUnitIncrement(1);
-         s1.setBlockIncrement(1);
-         s1.setLayoutX(590);
-         s1.setLayoutY(125);
-         s1.setMinWidth(25);
-         s1.setMinHeight(275);
-         s1.setOrientation(Orientation.VERTICAL);
-         
-         s1.valueProperty().addListener(new ChangeListener<Number>() {
-             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-            	 text.setText(version[new_val.intValue()]);
-             }
-         });
-         
-         getChildren().add(s1);
-                  
-    	getChildren().add( new MyLabel(0, 20, "Release Notes", 60, "white", "-fx-font-weight: bold;"));
-    	text = new MyLabel(30, 120, version[0], 20, "white");
-    	getChildren().add( text );    	
-    	getChildren().add( new MyButton(230, 420, "Close", 18, Navigator.HOME));     
+
+		Image image1 = new Image("images/background4.jpg");
+		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
+		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+		Background background = new Background(backgroundImage);
+
+		setBackground(background);
+
+		ScrollBar s1 = new ScrollBar();
+		s1.setMin(0);
+		s1.setMax(version.length - 1);
+		s1.setValue(0);
+		s1.setUnitIncrement(1);
+		s1.setBlockIncrement(1);
+		s1.setLayoutX(590);
+		s1.setLayoutY(125);
+		s1.setMinWidth(25);
+		s1.setMinHeight(275);
+		s1.setOrientation(Orientation.VERTICAL);
+
+		s1.valueProperty().addListener(new ChangeListener<Number>() {
+			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+				text.setText(version[new_val.intValue()]);
+			}
+		});
+
+		getChildren().add(s1);
+
+		getChildren().add(new MyLabel(0, 20, "Release Notes", 60, "white", "-fx-font-weight: bold;"));
+		text = new MyLabel(30, 120, version[0], 20, "white");
+		getChildren().add(text);
+		getChildren().add(new MyButton(230, 420, "Close", 18, Navigator.HOME));
 	}
 }

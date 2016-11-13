@@ -48,13 +48,13 @@ public class Home extends MyPanel {
 	
 	Home () {
 		
-		Image image1 = new Image("images/background3.jpg");
+		Image image1 = new Image("images/background4.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
 		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
 		Background background = new Background(backgroundImage);
 		setBackground(background);
 		
-		getChildren().add (new MyLabel(30, 20, Constants.APP_NAME+" v"+Constants.APP_VERSION, 30, "white", "-fx-font-weight: bold;"));		
+		getChildren().add (new MyLabel(30, 20, Constants.APP_NAME+" v"+Constants.APP_VERSION+" BETA", 30, "white", "-fx-font-weight: bold;"));		
 		getChildren().add (new MyLabel(30, 60, Constants.APP_BUILD, 20));
 		label3 = new MyLabel(30, 425, "", 20, "white");
 		getChildren().add(label3);

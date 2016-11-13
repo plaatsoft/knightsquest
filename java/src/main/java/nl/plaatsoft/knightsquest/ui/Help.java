@@ -37,14 +37,10 @@ import nl.plaatsoft.knightsquest.tools.SoldierUtils;
 public class Help extends MyPanel {
 
 	public void draw() {
-		Image image1 = new Image("images/background3.jpg");
+		Image image1 = new Image("images/background4.jpg");
     	BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
-    	BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
-    	Background background = new Background(backgroundImage);
-    	    	
-    	
-    
-    	setBackground(background);
+    	BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);   
+    	setBackground(new Background(backgroundImage));
     	
     	int y=20;
     	getChildren().add( new MyLabel(0, y, "Help", 60, "white", "-fx-font-weight: bold;"));
@@ -54,37 +50,37 @@ public class Help extends MyPanel {
     	getChildren().add( new MyLabel(250, y, "Strength", 24, "white", "-fx-font-weight: bold;"));
     	getChildren().add( new MyLabel(400, y, "Food Demand", 24, "white", "-fx-font-weight: bold;"));
     	y+=40;    	
-    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.TOWER),1));
+    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.TOWER), 1, true));
     	getChildren().add( new MyLabel(130, y, "Castle", 24, "white"));
     	getChildren().add( new MyLabel(250, y, "unlimit", 24, "white"));
     	getChildren().add( new MyLabel(400, y, "n.a.", 24, "white"));
     	y+=30;
-    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.SOLDIER),1));
+    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.SOLDIER), 1, true));
     	getChildren().add( new MyLabel(130, y, "Soldier", 24, "white"));
     	getChildren().add( new MyLabel(250, y, "2", 24, "white"));
     	getChildren().add( new MyLabel(400, y, "2", 24, "white"));
     	y+=30;
-    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.BISHOP),1));
+    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.BISHOP), 1, true));
     	getChildren().add( new MyLabel(130, y, "Bishop", 24, "white"));
     	getChildren().add( new MyLabel(250, y, "3", 24, "white"));
     	getChildren().add( new MyLabel(400, y, "5", 24, "white"));
     	y+=30;
-    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.HORSE),1));
+    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.HORSE), 1, true));
     	getChildren().add( new MyLabel(130, y, "Horse", 24, "white"));
     	getChildren().add( new MyLabel(250, y, "4", 24, "white"));
     	getChildren().add( new MyLabel(400, y, "10", 24, "white"));
     	y+=30;
-    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.QUEEN),1));
+    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.QUEEN), 1, true));
     	getChildren().add( new MyLabel(130, y, "Queen", 24, "white"));
     	getChildren().add( new MyLabel(250, y, "5", 24, "white"));
     	getChildren().add( new MyLabel(400, y, "20", 24, "white"));
     	y+=30;
-    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.KING),1));
+    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.KING), 1, true));
     	getChildren().add( new MyLabel(130, y, "King", 24, "white"));
     	getChildren().add( new MyLabel(250, y, "6", 24, "white"));
     	getChildren().add( new MyLabel(400, y, "40", 24, "white"));
     	y+=30;
-    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.CROSS),1));
+    	getChildren().add( new MyImageView(50,y+5,SoldierUtils.get(SoldierType.CROSS), 1, true));
     	getChildren().add( new MyLabel(130, y, "Cross", 24, "white"));
     	getChildren().add( new MyLabel(250, y, "n.a.", 24, "white"));
     	getChildren().add( new MyLabel(400, y, "n.a.", 24, "white"));

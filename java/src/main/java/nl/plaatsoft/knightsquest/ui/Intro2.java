@@ -54,7 +54,7 @@ public class Intro2 extends MyPanel {
 		setOnMousePressed(new EventHandler<MouseEvent>() {
 
 	        public void handle(MouseEvent t) {
-				Navigator.go(Navigator.HOME);						
+				Navigator.go(Navigator.INTRO3);						
 	        }
 	    });
 				
