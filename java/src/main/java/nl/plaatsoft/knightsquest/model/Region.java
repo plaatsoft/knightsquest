@@ -28,7 +28,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import javafx.scene.canvas.GraphicsContext;
-import nl.plaatsoft.knightsquest.tools.SoldierUtils;
+import nl.plaatsoft.knightsquest.utils.SoldierUtils;
 
 public class Region {
 
@@ -43,14 +43,14 @@ public class Region {
 		this.player = player;
 	}
 	
-	public void draw(GraphicsContext gc, Player player) {
+	public void draw(GraphicsContext gc, Player player, int size) {
 			
 		//log.info("draw region [id="+id+"|landSize="+lands.size()+"]");
 		
 		Iterator<Land> iter1 = lands.iterator();  
 		while (iter1.hasNext()) {
 			Land land = (Land) iter1.next();
-			land.draw(gc, player);
+			land.draw(gc, player, size);
 		}
 	}
 	

@@ -33,8 +33,7 @@ import nl.plaatsoft.knightsquest.tools.MyPanel;
 
 public class Credits extends MyPanel {
 
-	@Override
-	public void draw() {
+	public Credits() {
 		
 		Image image1 = new Image("images/background4.jpg");
 	    BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
@@ -44,7 +43,7 @@ public class Credits extends MyPanel {
 	    setBackground(background);
 	    
 	    int y=20;
-	    getChildren().add( new MyLabel(0, y, "Credits", 60, "white", "-fx-font-weight: bold;"));
+	    getChildren().add( new MyLabel(0, y, "Credits", 50, "white", "-fx-font-weight: bold;"));
 	    y+=80;
 	    getChildren().add( new MyLabel(0, y, "GAME LOGIC", 24, "white"));
 	    y+=35;
@@ -63,5 +62,10 @@ public class Credits extends MyPanel {
 	    getChildren().add( new MyLabel(0, y, "wplaat, lplaat, splaat, bplaat", 18, "white"));
 	    	     
 	    getChildren().add( new MyButton(230, 420, "Close", 18, Navigator.HOME));		
+	}
+
+	@Override
+	public void draw() {
+		
 	}
 }

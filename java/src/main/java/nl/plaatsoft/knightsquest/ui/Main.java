@@ -28,9 +28,8 @@ import org.apache.log4j.Logger;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.MyMusic;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class Main extends Application {
 

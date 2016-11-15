@@ -24,7 +24,7 @@ package nl.plaatsoft.knightsquest.network;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-import nl.plaatsoft.knightsquest.tools.Constants;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class CloudProduct {
 
@@ -40,7 +40,7 @@ public class CloudProduct {
 				"&os="+System.getProperty("os.name").replaceAll(" ","");
 						
 		log.info(Constants.APP_WS_URL+ " "+parameters);
-		String json = CloudUtils.executePost(Constants.APP_WS_URL, parameters);
+		String json = CloudUtils.executePost("https://"+Constants.APP_WS_URL, parameters);
 		log.info(json);
 		
 		try {

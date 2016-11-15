@@ -21,22 +21,36 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class MyMusic {
 
-	static MediaPlayer mp;
+	final static Logger log = Logger.getLogger( MyMusic.class);
 	
-	public static void play() {
+	private static MediaPlayer mp;
+	
+	public static void init() {
+		log.info("init");
 		String path = MyMusic.class.getResource("/sounds/intro.mp3").toExternalForm();
         Media media = new Media(path);
         mp = new MediaPlayer(media);
-        //mp.setCycleCount(MediaPlayer.INDEFINITE);
-        
+        mp.setCycleCount(MediaPlayer.INDEFINITE);
+	}
+	
+	public static void play() {  
+		if (mp==null) {
+			init();
+		}
         if (Constants.MUSIC_MODE==1) {
         	mp.play();
         }
 	}
-	
+		
+	public static void stop() {
+		mp.stop();
+	}
 }

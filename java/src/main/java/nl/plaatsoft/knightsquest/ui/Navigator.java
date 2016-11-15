@@ -30,7 +30,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import nl.plaatsoft.knightsquest.tools.Constants;
+
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class Navigator {
 		
@@ -38,13 +39,12 @@ public class Navigator {
 	
 	private static Intro1 intro1;
 	private static Intro2 intro2;
-	private static Intro3 intro3;
 	private static Home home;	
 	private static MapSelector selector;	
 	private static Game game;	
 	private static Donate donate;
-	//private static HighScore1 highScore1;
-	//private static HighScore2 highScore2;
+	private static HighScore1 highScore1;
+	private static HighScore2 highScore2;
 	private static Credits credits;	
 	private static ReleaseNotes releaseNotes;
 	private static Help help;
@@ -55,7 +55,6 @@ public class Navigator {
 	public static final int NONE = 0;
 	public static final int INTRO1 = 1;
 	public static final int INTRO2 = 2;
-	public static final int INTRO3 = 3;
 	public static final int HOME = 4;
 	public static final int GAME = 5;
 	public static final int MAP_SELECTOR = 6;
@@ -89,7 +88,7 @@ public class Navigator {
 	    				Node node = (Node) iter.next();
 	    				if(node instanceof Pane){
 	    			         Pane pane = (Pane) node;
-	    			         if (pane.getId().equals("map")) {
+	    			         if ( pane.getId().equals("map") || pane.getId().equals("player")) {
 	    			        	 
 	    			        	 double scale = pane.getScaleX() * zoomFactor;
 	    			        	 
@@ -106,6 +105,7 @@ public class Navigator {
 	      });
 	  }
 	
+	
 	public static void go(int page) {
 				
 	  switch (page ) {
@@ -115,17 +115,11 @@ public class Navigator {
 			intro1.draw();
 			scene = new Scene(intro1, Constants.WIDTH, Constants.HEIGHT);	
 			break;
-			
+						
 		case INTRO2:
 			intro2 = new Intro2();				
 			intro2.draw();
 			scene.setRoot(intro2);
-			break;
-			
-		case INTRO3:
-			intro3 = new Intro3();				
-			intro3.draw();
-			scene.setRoot(intro3);
 			break;
 			
 		case HOME:
@@ -149,41 +143,46 @@ public class Navigator {
 			setSceneEvents(scene, game);
 			break;	
 			
-		/*case LOCAL_HIGHSCORE:
-			ScoreGlobal.clear();
-			
+		case LOCAL_HIGHSCORE:			
 			highScore1 = new HighScore1();
-			highScore1.draw();
-			
+			highScore1.draw();			
 			scene.setRoot(highScore1);
 			break;
 			
 		case GLOBAL_HIGHSCORE:
-			highScore2 = new HighScore2();
-			scene.setRoot(highScore2);
+			highScore2 = new HighScore2();			
 			highScore2.draw();
-			break;	*/	
+			scene.setRoot(highScore2);
+			break;	
 			
 		case DONATE:
-			donate = new Donate();
-			scene.setRoot(donate);
+			if (donate==null) {
+				donate = new Donate();
+			}			
 			donate.draw();
+			scene.setRoot(donate);
 			break;
 							
 		case CREDITS:
-			credits = new Credits();
-			credits.draw();
+			if (credits==null) {
+				credits = new Credits();
+			}
+			credits.draw();			
 			scene.setRoot(credits);
 			break;	
 			
 		case RELEASE_NOTES:
-			releaseNotes = new ReleaseNotes();
+			if (releaseNotes==null) {
+				releaseNotes = new ReleaseNotes();
+			}
 			releaseNotes.draw();
 			scene.setRoot(releaseNotes);				
 			break;		
 			
 		case SETTINGS:
-			settings = new Settings();
+			if (settings==null) {
+				settings = new Settings();
+			}
 			settings.draw();
 			scene.setRoot(settings);			
 			break;	

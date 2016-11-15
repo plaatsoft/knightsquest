@@ -31,13 +31,14 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-
+import nl.plaatsoft.knightsquest.network.CloudCheck;
 import nl.plaatsoft.knightsquest.network.CloudProduct;
 import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class Intro1 extends MyPanel {
 
@@ -59,7 +60,7 @@ public class Intro1 extends MyPanel {
 		
 		setOnMousePressed(new EventHandler<MouseEvent>() {
 	        public void handle(MouseEvent t) {
-	        	Navigator.go(Navigator.INTRO3);			
+	        	Navigator.go(Navigator.INTRO2);			
 	        }
 	    });		
 		
@@ -80,10 +81,13 @@ public class Intro1 extends MyPanel {
 	    
 		Task<Void> task = new Task<Void>() {
 	        public Void call() {
-	           	CloudProduct.getPid(); 
-	            CloudUser.getUid();
-	            CloudScore.getLocal(); 	            
-	            return null;
+	        		        	
+	        	if (CloudCheck.isReachableByTCP(Constants.APP_WS_URL)) {	        	
+	        		CloudProduct.getPid(); 
+	        		CloudUser.getUid();
+	        		CloudScore.getLocal();
+	        	}
+	        	return null;
 	        }
 		};
 		

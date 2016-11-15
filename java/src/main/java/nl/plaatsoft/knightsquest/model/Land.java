@@ -25,9 +25,8 @@ import org.apache.log4j.Logger;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import nl.plaatsoft.knightsquest.tools.Constants;
-import nl.plaatsoft.knightsquest.tools.LandUtils;
-import nl.plaatsoft.knightsquest.tools.PlayerUtils;
+import nl.plaatsoft.knightsquest.utils.LandUtils;
+import nl.plaatsoft.knightsquest.utils.PlayerUtils;
 
 public class Land {
 
@@ -35,56 +34,48 @@ public class Land {
 	
 	private int x;
 	private int y;
-	private LandType type; 
+	private LandEnum type; 
 	private Soldier soldier;
 	private Player player;
 	private int region;
 		
-	public Land(int x, int y, LandType type) {
+	public Land(int x, int y, LandEnum type) {
 		this.x = x;
 		this.y = y;
 		this.type = type;
 	}
 	
-	public void draw(GraphicsContext gc) {
+	public void draw(GraphicsContext gc, int size) {
 		
 		//log.info("draw land ["+x+","+y+"]");
 		
 		int offset = 0;
 		if ((y % 2)==1) {
-			offset = Constants.SEGMENT_SIZE*2;
+			offset = size*2;
 		} 
 		
 		LandUtils.getTexture(gc, type);
 		
 		gc.fillPolygon(
-			new double[]{(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset,
-					(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, (Constants.SEGMENT_SIZE*3)+(x*(Constants.SEGMENT_SIZE*4))+offset, 
-					(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset, 
-					0+(x*(Constants.SEGMENT_SIZE*4))+offset}, 
-			new double[]{Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), 
-					Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
-					Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7
+			new double[]{(x*(size*4))+offset, size+(x*(size*4))+offset,	(size*2)+(x*(size*4))+offset, (size*3)+(x*(size*4))+offset, 
+					(size*2)+(x*(size*4))+offset, size+(x*(size*4))+offset,	0+(x*(size*4))+offset}, 
+			new double[]{size+(y*size), (y*size), (y*size),	size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7
 			);
 				
 		gc.setFill(Color.BLACK);		
 		gc.strokePolyline(
-				new double[]{(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset,
-						(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, (Constants.SEGMENT_SIZE*3)+(x*(Constants.SEGMENT_SIZE*4))+offset, 
-						(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset, 
-						0+(x*(Constants.SEGMENT_SIZE*4))+offset}, 
-				new double[]{Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), 
-						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
-						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7
+				new double[]{(x*(size*4))+offset, size+(x*(size*4))+offset,	(size*2)+(x*(size*4))+offset, (size*3)+(x*(size*4))+offset, 
+						(size*2)+(x*(size*4))+offset, size+(x*(size*4))+offset,	0+(x*(size*4))+offset}, 
+				new double[]{size+(y*size), (y*size), (y*size),	size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7
 		);	
 		
-		if (Constants.SEGMENT_SIZE>=20) {
+		if (size>=20) {
 			gc.setFill(Color.WHITE);
-			gc.fillText("["+x+","+y+"]",(x*(Constants.SEGMENT_SIZE*4))+offset+15,Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE));
+			gc.fillText("["+x+","+y+"]",(x*(size*4))+offset+15,size+(y*size));
 		}
 	}
 		
-	public void draw(GraphicsContext gc,Player player) {
+	public void draw(GraphicsContext gc, Player player, int size) {
 		
 		//log.info("draw land player ["+x+","+y+"]");
 		
@@ -92,41 +83,33 @@ public class Land {
 		
 		int offset = 0;
 		if ((y % 2)==1) {
-			offset = Constants.SEGMENT_SIZE*2;
+			offset = size*2;
 		} 
 		
 		PlayerUtils.getTexture(gc, player.getId());
 		
 		gc.fillPolygon(
-						new double[]{(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset,
-								(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, (Constants.SEGMENT_SIZE*3)+(x*(Constants.SEGMENT_SIZE*4))+offset, 
-								(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset, 
-								0+(x*(Constants.SEGMENT_SIZE*4))+offset}, 
-						new double[]{Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), 
-								Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
-								Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7);	
+				new double[]{(x*(size*4))+offset, size+(x*(size*4))+offset,	(size*2)+(x*(size*4))+offset, (size*3)+(x*(size*4))+offset, 
+						(size*2)+(x*(size*4))+offset, size+(x*(size*4))+offset,	0+(x*(size*4))+offset}, 
+				new double[]{size+(y*size), (y*size), (y*size),	size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7);	
 	
 		gc.setFill(Color.BLACK);
 		
 		gc.strokePolyline(
-				new double[]{(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset,
-						(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, (Constants.SEGMENT_SIZE*3)+(x*(Constants.SEGMENT_SIZE*4))+offset, 
-						(Constants.SEGMENT_SIZE*2)+(x*(Constants.SEGMENT_SIZE*4))+offset, Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset, 
-						0+(x*(Constants.SEGMENT_SIZE*4))+offset}, 
-				new double[]{Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), (y*Constants.SEGMENT_SIZE), 
-						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), (Constants.SEGMENT_SIZE*2)+(y*Constants.SEGMENT_SIZE), 
-						Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)}, 7);	
+				new double[]{(x*(size*4))+offset, size+(x*(size*4))+offset,	(size*2)+(x*(size*4))+offset, (size*3)+(x*(size*4))+offset, 
+						(size*2)+(x*(size*4))+offset, size+(x*(size*4))+offset,	0+(x*(size*4))+offset}, 
+				new double[]{size+(y*size), (y*size), (y*size),	size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7);	
 		
-		if (Constants.SEGMENT_SIZE>=20) {
+		if (size>=20) {
 			
 			gc.setGlobalAlpha(1);
 			gc.setFill(Color.WHITE);
-			gc.fillText(""+region,(x*(Constants.SEGMENT_SIZE*4))+offset+25,Constants.SEGMENT_SIZE+(y*Constants.SEGMENT_SIZE)+15);
+			gc.fillText(""+region,(x*(size*4))+offset+25,size+(y*size)+15);
 		}
 		
 		if (soldier!=null) {
 			
-			getSoldier().draw(gc, x, y);
+			getSoldier().draw(gc, x, y, size);
 		}
 	}
 		
@@ -146,11 +129,11 @@ public class Land {
 		this.y = y;
 	}
 	
-	public LandType getType() {
+	public LandEnum getType() {
 		return type;
 	}
 	
-	public void setType(LandType type) {
+	public void setType(LandEnum type) {
 		this.type = type;
 	}
 	

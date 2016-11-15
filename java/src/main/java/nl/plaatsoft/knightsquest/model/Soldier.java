@@ -24,50 +24,57 @@ package nl.plaatsoft.knightsquest.model;
 import org.apache.log4j.Logger;
 
 import javafx.scene.canvas.GraphicsContext;
-import nl.plaatsoft.knightsquest.tools.Constants;
-import nl.plaatsoft.knightsquest.tools.SoldierUtils;
+import nl.plaatsoft.knightsquest.tools.MyImageView;
+import nl.plaatsoft.knightsquest.utils.SoldierUtils;
 
 public class Soldier {
 
 	final static Logger log = Logger.getLogger( Soldier.class);
 	
-	private SoldierType type;
+	private SoldierEnum type;
 	private boolean moved = false;
 	private Player player;
+	private MyImageView imageView;
 
 	@Override
 	public String toString() {
 		return ""+type;
 	}
 
-	public Soldier(SoldierType type, Player player) {
+	public Soldier(SoldierEnum type, Player player) {
 
 		this.type = type;
 		this.player = player;
+		imageView = new MyImageView(0,0,SoldierUtils.get(type),1);
 	}
 	
-	public void draw(GraphicsContext gc, int x, int y) {
+	public void draw(GraphicsContext gc, int x, int y, int size) {
 		
-		//log.info("draw soldier "+type+" [x="+x+"|y="+y+"]");
+		log.info("draw "+type+" playerId="+player.getId()+" [x="+x+"|y="+y+"]");
+				
+		if(imageView!=null) {
+			imageView.setPosition(x, y);			
+		}
 		
-		gc.setGlobalAlpha(1.0);
-			
-		int offset = 0;
-		if ((y % 2)==1) {
-			offset = Constants.SEGMENT_SIZE*2;
-		} 
-		             
-		double posX = Constants.SEGMENT_SIZE+(x*(Constants.SEGMENT_SIZE*4))+offset-2;
-		double posY = (y*Constants.SEGMENT_SIZE)+(Constants.SEGMENT_SIZE/2)-2;
-	
-		gc.drawImage(SoldierUtils.get(type), posX, posY);
+		/* else {		
+			int offset = 0;
+			if ((y % 2)==1) {
+			offset = size*2;
+			} 
+	             	
+			double posX = size+(x*(size*4))+offset-2;
+			double posY = (y*size)+(size/2)-2;
+		
+			gc.setGlobalAlpha(1.0);			
+				gc.drawImage(SoldierUtils.get(type), posX, posY);
+		} */
 	}
 		
-	public SoldierType getType() {
+	public SoldierEnum getType() {
 		return type;
 	}
 
-	public void setType(SoldierType type) {
+	public void setType(SoldierEnum type) {
 		this.type = type;
 	}
 
@@ -85,5 +92,9 @@ public class Soldier {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+	
+	public MyImageView getImageView() {
+		return imageView;
 	}
 }

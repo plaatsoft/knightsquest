@@ -31,13 +31,13 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-
+import nl.plaatsoft.knightsquest.network.CloudCheck;
 import nl.plaatsoft.knightsquest.network.CloudNewVersion;
-import nl.plaatsoft.knightsquest.tools.Constants;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class Home extends MyPanel {
 
@@ -54,7 +54,7 @@ public class Home extends MyPanel {
 		Background background = new Background(backgroundImage);
 		setBackground(background);
 		
-		getChildren().add (new MyLabel(30, 20, Constants.APP_NAME+" v"+Constants.APP_VERSION+" BETA", 30, "white", "-fx-font-weight: bold;"));		
+		getChildren().add (new MyLabel(30, 20, Constants.APP_NAME+" v"+Constants.APP_VERSION, 30, "white", "-fx-font-weight: bold;"));		
 		getChildren().add (new MyLabel(30, 60, Constants.APP_BUILD, 20));
 		label3 = new MyLabel(30, 425, "", 20, "white");
 		getChildren().add(label3);
@@ -81,7 +81,11 @@ public class Home extends MyPanel {
 					
 	    task = new Task<Void>() {
 	        public Void call() {
-	        	label3.setText(CloudNewVersion.get()); 
+	        	if (CloudCheck.isReachableByTCP(Constants.APP_WS_URL)) {	        		
+	        		label3.setText(CloudNewVersion.get());
+	        	} else {
+	        		label3.setText("No Internet connection!");
+	        	}
 	            return null;
 	        }
 		};

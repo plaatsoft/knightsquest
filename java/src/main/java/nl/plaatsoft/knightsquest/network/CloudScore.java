@@ -29,13 +29,15 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import nl.plaatsoft.knightsquest.tools.Constants;
+import nl.plaatsoft.knightsquest.model.Score;
+import nl.plaatsoft.knightsquest.model.ScoreDAO;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class CloudScore {
 
 	final static Logger log = Logger.getLogger( CloudScore.class);
 	
-	/*public static void set(String product, String version, Score score) {
+	public static void set(String product, String version, Score score) {
 					
 		String parameters;
 		parameters  = "action=setScore&";
@@ -49,7 +51,7 @@ public class CloudScore {
 		log.info(Constants.APP_WS_URL+ " "+parameters);
 		String result = CloudUtils.executePost(Constants.APP_WS_URL, parameters);
 		log.info(result);
-	}*/
+	}
 	
 	public static void getLocal() {
 		
@@ -59,7 +61,7 @@ public class CloudScore {
 		parameters += "uid=" + CloudUser.getUid();
 		
 		log.info(Constants.APP_WS_URL+ " "+parameters);
-		String json = CloudUtils.executePost(Constants.APP_WS_URL, parameters);
+		String json = CloudUtils.executePost("https://"+Constants.APP_WS_URL, parameters);
 		log.info(json);
 		
 		try {
@@ -75,22 +77,22 @@ public class CloudScore {
 			    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			    Date date = df.parse(dt);
 			    
-				//Score score = new Score(date, points, level, nickname, country);
-			  	//ScoreLocal.addScore(score);  	   
+				Score score = new Score(date, points, level, nickname, country);
+				ScoreDAO.addLocal(score);  	   
 			}			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 	}
 	
-	/*public static void getGlobal() {
+	public static void getGlobal() {
 		
 		String parameters;
 		parameters  = "action=getGlobalScore&";
 		parameters += "pid=" + CloudProduct.getPid();
 		
 		log.info(Constants.APP_WS_URL+ " "+parameters);
-		String json = CloudUtils.executePost(Constants.APP_WS_URL, parameters);
+		String json = CloudUtils.executePost("https://"+Constants.APP_WS_URL, parameters);
 		log.info(json);
 						
 		try {
@@ -107,10 +109,10 @@ public class CloudScore {
 			    Date date = df.parse(dt);
 			    
 				Score score = new Score(date, points, level, nickname, country);
-			  	ScoreGlobal.addScore(score);  	   
+			  	ScoreDAO.addGlobal(score);   
 			}			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
-	}*/
+	}
 }

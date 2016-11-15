@@ -46,11 +46,11 @@ public class Player {
 		return ""+id;
 	}
 
-	public void draw(GraphicsContext gc) {			
+	public void draw(GraphicsContext gc, int size) {			
 		Iterator<Region> iter = region.iterator();  
 		while (iter.hasNext()) {
 			Region region = (Region) iter.next();
-			region.draw(gc, this);
+			region.draw(gc, this, size);
 		}
 	}
 						

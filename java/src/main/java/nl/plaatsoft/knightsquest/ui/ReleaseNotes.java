@@ -39,10 +39,12 @@ public class ReleaseNotes extends MyPanel {
 
 	private static String[] version = {
 
-			"13-11-2016 (Version 0.2)\n" 
+			"15-11-2016 (Version 0.2)\n" 
 					+ "- Added new background.\n" 
 					+ "- Improve help page.\n" 
-					+ "- Improve second intro page.\n",
+					+ "- Add intro movie.\n"
+					+ "- Improve network detection.\n"
+					+ "- Add setting option to switch off the music.\n",
 
 			"12-11-2016 (Version 0.1)\n" 
 					+ "- Added basic game engine (only bot mode for now).\n" 
@@ -54,7 +56,7 @@ public class ReleaseNotes extends MyPanel {
 
 	private static MyLabel text;
 
-	public void draw() {
+	public ReleaseNotes() {
 
 		Image image1 = new Image("images/background4.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
@@ -84,9 +86,14 @@ public class ReleaseNotes extends MyPanel {
 
 		getChildren().add(s1);
 
-		getChildren().add(new MyLabel(0, 20, "Release Notes", 60, "white", "-fx-font-weight: bold;"));
+		getChildren().add(new MyLabel(0, 20, "Release Notes", 50, "white", "-fx-font-weight: bold;"));
 		text = new MyLabel(30, 120, version[0], 20, "white");
 		getChildren().add(text);
 		getChildren().add(new MyButton(230, 420, "Close", 18, Navigator.HOME));
+	}
+
+	@Override
+	public void draw() {
+		
 	}
 }
