@@ -21,14 +21,12 @@
 
 package nl.plaatsoft.knightsquest.ui;
 
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 
 import javafx.animation.AnimationTimer;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
@@ -40,8 +38,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
+import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
-import nl.plaatsoft.knightsquest.tools.MyImageView;
+import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.utils.Constants;
 import nl.plaatsoft.knightsquest.utils.LandUtils;
 import nl.plaatsoft.knightsquest.utils.PlayerUtils;
@@ -50,17 +49,27 @@ public class Game extends StackPane {
 
 	final static Logger log = Logger.getLogger(Game.class);
 
-	private GraphicsContext gc2;
-	private GraphicsContext gc3;
-
-	private Canvas canvas2;
-	private Canvas canvas3;
-
+	private GraphicsContext gc;
+	private Canvas canvas;
+	private Player[] player = new Player[6];	
+	private Pane pane2; 
 	private double offsetX = 0;
 	private double offsetY = 0;
-
 	private AnimationTimer timer;
 
+	public void redraw() {
+		
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		
+		LandUtils.drawMap();
+		
+		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
+			player[i].draw();
+		}
+	}
+
+	
+	@SuppressWarnings("unused")
 	public void draw() {
 
 		// ------------------------------------------------------
@@ -77,80 +86,66 @@ public class Game extends StackPane {
 		// MAP LAYER 2
 		// ------------------------------------------------------
 		
-		Pane pane2 = new Pane();
+		pane2 = new Pane();
 		pane2.setScaleX(Constants.SCALE);
 		pane2.setScaleY(Constants.SCALE);
 		pane2.setId("map");
-				
-		canvas2 = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
-		canvas2.setLayoutX(Constants.OFFSET_X);
-		canvas2.setLayoutY(Constants.OFFSET_Y);
 		
-		gc2 = canvas2.getGraphicsContext2D();
+		canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
+		canvas.setLayoutX(Constants.OFFSET_X);
+		canvas.setLayoutY(Constants.OFFSET_Y);
 		
-		LandUtils.createMap();
-		LandUtils.drawMap(gc2, Constants.SEGMENT_SIZE);
+		gc = canvas.getGraphicsContext2D();
 		
-		pane2.getChildren().add(canvas2);
+		LandUtils.createMap(gc, Constants.SEGMENT_SIZE);
 		
+		pane2.getChildren().add(canvas);
 		getChildren().add(pane2);
 		
 		// ------------------------------------------------------ 
-		// PLAYER LAYER 3
+		// CONTROL LAYER 3
 		// ------------------------------------------------------
-		
+			
 		Pane pane3 = new Pane();
 		pane3.setScaleX(Constants.SCALE);
 		pane3.setScaleY(Constants.SCALE);
-		pane3.setId("player");
-		
-		getChildren().add(pane3);
-		
-		canvas3 = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
-		canvas3.setId("player");
-		canvas3.setLayoutX(Constants.OFFSET_X);
-		canvas3.setLayoutY(Constants.OFFSET_Y);
-				
-		gc3 = canvas3.getGraphicsContext2D();		
-		pane3.getChildren().add(canvas3);
+		pane3.setId("control");
 						
+		MyButton btn = new MyButton(Constants.WIDTH-210, Constants.HEIGHT-60, "Turn", 18, Navigator.NONE);		
+		pane3.getChildren().add(btn);
+		getChildren().add(pane3);
+				
+		// ------------------------------------------------------ 
+		// Create players
+		// ------------------------------------------------------
+		
 		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
-			Player player = PlayerUtils.createPlayer(i, pane3);
-			player.draw(gc3, Constants.SEGMENT_SIZE);
+			player[i] = PlayerUtils.createPlayer(gc, i, pane2);
 		}
 		
-	
-		timer = new AnimationTimer() {
+		redraw();
+		
+		// ------------------------------------------------------ 
+		// Human Player Actions
+		// ------------------------------------------------------
+				
+		pane3.setOnMouseReleased(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent me) {
 
-			@Override
-			public void handle(long now) {
-
-				// Move bot players
-				if (PlayerUtils.nextTurn(pane3) == true) {
-					timer.stop();
-				}
-
-				// Clear canvas
-				gc3.clearRect(0, 0, canvas3.getWidth(), canvas3.getHeight());
-
-				// Draw new canvas
-				Iterator<Player> iter = PlayerUtils.getPlayers().iterator();
-				while (iter.hasNext()) {
-					Player player = (Player) iter.next();
-					player.draw(gc3, Constants.SEGMENT_SIZE);
+				Land land = LandUtils.getLand(offsetX,offsetY);				
+				if (land!=null) {
+					//log.info("land ["+land.getX()+","+land.getY()+" scale="+pane2.getScaleX()+"] selected");
+					LandUtils.getMoveToLand(land, player[1]);
+					redraw();
 				}
 			}
-		};
-
-		if (Constants.BOTS_MODE == 1) {
-			timer.start();
-		}
-				
-		canvas3.setOnMousePressed(new EventHandler<MouseEvent>() {
+		});
+		
+		pane3.setOnMousePressed(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
-				offsetX = me.getSceneX() - canvas3.getLayoutX();
-				offsetY = me.getSceneY() - canvas3.getLayoutY();
-
+				offsetX = me.getSceneX() - canvas.getLayoutX();
+				offsetY = me.getSceneY() - canvas.getLayoutY();
+	
 				if (me.getButton() == MouseButton.SECONDARY) {
 					timer.stop();
 					Navigator.go(Navigator.HOME);
@@ -158,29 +153,45 @@ public class Game extends StackPane {
 			}
 		});
 
-		canvas3.setOnMouseDragged(new EventHandler<MouseEvent>() {
+		// Scroll map
+		pane3.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
 
 				double tmpX = me.getSceneX() - offsetX;
 				double tmpY = me.getSceneY() - offsetY;
 
-				canvas2.setLayoutX(tmpX);
-				canvas2.setLayoutY(tmpY);
-
-				canvas3.setLayoutX(tmpX);
-				canvas3.setLayoutY(tmpY);
-				
-				Iterator<Node> iter = pane3.getChildren().iterator();
-				while (iter.hasNext()) {
-					Node node = (Node) iter.next();
-					if (node.getClass() == MyImageView.class) {
-						MyImageView imageView = (MyImageView) node;
-
-						imageView.move(canvas3.getLayoutX(), canvas3.getLayoutY());
-					}
-				}
+				canvas.setLayoutX(tmpX);
+				canvas.setLayoutY(tmpY);				
 			}
 		});
 		
+		btn.setOnAction(new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent event) {
+				PlayerUtils.nextTurn();
+				redraw();
+			}
+		});
+		
+		
+		// ------------------------------------------------------ 
+		// 100% Bot mode
+		// ------------------------------------------------------
+				
+		if (Constants.BOTS_MODE == 1) {
+			
+			timer = new AnimationTimer() {
+
+				@Override
+				public void handle(long now) {
+							
+					// Move bot players
+					if (PlayerUtils.nextTurn() == true) {
+						timer.stop();
+					}
+					redraw();
+				}
+			};			
+			timer.start();
+		}		
 	}
 }

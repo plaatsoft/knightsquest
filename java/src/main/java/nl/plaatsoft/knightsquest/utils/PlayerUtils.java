@@ -71,10 +71,14 @@ public class PlayerUtils {
 		}		
 	}	
 	
-	public static Player createPlayer(int id, Pane pane) {
+	public static Player createPlayer(GraphicsContext gc, int id, Pane pane) {
 			
-		Player player = new Player(id);
-		player.setId(id);
+		Boolean bot = true;
+		if (id==1) {
+			bot = false;
+		}
+		
+		Player player = new Player(id, bot);
 		players.add(player);
 		//log.info("Player [id="+id+"] created");
 		
@@ -103,42 +107,41 @@ public class PlayerUtils {
 		return stop;		
 	}
 	
-	public static boolean nextTurn(Pane pane) {
-					
-		log.info("---["+turnCount+"]---");
-		turnCount++;
+	public static boolean nextTurn() {
 		
+		log.info("---[ Turn "+(++turnCount)+"]---");
+				
 		Iterator<Player> iter1 = players.iterator();  	
 		while (iter1.hasNext()) {
+			
 			Player player = (Player) iter1.next();		
-							
-			int landCount=0;
+			int amount = SoldierUtils.enableMove(player);
+				
 			Iterator<Region> iter2 = player.getRegion().iterator();  
 			while (iter2.hasNext()) {
+					
 				Region region = (Region) iter2.next();
-				landCount+=region.getLands().size();
-				/* Activate Soldiers to Move */
-				int amount = SoldierUtils.activateMoveSoldier(player);
-				
+											
 				/* Move all soldiers of bot players */
-				for (int i=0; i<amount; i++) {
-					SoldierUtils.moveSoldier(region);
+				if (player.isBot()) {
+					for (int i=0; i<amount; i++) {
+						SoldierUtils.moveSoldier(region);
+					}
 				}
-							
+								
 				/* Create soldier */
-				SoldierUtils.createSoldier(region, pane);							
-			}
-			log.info("PlayerId="+player.getId()+" Regions="+player.getRegion().size()+" Lands="+landCount);
+				SoldierUtils.createSoldier(region);
+			}			
 		}
 		
-		int regions = RegionUtils.detectedRegions();
-		//log.info("Region active="+regions);
-		RegionUtils.rebuildRegions(regions, pane);	
+		/* Rebuild all regions */
+		int regions = RegionUtils.detectedRegions();		
+		RegionUtils.rebuildRegions(regions);	
 		
 		return checkGameOver();
 	}
 	
-	public static Region getPlayer(Land newLand) {
+	public static Region getRegion(Land newLand) {
 				
 		Iterator<Player> iter1 = players.iterator();  	
 		while (iter1.hasNext()) {
@@ -146,14 +149,14 @@ public class PlayerUtils {
 			
 			Iterator<Region> iter2 = player.getRegion().iterator();  
 			while (iter2.hasNext()) {
-				Region castle = (Region) iter2.next();
+				Region region = (Region) iter2.next();
 				
-				Iterator<Land> iter3 = castle.getLands().iterator();  
+				Iterator<Land> iter3 = region.getLands().iterator();  
 				while (iter3.hasNext()) {
 					Land land = (Land) iter3.next();
 					
 					if (land.equals(newLand)) {
-						return castle;
+						return region;
 					}
 				}
 			}

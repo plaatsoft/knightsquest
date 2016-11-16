@@ -25,35 +25,29 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import javafx.scene.canvas.GraphicsContext;
-
 public class Player {
-
-	final static Logger log = Logger.getLogger( Player.class);
 	
-	private int id;		
+	private int id;				
+	private boolean bot = false;
 	private List <Region> region = new ArrayList<Region>();
-	
-	public Player(int id) {
-		super();
+
+	public Player(int id, boolean bot) {
+		this.bot = bot;
 		this.id = id;
 	}
 	
-	@Override
-	public String toString() {
-		return ""+id;
-	}
-
-	public void draw(GraphicsContext gc, int size) {			
+	public void draw() {		
 		Iterator<Region> iter = region.iterator();  
 		while (iter.hasNext()) {
 			Region region = (Region) iter.next();
-			region.draw(gc, this, size);
+			region.draw();
 		}
 	}
-						
+		
+	public String toString() {
+		return ""+id;
+	}
+		
 	public int getId() {
 		return id;
 	}
@@ -68,5 +62,13 @@ public class Player {
 	
 	public void setRegion(List<Region> region) {
 		this.region = region;
+	}
+
+	public boolean isBot() {
+		return bot;
+	}
+
+	public void setBot(boolean bot) {
+		this.bot = bot;
 	}	
 }

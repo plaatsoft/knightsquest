@@ -23,8 +23,6 @@ package nl.plaatsoft.knightsquest.model;
 
 import org.apache.log4j.Logger;
 
-import javafx.scene.canvas.GraphicsContext;
-import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.utils.SoldierUtils;
 
 public class Soldier {
@@ -34,40 +32,34 @@ public class Soldier {
 	private SoldierEnum type;
 	private boolean moved = false;
 	private Player player;
-	private MyImageView imageView;
+	private Land land;	
 
 	@Override
 	public String toString() {
 		return ""+type;
 	}
 
-	public Soldier(SoldierEnum type, Player player) {
+	public Soldier(SoldierEnum type, Player player, Land land) {
 
 		this.type = type;
+		this.setLand(land);
 		this.player = player;
-		imageView = new MyImageView(0,0,SoldierUtils.get(type),1);
 	}
 	
-	public void draw(GraphicsContext gc, int x, int y, int size) {
+	public void draw() {
 		
-		log.info("draw "+type+" playerId="+player.getId()+" [x="+x+"|y="+y+"]");
+		//log.info("draw "+type+" playerId="+player.getId()+" [x="+land.getX()+"|y="+land.getY()+"]");
 				
-		if(imageView!=null) {
-			imageView.setPosition(x, y);			
-		}
-		
-		/* else {		
-			int offset = 0;
-			if ((y % 2)==1) {
-			offset = size*2;
-			} 
+		int offset = 0;
+		if ((land.getY() % 2)==1) {
+			offset = land.getSize()*2;
+		} 
 	             	
-			double posX = size+(x*(size*4))+offset-2;
-			double posY = (y*size)+(size/2)-2;
+		double posX = land.getSize()+(land.getX()*(land.getSize()*4))+offset-2;
+		double posY = (land.getY()*land.getSize())+(land.getSize()/2)-2;
 		
-			gc.setGlobalAlpha(1.0);			
-				gc.drawImage(SoldierUtils.get(type), posX, posY);
-		} */
+		land.getGc().setGlobalAlpha(1.0);			
+		land.getGc().drawImage(SoldierUtils.get(type), posX, posY);
 	}
 		
 	public SoldierEnum getType() {
@@ -94,7 +86,11 @@ public class Soldier {
 		this.player = player;
 	}
 	
-	public MyImageView getImageView() {
-		return imageView;
+	public Land getLand() {
+		return land;
+	}
+
+	public void setLand(Land land) {
+		this.land = land;
 	}
 }

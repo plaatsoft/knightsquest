@@ -72,7 +72,7 @@ public class Navigator {
 	}
 	
 	//handles mouse scrolling
-	private static void setSceneEvents(final Scene scene, final Pane page) {	    
+	/*private static void setSceneEvents(final Scene scene, final Pane page) {	    
 	    scene.setOnScroll(
 	            new EventHandler<ScrollEvent>() {
 	              public void handle(ScrollEvent event) {
@@ -88,7 +88,7 @@ public class Navigator {
 	    				Node node = (Node) iter.next();
 	    				if(node instanceof Pane){
 	    			         Pane pane = (Pane) node;
-	    			         if ( pane.getId().equals("map") || pane.getId().equals("player")) {
+	    			         if ( pane.getId().equals("map") {
 	    			        	 
 	    			        	 double scale = pane.getScaleX() * zoomFactor;
 	    			        	 
@@ -103,7 +103,7 @@ public class Navigator {
 	    		   }
 	           }
 	      });
-	  }
+	  }*/
 	
 	
 	public static void go(int page) {
@@ -140,7 +140,7 @@ public class Navigator {
 			game = new Game();				
 			game.draw();						
 			scene.setRoot(game);	
-			setSceneEvents(scene, game);
+			//setSceneEvents(scene, game);
 			break;	
 			
 		case LOCAL_HIGHSCORE:			

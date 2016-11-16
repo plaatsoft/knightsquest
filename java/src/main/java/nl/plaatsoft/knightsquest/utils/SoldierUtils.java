@@ -24,10 +24,8 @@ package nl.plaatsoft.knightsquest.utils;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
+
 import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
@@ -36,8 +34,6 @@ import nl.plaatsoft.knightsquest.model.SoldierEnum;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 
 public class SoldierUtils {
-
-	final private static Logger log = Logger.getLogger( SoldierUtils.class);		
 	
 	private static Image tower = new Image("images/tower.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 	private static Image pawn = new Image("images/pawn.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
@@ -47,10 +43,8 @@ public class SoldierUtils {
 	private static Image king = new Image("images/king.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 	private static Image cross = new Image("images/cross.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 			
-	public static void createSoldier(Region region, Pane pane) {
-	
-		//log.info("soldier create start");
-					
+	public static void createSoldier(Region region) {
+						
 		/* Create new Soldier if there is enough food */  
 		if (region.foodAvailable()>=getFoodNeeds(SoldierEnum.PAWN)) {
 						
@@ -62,20 +56,14 @@ public class SoldierUtils {
 				if (iter2.hasNext()) {				
 					Land land2 = (Land) iter2.next();
 					
-					Soldier soldier = new Soldier(SoldierEnum.PAWN, region.getPlayer());
-					soldier.getImageView().setPosition(land2.getX(), land2.getY());
-					pane.getChildren().add(soldier.getImageView());
+					Soldier soldier = new Soldier(SoldierEnum.PAWN, region.getPlayer(), land2);
 					land2.setSoldier(soldier);
-					
-					log.info("New "+soldier.getType()+" [x="+land2.getX()+"|y="+land2.getY()+"|regionId="+region.getId()+"] created!");
 				}
 			}							
 		}
-		
-		//log.info("soldier create end");
 	}
 	
-	public static int activateMoveSoldier(Player player) {
+	public static int enableMove(Player player) {
 		
 		int count = 0;
 		Iterator<Region> iter2 = player.getRegion().iterator();  
@@ -95,6 +83,7 @@ public class SoldierUtils {
 		return count;
 	}
 		
+	// Move bots
 	public static void moveSoldier(Region region) {
 		
 		//log.info("soldier move start");
@@ -121,19 +110,13 @@ public class SoldierUtils {
 						Land land2 = (Land) iter2.next();
 
 						// Only upgrade if there is enough food
-						if (region.foodAvailable()>SoldierUtils.getFoodNeeds(upgrade(land1.getSoldier().getType()))) {
+						SoldierEnum nextType = upgrade(land1.getSoldier().getType());	
 						
-							land1.getSoldier().setMoved(true);
-							
-							@SuppressWarnings("unused")
-							SoldierEnum currentType = land1.getSoldier().getType();
-							SoldierEnum nextType = upgrade(land1.getSoldier().getType());
-														
-							land2.setSoldier(land1.getSoldier());
-							land2.getSoldier().setType(nextType);
-							//log.info("Move ["+land1.getX()+","+land1.getY()+"]->["+land2.getX()+","+land2.getY()+"] Upgrade soldier ["+currentType+"->"+nextType+"]");
-						
-							land1.setSoldier(null);						
+						if (region.foodAvailable()>SoldierUtils.getFoodNeeds(nextType)) {
+																								
+							land1.getSoldier().setType(nextType);
+																												
+							LandUtils.moveSoldier(land1, land2);			
 							return;
 						}
 					}
@@ -155,44 +138,13 @@ public class SoldierUtils {
 						
 						if (attackStrength>defendStrength) {
 								
-							land1.getSoldier().setMoved(true);
-							
-							// log.info(land1.getSoldier().getType()+" ["+land1.getX()+","+land1.getY()+"] attack and kills "+land2.getSoldier().getType()+" ["+land2.getX()+","+land2.getY()+"]");
-							
-							land2.setSoldier(land1.getSoldier());
-							land2.setPlayer(region.getPlayer());
-							land1.setSoldier(null);
-															
-							// Remove land from current owner, if any
-							Region region2 = PlayerUtils.getPlayer(land2);
-							if (region2!=null) {
-								region2.getLands().remove(land2);
-							}	
-							
-							// Add land to player castle								
-							region.getLands().add(land2);
+							LandUtils.moveSoldier(land1, land2);
 							return;
 						} 
 							
 					} else {
 						/* Enemy land is unprotected */
-					
-						land1.getSoldier().setMoved(true);
-									
-						// log.info("land1.getSoldier().getType()+" ["+land1.getX()+","+land1.getY()+"]->["+land2.getX()+","+land2.getY()+"]");
-					
-						land2.setSoldier(land1.getSoldier());
-						land2.setPlayer(region.getPlayer());
-						land1.setSoldier(null);
-															
-						//	Remove land from current owner, if any
-						Region region2 = PlayerUtils.getPlayer(land2);
-						if (region!=null) {
-							region2.getLands().remove(land2);
-						}	
-							
-						// 	Add land to player castle								
-						region.getLands().add(land2);		
+						LandUtils.moveSoldier(land1, land2);
 						return;				
 					}
 				}
@@ -205,16 +157,10 @@ public class SoldierUtils {
 				Land land4 = MyRandom.nextLand(list4);
 				if (land4!=null) {
 											
-					land1.getSoldier().setMoved(true);
-							
-					land4.setSoldier(land1.getSoldier());
-					land4.setPlayer(region.getPlayer());
-					land1.setSoldier(null);
-							
+					LandUtils.moveSoldier(land1, land4);
+													
 					// Add land to player castle								
 					region.getLands().add(land4);
-							
-					// log.info("land1.getSoldier().getType()+" ["+land1.getX()+","+land1.getY()+"]->["+land4.getX()+","+land4.getY()+"]");
 					return;
 				}
 						
@@ -225,14 +171,7 @@ public class SoldierUtils {
 				List <Land> list5 = LandUtils.getOwnLand(land1.getX(), land1.getY(), region.getPlayer());	
 				Land land5 = MyRandom.nextLand(list5);
 				if (land5!=null) {
-
-					land1.getSoldier().setMoved(true);
-													
-					land5.setSoldier(land1.getSoldier());
-					land5.setPlayer(region.getPlayer());
-					land1.setSoldier(null);
-
-					//log.info("land1.getSoldier().getType()+" ["+land1.getX()+","+land1.getY()+"]->["+land5.getX()+","+land5.getY()+"]");
+					LandUtils.moveSoldier(land1, land5);
 					return;
 				}		
 			}
@@ -265,7 +204,6 @@ public class SoldierUtils {
 				return cross;
 			
 			default:
-				log.error("Unknown soldier found!");
 				break;
 		}
 		return null;

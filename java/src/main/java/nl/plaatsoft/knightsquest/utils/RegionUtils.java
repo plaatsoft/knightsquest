@@ -40,31 +40,6 @@ public class RegionUtils {
 
 	final private static Logger log = Logger.getLogger(RegionUtils.class);
 
-	public static void checkFood(Region region) {
-
-		log.info("check food [player=" + region.getPlayer().getId() + " region=" + region.getId() + " size="
-				+ region.getLands().size() + " foodAvailable=" + region.foodAvailable() + "]");
-
-		if (region.foodAvailable() < 0) {
-
-			/* Too less food for all soldiers of castle, they all die */
-			Iterator<Land> iter = region.getLands().iterator();
-			while (iter.hasNext()) {
-				Land land = (Land) iter.next();
-				if (land.getSoldier() != null) {
-					Soldier soldier = land.getSoldier();
-					if (soldier.getType() != SoldierEnum.TOWER) {
-						soldier.setType(SoldierEnum.CROSS);
-						// log.info("Soldier
-						// [x="+land.getX()+"|y="+land.getY()+"|castleId="+castle.getId()+"]
-						// died!");
-					}
-				}
-			}
-		}
-
-		// log.info("check food end");
-	}
 
 	public static Region createStartRegion(int regionId, Player player, Pane pane) {
 
@@ -106,9 +81,7 @@ public class RegionUtils {
 					land3.setPlayer(player);
 
 					// Place Tower
-					Soldier soldier3 = new Soldier(SoldierEnum.TOWER, player);		
-					soldier3.getImageView().setPosition(land3.getX(), land3.getY());
-					pane.getChildren().add(soldier3.getImageView());
+					Soldier soldier3 = new Soldier(SoldierEnum.TOWER, player, land3);		
 					land3.setSoldier(soldier3);
 					
 					log.info("New "+soldier3.getType()+" [x="+land3.getX()+"|y="+land3.getY()+"] created!");
@@ -129,9 +102,7 @@ public class RegionUtils {
 						land4.setPlayer(player);
 						region.getLands().add(land4);
 						
-						Soldier soldier4 = new Soldier(SoldierEnum.PAWN, player);
-						soldier4.getImageView().setPosition(land4.getX(), land4.getY());
-						pane.getChildren().add(soldier4.getImageView());
+						Soldier soldier4 = new Soldier(SoldierEnum.PAWN, player, land4);
 						land4.setSoldier(soldier4);
 						
 						log.info("New "+soldier4.getType()+" [x="+land4.getX()+"|y="+land4.getY()+"|regionId="+region.getId()+"] created!");
@@ -199,7 +170,7 @@ public class RegionUtils {
 		return regionId;
 	}
 
-	public static void rebuildRegions(int amountOfRegions, Pane pane) {
+	public static void rebuildRegions(int amountOfRegions) {
 
 		// Remove all region
 		Iterator<Player> iter1 = PlayerUtils.getPlayers().iterator();
@@ -235,7 +206,7 @@ public class RegionUtils {
 						if (lands[x][y].getSoldier() != null) {
 
 							foodNeeded += SoldierUtils.getFoodNeeds(lands[x][y].getSoldier().getType());
-
+							log.info("FoodNeeded="+foodNeeded+" ["+x+","+y+"]");
 							if (lands[x][y].getSoldier().getType() == SoldierEnum.TOWER) {
 								if (++castleCount > 1) {
 
@@ -243,7 +214,6 @@ public class RegionUtils {
 									 * Remove castle if there are more one
 									 * castle in one region
 									 */
-									// log.info("Castle remove");
 									lands[x][y].setSoldier(null);
 								}
 							}
@@ -252,12 +222,13 @@ public class RegionUtils {
 				}
 			}
 
+			log.info("check food [regionId="+regionId+" foodAvailable=" + foodAvailable + " foodNeeded="+foodNeeded+"]");
+			
 			if (foodAvailable < foodNeeded) {
-
 				Iterator<Land> iter = list.iterator();
 				while (iter.hasNext()) {
 					Land land = (Land) iter.next();
-					if (land.getSoldier() != null) {
+					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierEnum.TOWER)) {
 
 						// No food, soldiers die
 						land.getSoldier().setType(SoldierEnum.CROSS);
@@ -265,16 +236,13 @@ public class RegionUtils {
 				}
 			}
 
-			// log.info("CastleId="+i+" landSize="+list.size());
-
 			if ((castleCount == 0) && (list.size() > 1)) {
 
 				// Create new castle.
 				Land land = MyRandom.nextLand(list);
 				if (land != null) {
 					// log.info("Castle created");
-					Soldier soldier = new Soldier(SoldierEnum.TOWER, land.getPlayer());
-					pane.getChildren().add(soldier.getImageView());
+					Soldier soldier = new Soldier(SoldierEnum.TOWER, land.getPlayer(), land);
 					land.setSoldier(soldier);
 				}
 			}

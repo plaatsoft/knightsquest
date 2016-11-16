@@ -21,15 +21,24 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.CacheHint;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import nl.plaatsoft.knightsquest.model.Land;
+import nl.plaatsoft.knightsquest.model.LandEnum;
+import nl.plaatsoft.knightsquest.model.Soldier;
+import nl.plaatsoft.knightsquest.model.SoldierEnum;
 import nl.plaatsoft.knightsquest.utils.Constants;
+import nl.plaatsoft.knightsquest.utils.LandUtils;
 
 public class MyImageView extends ImageView {
 
@@ -37,20 +46,106 @@ public class MyImageView extends ImageView {
 
 	private double origX = -1;
 	private double origY = -1;
+	private Soldier soldier;
+	private double offsetX;
+	private double offsetY;
 
-	public MyImageView(double x, double y, Image image, double scale) {
+	public MyImageView(double x, double y, Image image, double scale, Soldier soldier) {
 
+		this.setSoldier(soldier);
+		
 		setImage(image);
 		setLayoutX(x);
 		setLayoutY(y);
 		setScaleX(scale);
 		setScaleY(scale);
-		
-		setOnMouseClicked(new EventHandler<MouseEvent>() {
+				
+		setOnMousePressed(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
-				log.info("selected");
+				log.info(soldier.getType()+" ["+soldier.getLand().getX()+","+soldier.getLand().getY()+"] selected");
+				
+				if ((soldier.getType()!=SoldierEnum.CROSS) && (soldier.getType()!=SoldierEnum.TOWER)) {
+					origX = getLayoutX();
+					origY = getLayoutY();
+					
+					offsetX = me.getSceneX() - getLayoutX();
+					offsetY = me.getSceneY() - getLayoutY();
+					
+					List <Land> list1 = LandUtils.getNeigbors(soldier.getLand().getX(), soldier.getLand().getY());
+					Iterator<Land> iter1 = list1.iterator();
+									
+					while (iter1.hasNext()) {				
+						Land land = (Land) iter1.next();
+						if (
+							(land.getType()!=LandEnum.WATER) &&  
+							(land.getType()!=LandEnum.OCEAN) //&& 
+						   // ((land.getSoldier()!=null) && !soldier.getPlayer().equals(land.getPlayer()) &&
+						   // (land.getSoldier().getType()!=SoldierEnum.TOWER)) 
+						   ) {
+							  //land.drawSelect();
+						}
+					}	
+				}
 			}
 		});
+		
+		setOnMouseDragged(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent me) {
+
+				if ((soldier.getType()!=SoldierEnum.CROSS) && (soldier.getType()!=SoldierEnum.TOWER)) {
+					double tmpX = me.getSceneX() - offsetX;
+					double tmpY = me.getSceneY() - offsetY;
+
+					setLayoutX(tmpX);
+					setLayoutY(tmpY);
+				}
+			}
+		});
+		
+		setOnMouseReleased(new EventHandler<MouseEvent>() {;
+			public void handle(MouseEvent me) {
+				
+				if ((soldier.getType()!=SoldierEnum.CROSS) && (soldier.getType()!=SoldierEnum.TOWER)) {
+					
+					
+					List <Land> list1 = LandUtils.getNeigbors(soldier.getLand().getX(), soldier.getLand().getY());
+					Iterator<Land> iter1 = list1.iterator();
+									
+					while (iter1.hasNext()) {				
+						Land land = (Land) iter1.next();
+						if (
+							(land.getType()!=LandEnum.WATER) &&  
+							(land.getType()!=LandEnum.OCEAN) //&& 
+						   // ((land.getSoldier()!=null) && !soldier.getPlayer().equals(land.getPlayer()) &&
+						   // (land.getSoldier().getType()!=SoldierEnum.TOWER)) 
+						   ) {
+
+							  Point2D point = new Point2D(me.getSceneX(), me.getSceneY());
+					           if (land.getPolygon().contains(point)) {
+					               System.out.println("land "+land.getX()+","+land.getY());
+					               
+					               moveSoldier(soldier.getLand(),land);
+					               return;
+					           }
+							
+							  soldier.getPlayer().draw();
+						}
+					}
+					
+					setLayoutX(origX);
+					setLayoutY(origY);
+				}
+			}
+		});
+	}
+
+	
+	private void moveSoldier(Land a, Land b) {
+		
+		b.setSoldier(a.getSoldier());
+		b.setPlayer(a.getPlayer());
+		a.getSoldier().setLand(b);
+		a.setSoldier(null);		
 	}
 
 	public MyImageView(double x, double y, Image image, double scale, boolean invert) {
@@ -108,5 +203,13 @@ public class MyImageView extends ImageView {
 
 		setLayoutX(posX);
 		setLayoutY(posY);
+	}
+
+	public Soldier getSoldier() {
+		return soldier;
+	}
+
+	public void setSoldier(Soldier soldier) {
+		this.soldier = soldier;
 	}
 }

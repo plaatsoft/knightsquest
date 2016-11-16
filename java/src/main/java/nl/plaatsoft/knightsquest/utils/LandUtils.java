@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -35,6 +36,7 @@ import javafx.scene.paint.ImagePattern;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.LandEnum;
 import nl.plaatsoft.knightsquest.model.Player;
+import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 
@@ -51,6 +53,7 @@ public class LandUtils {
 	private static Image rock = new Image("images/rock.png");
 	private static Image grass = new Image("images/grass.png");
 		
+	
 	public static void getTexture(GraphicsContext gc, LandEnum type) {
 		
 		switch(type) {
@@ -153,7 +156,6 @@ public class LandUtils {
 		}			
 		return list2;
 	}
-
 	
 	public static List <Land> getNewLand(int x, int y) {
 		
@@ -187,6 +189,101 @@ public class LandUtils {
 		return list2;
 	}
 	
+	public static Land getLand(double mouseX, double mouseY) {
+		
+		Point2D point = new Point2D(mouseX, mouseY);
+		
+		for (int x=0; x<Constants.SEGMENT_X; x++) {			
+			for (int y=0; y<Constants.SEGMENT_Y; y++) {
+			    if (land[x][y].getPolygon().contains(point)) {
+			       return land[x][y];
+			    }		
+			}
+		}	
+		return null;
+	}
+	
+	public static void moveSoldier(Land source, Land destination) {
+		
+		log.info("Move soldier from ["+source.getX()+","+source.getY()+"]->["+destination.getX()+","+destination.getY()+"]");
+		
+		destination.setSoldier(source.getSoldier());
+		destination.setPlayer(source.getPlayer());		
+		destination.getSoldier().setLand(destination);		
+		destination.getSoldier().setMoved(true);
+		source.setSoldier(null);
+				
+		// Remove land from old region
+		Region region2 = PlayerUtils.getRegion(destination);
+		if (region2!=null) {
+			region2.getLands().remove(destination);
+		}	
+		
+		// Add land to new region
+		Region region1 = PlayerUtils.getRegion(source);
+		region1.getLands().add(destination);
+	}
+		
+	public static void getMoveToLand(Land land3, Player player) {
+	
+		if (land3.isDestination()) {
+						
+			// Search source land
+			List <Land> list1 = LandUtils.getNeigbors(land3.getX(), land3.getY());
+			Iterator<Land> iter1 = list1.iterator();						
+			while (iter1.hasNext()) {			
+				Land land2 = (Land) iter1.next();	
+				if (land2.isSource()) {
+					
+					moveSoldier(land2, land3);
+					break;
+				}
+			}	
+			
+			// Reset current selected land
+			for (int x=0; x<Constants.SEGMENT_X; x++) {			
+				for (int y=0; y<Constants.SEGMENT_Y; y++) {
+					land[x][y].setDestination(false);
+					land[x][y].setSource(false);
+				}		
+			}	
+			
+		} else {
+						
+			if ( (land3.getPlayer()!=null) && 
+			     (land3.getPlayer().equals(player)) && 
+				 (land3.getSoldier()!=null) && 
+				 (land3.getSoldier().isMoved()==false) &&
+			     (land3.getSoldier().getType()!=SoldierEnum.TOWER) &&
+				 (land3.getSoldier().getType()!=SoldierEnum.CROSS))
+			{			
+						
+				// Reset current selected land
+				for (int x=0; x<Constants.SEGMENT_X; x++) {			
+					for (int y=0; y<Constants.SEGMENT_Y; y++) {
+						land[x][y].setDestination(false);
+						land[x][y].setSource(false);
+					}		
+				}	
+							
+				// 	Select source
+				land3.setSource(true);
+			
+				// Select destination
+				List <Land> list1 = LandUtils.getNeigbors(land3.getX(), land3.getY());
+				Iterator<Land> iter1 = list1.iterator();						
+				while (iter1.hasNext()) {			
+					Land land2 = (Land) iter1.next();			
+					if ((land2.getType()!=LandEnum.WATER) && (land2.getType()!=LandEnum.OCEAN)) {
+						if ((land2.getSoldier()!=null && land2.getSoldier().getType()==SoldierEnum.TOWER)) {
+						} else {		
+							land2.setDestination(true);
+						}
+					}
+				}
+			}	
+		}	
+	}
 		
 	/**
 	 * Get Neighers of select x,y coordinate
@@ -435,11 +532,11 @@ public class LandUtils {
 		}
 	}
 	
-	public static void createMap() {
+	public static void createMap(GraphicsContext gc, int size) {
 					
 		for (int x=0; x<Constants.SEGMENT_X; x++) {	
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
-				land[x][y] = new Land(x, y, LandEnum.NONE);				
+				land[x][y] = new Land(gc, x, y, size, LandEnum.NONE);				
 			}
 		}
 		
@@ -451,10 +548,10 @@ public class LandUtils {
 		optimizeMap();			
 	}		
 		
-	public static void drawMap(GraphicsContext gc, int size) {
+	public static void drawMap() {
 		for (int x=0; x<Constants.SEGMENT_X; x++) {					
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {				
-				land[x][y].draw(gc, size);				
+				land[x][y].draw();				
 			}
 		}		
 	}

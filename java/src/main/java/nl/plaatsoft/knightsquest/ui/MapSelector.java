@@ -54,8 +54,8 @@ public class MapSelector extends MyPanel {
 	private void createMap(GraphicsContext gc, int seek) {
 		
 		MyRandom.setSeek(seek);
-		LandUtils.createMap();
-		LandUtils.drawMap(gc, SIZE);
+		LandUtils.createMap(gc, SIZE);
+		LandUtils.drawMap();
 	}
 
 	private void createCanvas(int id, int x, int y, int size, final int seek) {

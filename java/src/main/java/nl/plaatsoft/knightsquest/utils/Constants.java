@@ -32,15 +32,15 @@ public class Constants {
 	public final static String APP_DONATE_URL = "http://www.plaatsoft.nl/donate";
 	
 	public final static int BOTS_MODE = 0;
-	public final static int MUSIC_MODE = 0;
+	public final static int MUSIC_MODE = 1;
 	
 	public final static int WIDTH = 640; 
 	public final static int HEIGHT = 480;		
-	public final static double SCALE = 0.55;
+	public final static double SCALE = 1; //0.55;
 	public final static double OFFSET_X = 0; //-260;
 	public final static double OFFSET_Y = 0; //-200;	
 	
-	public final static int SEGMENT_SIZE = 19;	
+	public final static int SEGMENT_SIZE = 20;	
 	public final static int SEGMENT_X = 15;
 	public final static int SEGMENT_Y = 45;
 	 
