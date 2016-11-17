@@ -88,34 +88,6 @@ public class PlayerUtils {
 		}		
 		return player;
 	}
-
-	public static boolean checkGameOver2() {
-
-		int count=0;
-
-		Iterator<Player> iter1 = players.iterator();  	
-		while (iter1.hasNext()) {
-			
-			Player player = (Player) iter1.next();
-			if (player.isBot() && (player.getRegion().size()>0)) {
-				count++;
-			}
-		}
-		if (count>1) {
-			return false;
-		}
-					
-		return true;		
-	}
-	
-	public static boolean checkGameOver1() {
-		
-		if (players.get(0).getRegion().size()>0) {
-			return false;
-		}
-				
-		return true;		
-	}
 	
 	public static void nextTurn() {
 	

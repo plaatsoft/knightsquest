@@ -47,6 +47,7 @@ import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.model.Score;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 import nl.plaatsoft.knightsquest.utils.Constants;
 import nl.plaatsoft.knightsquest.utils.LandUtils;
@@ -58,7 +59,7 @@ public class Game extends StackPane {
 
 	private GraphicsContext gc;
 	private Canvas canvas;
-	private Player[] player = new Player[Constants.START_PLAYERS+1];;	
+	private static Player[] players = new Player[Constants.START_PLAYERS+1];;	
 	private Pane pane2; 
 	private double offsetX = 0;
 	private double offsetY = 0;
@@ -66,6 +67,8 @@ public class Game extends StackPane {
 	private boolean gameOver;
 	private int turn;
 	private Task<Void> task;
+	private static MyLabel label1;
+	private static MyLabel label2;
 
 	public void redraw() {
 		
@@ -74,7 +77,7 @@ public class Game extends StackPane {
 		LandUtils.drawMap();
 		
 		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
-			player[i].draw();
+			players[i].draw();
 		}
 	}
 		
@@ -95,6 +98,40 @@ public class Game extends StackPane {
 		return rank;
 	}
 		
+	public static boolean checkGameOver2() {
+
+		int count=0;
+
+		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
+			
+			if (players[i].getRegion().size()>0) {
+				count++;
+				if (count>1) {
+					return false;
+				}
+			}
+		}
+						
+		label1.setText("Game Over");
+		if (players[1].getRegion().size()>0) {			
+			label2.setText("Player wins!");
+		} else {
+			label2.setText("Bots won!");
+		}
+		return true;		
+	}
+	
+	public static boolean checkGameOver1() {
+		
+		if (players[1].getRegion().size()>0) {
+			return false;
+		}
+		
+		label1.setText("Game Over");
+		label2.setText("Bots won!");
+		return true;		
+	}
+	
 	public void start() {
 
 		gameOver = false;
@@ -139,7 +176,11 @@ public class Game extends StackPane {
 		pane3.setScaleY(Constants.SCALE);
 		pane3.setId("control");
 						
-		MyButton btn = new MyButton(Constants.WIDTH-210, Constants.HEIGHT-60, "Turn ["+turn+"]", 18, Navigator.NONE);		
+		label1 = new MyLabel(0, (Constants.HEIGHT/2)-120, "", 80, "white", "-fx-font-weight: bold;");
+		label2 = new MyLabel(0, (Constants.HEIGHT/2)-20, "", 60, "white", "-fx-font-weight: bold;");	
+		MyButton btn = new MyButton(Constants.WIDTH-210, Constants.HEIGHT-60, "Turn ["+turn+"]", 18, Navigator.NONE);
+		pane3.getChildren().add(label1);
+		pane3.getChildren().add(label2);
 		pane3.getChildren().add(btn);
 		getChildren().add(pane3);
 				
@@ -148,7 +189,7 @@ public class Game extends StackPane {
 		// ------------------------------------------------------
 		
 		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
-			player[i] = PlayerUtils.createPlayer(gc, i, pane2);
+			players[i] = PlayerUtils.createPlayer(gc, i, pane2);
 		}
 		
 		redraw();
@@ -164,7 +205,7 @@ public class Game extends StackPane {
 				Land land = LandUtils.getPlayerSelectedLand(offsetX,offsetY);				
 				if (land!=null) {
 					//log.info("land ["+land.getX()+","+land.getY()+" scale="+pane2.getScaleX()+"] selected");
-					LandUtils.doPlayerActions(land, player[1]);
+					LandUtils.doPlayerActions(land, players[1]);
 					redraw();
 				}
 			}
@@ -205,7 +246,7 @@ public class Game extends StackPane {
 					
 					PlayerUtils.nextTurn();
 					
-					if (PlayerUtils.checkGameOver1()) {
+					if (checkGameOver1() || checkGameOver2()) {
 															
 						log.info("game over, player dead");
 						gameOver=true;
@@ -223,14 +264,12 @@ public class Game extends StackPane {
 		timer = new AnimationTimer() {
 			public void handle(long now) {
 											
-				// Move bot players automaticly
+				// Move bot players automatic
 				turn++;
 				PlayerUtils.nextTurn();
-				if (PlayerUtils.checkGameOver2()) {
+				if (checkGameOver2()) {
 					
-					log.info("game over, all bots dead");
-					
-					// One bot won
+					log.info("game over, only one player over!");
 					timer.stop();		
 				}
 				btn.setText("End ["+turn+"]");

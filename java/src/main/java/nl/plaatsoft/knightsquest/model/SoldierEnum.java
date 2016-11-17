@@ -22,14 +22,13 @@
 package nl.plaatsoft.knightsquest.model;
 
 public enum SoldierEnum {
-	
-	TOWER(0),
-	CROSS(1),	
-	PAWN(2),
-	BISHOP(3),
-	HORSE(4),
-	QUEEN(5),
-	KING(6);	
+	CROSS(0),	
+	PAWN(1),
+	BISHOP(2),
+	HORSE(3),
+	QUEEN(4),
+	KING(5),
+	TOWER(6);
 	
 	private final int value;
 	

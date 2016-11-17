@@ -126,6 +126,27 @@ public class  SoldierUtils {
 					
 				//log.info(land1.getSoldier().getType()+" found [x="+land1.getX()+"|y="+land1.getY()+"]");	
 				
+				/* --------------------------- */
+				/* Upgrade soldier if possible */
+				/* --------------------------- */
+				
+				if (land1.getSoldier().getType()!=SoldierEnum.KING) {
+					List <Land> list5 = LandUtils.getUpgradeSoldiers(land1);
+					Iterator<Land> iter5 = list5.iterator();
+					while (iter5.hasNext()) {
+						Land land5 = (Land) iter5.next();
+
+						// Only upgrade if there is enough food
+						SoldierEnum nextType = upgrade(land1.getSoldier().getType());	
+						
+						if (region.foodAvailable()>SoldierUtils.food(nextType)) {
+																																																				
+							LandUtils.moveSoldier(land1, land5);			
+							return;
+						}
+					}
+				}
+				
 				/* ------------------------------------- */
 				/* Conquer enemy land or defend own land */
 				/* ------------------------------------- */
@@ -159,36 +180,11 @@ public class  SoldierUtils {
 				
 				List <Land> list4 = LandUtils.getBotNewLand(land1);					
 				Land land4 = MyRandom.nextLand(list4);
-				if (land4!=null) {
-											
-					LandUtils.moveSoldier(land1, land4);
-													
-					// Add land to player castle								
-					region.getLands().add(land4);
+				if (land4!=null) {											
+					LandUtils.moveSoldier(land1, land4);											
 					return;
 				}
 				
-				/* --------------------------- */
-				/* Upgrade soldier if possible */
-				/* --------------------------- */
-				
-				if (land1.getSoldier().getType()!=SoldierEnum.KING) {
-					List <Land> list5 = LandUtils.getUpgradeSoldiers(land1);
-					Iterator<Land> iter5 = list5.iterator();
-					while (iter5.hasNext()) {
-						Land land5 = (Land) iter5.next();
-
-						// Only upgrade if there is enough food
-						SoldierEnum nextType = upgrade(land1.getSoldier().getType());	
-						
-						if (region.foodAvailable()>SoldierUtils.food(nextType)) {
-																																																				
-							LandUtils.moveSoldier(land1, land5);			
-							return;
-						}
-					}
-				}
-
 				/* ------------------------ */
 				// Move soldier on own land
 				/* ------------------------ */

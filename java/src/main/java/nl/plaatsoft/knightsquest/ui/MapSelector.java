@@ -60,7 +60,7 @@ public class MapSelector extends MyPanel {
 
 	private void createCanvas(int id, int x, int y, int size, final int seek) {
 
-		Canvas canvas = new Canvas((Constants.SEGMENT_X * size * 4),(Constants.SEGMENT_Y * size * 2));
+		Canvas canvas = new Canvas((Constants.SEGMENT_X * size * 4.5),(Constants.SEGMENT_Y * size * 2));
 		canvas.setLayoutX(x);
 		canvas.setLayoutY(y);
 

@@ -172,7 +172,7 @@ public class LandUtils {
 		}			
 		return list2;
 	}
-	
+
 	public static List <Land> getBotRegionLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
@@ -278,6 +278,81 @@ public class LandUtils {
 		}
 	}
 	
+	
+	public static void setPlayerSoldierMoveDestinations(Land land) {
+		
+		List <Land> list1 = LandUtils.getNeigbors(land);
+		Iterator<Land> iter1 = list1.iterator();
+						
+		while (iter1.hasNext()) {				
+			Land land1 = (Land) iter1.next();
+			if ( (land1.getType()!=LandEnum.WATER) && 
+				 (land1.getType()!=LandEnum.OCEAN)) {
+			
+				 // Target land is free
+				 if (land1.getPlayer()==null) {
+					 land1.setDestination(true);
+					 continue;
+				 }
+				 
+				 // Target land has no soldier
+				 if (land1.getSoldier()==null) {
+					 land1.setDestination(true);
+					 continue;
+				 }
+				
+				 // Target land is owner by bot but soldier is less strong
+				 if ((land1.getPlayer()!=null) && (!land1.getPlayer().equals(land.getPlayer())) && (land1.getSoldier()!=null) && 
+			    		 (land1.getSoldier().getType().getValue()<land.getSoldier().getType().getValue())) {
+					 land1.setDestination(true);
+					 continue;
+				 }
+				 				 
+				 // Target land is owned, Pawn soldier available and there is food available for upgrade. 
+				 Region region = RegionUtils.getRegion(land);
+				 SoldierEnum nextType = SoldierUtils.upgrade(land.getSoldier().getType());	
+				 
+				 if ((land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer()) && 
+					 (land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.PAWN) &&
+					 (region.foodAvailable()>SoldierUtils.food(nextType))) {
+					 land1.setDestination(true);
+					 continue;				 
+				 }
+			}
+		}	
+	}
+	
+	public static void setPlayerNewSoldierDestinations(Land land) {
+		
+		List <Land> list1 = LandUtils.getNeigbors(land);
+		Iterator<Land> iter1 = list1.iterator();
+						
+		while (iter1.hasNext()) {				
+			Land land1 = (Land) iter1.next();
+			if ( (land1.getType()!=LandEnum.WATER) && 
+				 (land1.getType()!=LandEnum.OCEAN)) {
+			
+				 // Target land is free
+				 if (land1.getPlayer()==null) {
+					 land1.setDestination(true);
+					 continue;
+				 }
+				
+				// Target land has cross
+				 if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.CROSS)) { 
+					 land1.setDestination(true);
+					 continue;
+				 }
+				 
+				 // Target land is owned and does not have soldier on it
+				 if ((land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer()) && (land1.getSoldier()==null)) { 
+					 land1.setDestination(true);
+					 continue;
+				 }
+			}
+		}	
+	}
+	
 	public static void doPlayerActions(Land land3, Player player) {
 	
 		if (land3.isDestination()) {
@@ -316,28 +391,13 @@ public class LandUtils {
 				// 	Select source
 				land3.setSource(true);
 					
-				// Select destination
-				List <Land> list1 = LandUtils.getNeigbors(land3);
-				Iterator<Land> iter1 = list1.iterator();						
-				while (iter1.hasNext()) {			
-					Land land2 = (Land) iter1.next();			
-					if ((land2.getType()!=LandEnum.WATER) && (land2.getType()!=LandEnum.OCEAN)) {
-						if (land3.getSoldier().getType()==SoldierEnum.TOWER) {
-							if ((land2.getSoldier()!=null) && (land2.getSoldier().getType()!=SoldierEnum.CROSS)) {								
-							} else {
-								// New Soldier can only go to new free land.
-								land2.setDestination(true);
-							}							
-						} else {
-							if ((land2.getSoldier()!=null) && (land2.getSoldier().getType()==SoldierEnum.TOWER)) {
-							} else {		
-								// Existing soldier can move every expect tower land
-								land2.setDestination(true);
-							}
-						}
-					}
+				// Select destination				
+				if (land3.getSoldier().getType()==SoldierEnum.TOWER) {
+					setPlayerNewSoldierDestinations(land3);
+				} else {
+					setPlayerSoldierMoveDestinations(land3);
 				}
-			}	
+			}
 		}	
 	}
 		

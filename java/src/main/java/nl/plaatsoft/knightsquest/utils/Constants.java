@@ -36,7 +36,7 @@ public class Constants {
 	public final static int WIDTH = 640; 
 	public final static int HEIGHT = 480;		
 	public final static double SCALE = 1; //0.55;
-	public final static double OFFSET_X = 20; //-260;
+	public final static double OFFSET_X = 10; //-260;
 	public final static double OFFSET_Y = 10; //-200;	
 	
 	public final static int SEGMENT_SIZE = 10;	
