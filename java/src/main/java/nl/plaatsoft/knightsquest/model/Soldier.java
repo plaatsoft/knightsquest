@@ -30,7 +30,7 @@ public class Soldier {
 	final static Logger log = Logger.getLogger( Soldier.class);
 	
 	private SoldierEnum type;
-	private boolean moved = false;
+	private boolean enabled;
 	private Player player;
 	private Land land;	
 
@@ -41,6 +41,8 @@ public class Soldier {
 
 	public Soldier(SoldierEnum type, Player player, Land land) {
 
+		enabled = false;
+		
 		this.type = type;
 		this.setLand(land);
 		this.player = player;
@@ -59,7 +61,12 @@ public class Soldier {
 		double posY = (land.getY()*land.getSize())+(land.getSize()/2)-2;
 		
 		land.getGc().setGlobalAlpha(1.0);			
-		land.getGc().drawImage(SoldierUtils.get(type), posX, posY);
+		
+		boolean red = false;
+		if (!player.isBot()) {
+			red = enabled;
+		}
+		land.getGc().drawImage(SoldierUtils.get(type, red), posX, posY);
 	}
 		
 	public SoldierEnum getType() {
@@ -68,14 +75,6 @@ public class Soldier {
 
 	public void setType(SoldierEnum type) {
 		this.type = type;
-	}
-
-	public boolean isMoved() {
-		return moved;
-	}
-
-	public void setMoved(boolean moved) {
-		this.moved = moved;
 	}
 
 	public Player getPlayer() {
@@ -92,5 +91,13 @@ public class Soldier {
 
 	public void setLand(Land land) {
 		this.land = land;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }

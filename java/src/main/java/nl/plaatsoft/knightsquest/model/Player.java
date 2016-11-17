@@ -45,7 +45,7 @@ public class Player {
 	}
 		
 	public String toString() {
-		return ""+id;
+		return "playerId="+id;
 	}
 		
 	public int getId() {

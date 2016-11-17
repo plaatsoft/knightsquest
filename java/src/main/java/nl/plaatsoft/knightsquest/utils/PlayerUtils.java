@@ -38,8 +38,8 @@ import nl.plaatsoft.knightsquest.model.Player;
 public class PlayerUtils {
 
 	final private static Logger log = Logger.getLogger( PlayerUtils.class);		
+	
 	final private static List <Player> players = new ArrayList<Player>() ;
-	private static int turnCount = 0;
 	
 	public static void getTexture(GraphicsContext gc, int player) { 
 	
@@ -89,81 +89,74 @@ public class PlayerUtils {
 		return player;
 	}
 
-	public static boolean checkGameOver() {
-		
-		boolean stop = false;
-		int killPlayerCount=0;
+	public static boolean checkGameOver2() {
+
+		int count=0;
+
 		Iterator<Player> iter1 = players.iterator();  	
 		while (iter1.hasNext()) {
+			
 			Player player = (Player) iter1.next();
-			if (player.getRegion().size()==0) {
-				killPlayerCount++;				
+			if (player.isBot() && (player.getRegion().size()>0)) {
+				count++;
 			}
 		}
-		
-		if (killPlayerCount==(players.size()-1)) {
-			stop =true;
-		}		
-		return stop;		
+		if (count>1) {
+			return false;
+		}
+					
+		return true;		
 	}
 	
-	public static boolean nextTurn() {
+	public static boolean checkGameOver1() {
 		
-		log.info("---[ Turn "+(++turnCount)+"]---");
+		if (players.get(0).getRegion().size()>0) {
+			return false;
+		}
 				
+		return true;		
+	}
+	
+	public static void nextTurn() {
+	
+		log.info("-------");
+		
 		Iterator<Player> iter1 = players.iterator();  	
 		while (iter1.hasNext()) {
 			
 			Player player = (Player) iter1.next();		
-			int amount = SoldierUtils.enableMove(player);
+						
+			int amount = SoldierUtils.enableSoldier(player);
 				
 			Iterator<Region> iter2 = player.getRegion().iterator();  
-			while (iter2.hasNext()) {
-					
+			while (iter2.hasNext()) {					
 				Region region = (Region) iter2.next();
-											
-				/* Move all soldiers of bot players */
-				if (player.isBot()) {
+				
+				if (!player.isBot()) {
+					
+					// Human Player
+					SoldierUtils.newSoldierArrive(region);
+				
+				} else {
+					
+					// Bot player
 					for (int i=0; i<amount; i++) {
-						SoldierUtils.moveSoldier(region);
+												
+						/* Move bot soldiers */
+						SoldierUtils.moveBotSoldier(region);						
 					}
+					
+					/* Create bot soldier, if possible */
+					SoldierUtils.createBotSoldier(region);
 				}
-								
-				/* Create soldier */
-				SoldierUtils.createSoldier(region);
 			}			
 		}
 		
 		/* Rebuild all regions */
 		int regions = RegionUtils.detectedRegions();		
 		RegionUtils.rebuildRegions(regions);	
-		
-		return checkGameOver();
 	}
 	
-	public static Region getRegion(Land newLand) {
-				
-		Iterator<Player> iter1 = players.iterator();  	
-		while (iter1.hasNext()) {
-			Player player = (Player) iter1.next();			
-			
-			Iterator<Region> iter2 = player.getRegion().iterator();  
-			while (iter2.hasNext()) {
-				Region region = (Region) iter2.next();
-				
-				Iterator<Land> iter3 = region.getLands().iterator();  
-				while (iter3.hasNext()) {
-					Land land = (Land) iter3.next();
-					
-					if (land.equals(newLand)) {
-						return region;
-					}
-				}
-			}
-		}
-		return null;
-	}
-		
 	public static List<Player> getPlayers() {
 		return players;
 	}

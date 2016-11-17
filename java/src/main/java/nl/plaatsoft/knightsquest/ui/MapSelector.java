@@ -49,7 +49,7 @@ public class MapSelector extends MyPanel {
 	private Task<Void> task;
 
 	private static GraphicsContext[] gc = new GraphicsContext[6];
-	private static int seek[] = { 1, 8, 30, 4, 10, 6 };
+	private static int seek[] = { 1, 4, 6, 8, 9, 10};
 
 	private void createMap(GraphicsContext gc, int seek) {
 		

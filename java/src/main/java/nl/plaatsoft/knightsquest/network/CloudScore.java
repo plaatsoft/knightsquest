@@ -49,7 +49,7 @@ public class CloudScore {
 		parameters += "level=" + score.getLevel();
 		
 		log.info(Constants.APP_WS_URL+ " "+parameters);
-		String result = CloudUtils.executePost(Constants.APP_WS_URL, parameters);
+		String result = CloudUtils.executePost("https://"+Constants.APP_WS_URL, parameters);
 		log.info(result);
 	}
 	

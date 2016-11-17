@@ -22,15 +22,37 @@
 package nl.plaatsoft.knightsquest.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+
+import nl.plaatsoft.knightsquest.utils.ScoreUtils;
 
 public class ScoreDAO {
 
 	private static ArrayList<Score> local = new ArrayList<Score>();
 	private static ArrayList<Score> global = new ArrayList<Score>();
 		
-	public static void addLocal(Score score) {
+	public static int addLocal(Score score) {
 		local.add(score);
+		
+		sort(local);
+		
+		int count = 0;
+		Iterator<Score> iter = local.iterator();    	
+		while (iter.hasNext()) {
+			count++;
+			if (score == (Score) iter.next()) {
+				break;
+			}
+		}
+		
+		// Return highscore place
+		return count;		
+	}
+	
+	private static void sort(ArrayList <Score> list) {
+        ScoreUtils comparator = new ScoreUtils();
+        Collections.sort(list, comparator);
 	}
 	
 	public static void addGlobal(Score score) {

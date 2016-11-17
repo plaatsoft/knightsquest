@@ -23,7 +23,6 @@ package nl.plaatsoft.knightsquest.model;
 
 public enum LandEnum {	
 	
-	NONE(0),
 	MOUNTAIN(1),
 	FOREST(2),
 	GRASS(3),

@@ -42,6 +42,10 @@ public class Region {
 		this.player = player;
 	}
 	
+	public String toString() {
+		return "regionId="+id;
+	}
+	
 	public void draw() {
 			
 		//log.info("draw region [id="+id+"|landSize="+lands.size()+"]");
@@ -61,7 +65,7 @@ public class Region {
 		while (iter.hasNext()) {				
 			Land land = (Land) iter.next();
 			if (land.getSoldier()!=null) {					
-				foodDemand += SoldierUtils.getFoodNeeds(land.getSoldier().getType());
+				foodDemand += SoldierUtils.food(land.getSoldier().getType());
 			}		
 		}	
 				
@@ -70,22 +74,6 @@ public class Region {
 		//log.info("regionId="+id+" foodDemand="+foodDemand+" foodProduction="+lands.size()+" foodAvailable="+foodAvailable);
 		
 		return foodAvailable;
-	}
-	
-	public boolean checkNewLand(Land newLand) {
-
-		boolean value = true;
-		
-		Iterator<Land> iter = lands.iterator();						
-		while (iter.hasNext()) {				
-			Land land = (Land) iter.next();
-			if (land.equals(newLand)) {						
-				value = false;
-			}		
-		}	
-		
-		//log.info("checkNewLand="+value);
-		return value;
 	}
 	
 	public int getId() {

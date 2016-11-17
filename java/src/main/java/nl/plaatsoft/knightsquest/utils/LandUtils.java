@@ -37,6 +37,7 @@ import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.LandEnum;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Region;
+import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 
@@ -44,16 +45,15 @@ public class LandUtils {
 	
 	final static Logger log = Logger.getLogger( LandUtils.class);
 	
-	private static Land[][] land = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
+	private static Land[][] lands = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
 		
-	//private static Image water = new Image("images/water.png");
-	//private static Image ocean = new Image("images/ocean.png");
+	private static Image water = new Image("images/water.png");
+	private static Image ocean = new Image("images/ocean.png");
 	private static Image forest = new Image("images/forest.png");
 	private static Image coast = new Image("images/coast.png");
 	private static Image rock = new Image("images/rock.png");
 	private static Image grass = new Image("images/grass.png");
-		
-	
+			
 	public static void getTexture(GraphicsContext gc, LandEnum type) {
 		
 		switch(type) {
@@ -75,13 +75,13 @@ public class LandUtils {
 					break;
 				
 			case WATER:
-					gc.setFill(Color.BLUE);
-					//gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
+					//gc.setFill(Color.BLUE);
+					gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
 					break;
 					
 			case OCEAN:
-					gc.setFill(Color.DARKBLUE);
-					//gc.setFill(new ImagePattern(ocean, 0, 0, 1, 1, true));
+					//gc.setFill(Color.DARKBLUE);
+					gc.setFill(new ImagePattern(ocean, 0, 0, 1, 1, true));
 					break;
 					
 			default:
@@ -90,43 +90,43 @@ public class LandUtils {
 		}
 	}
 	
-	public static List <Land> getUpgradeSoldiers(int x, int y, Player player) {
+	public static List <Land> getUpgradeSoldiers(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		List <Land> list1 = LandUtils.getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
-			Land land = (Land) iter1.next();
-			if ((land.getPlayer()!=null) &&
-				land.getPlayer().equals(player) &&
-				(land.getSoldier()!=null) && 
-				(land.getSoldier().getType()==SoldierEnum.PAWN)) 
+			Land land1 = (Land) iter1.next();
+			if ((land1.getPlayer()!=null) &&
+				land1.getPlayer().equals(land.getPlayer()) &&
+				(land1.getSoldier()!=null) && 
+				(land1.getSoldier().getType()==SoldierEnum.PAWN)) 
 			{
-					list2.add(land);
+					list2.add(land1);
 			}
 		}	
 
 		return list2;
 	}
 
-	public static List <Land> getEnemyLand(int x, int y, Player player) {
+	public static List <Land> getBotEnemyLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		List <Land> list1 = LandUtils.getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
-			Land land = (Land) iter1.next();
-			if ((land.getType()!=LandEnum.WATER) && (land.getType()!=LandEnum.OCEAN)) {
+			Land land1 = (Land) iter1.next();
+			if ((land1.getType()!=LandEnum.WATER) && (land1.getType()!=LandEnum.OCEAN)) {
 				
-			 	 if ((land.getPlayer()!=null) && !land.getPlayer().equals(player)) {
-			 		if ((land.getSoldier()!=null) && (land.getSoldier().getType()==SoldierEnum.TOWER)) {
+			 	 if ((land1.getPlayer()!=null) && !land1.getPlayer().equals(land.getPlayer())) {
+			 		if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.TOWER)) {
 			 			// no nothing
 			 		} else {
-			 			list2.add(land);
+			 			list2.add(land1);
 			 		}
 				}
 			}
@@ -134,22 +134,22 @@ public class LandUtils {
 		return list2;
 	}
 
-	public static List <Land> getOwnLand(int x, int y, Player player) {
+	public static List <Land> getBotOwnLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		List <Land> list1 = LandUtils.getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
-			Land land = (Land) iter1.next();
-			if ((land.getType()!=LandEnum.WATER) && (land.getType()!=LandEnum.OCEAN)) {				
-				if ((land.getPlayer()!=null) && land.getPlayer().equals(player)) {
-					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierEnum.CROSS)) {
+			Land land1 = (Land) iter1.next();
+			if ((land1.getType()!=LandEnum.WATER) && (land1.getType()!=LandEnum.OCEAN)) {				
+				if ((land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer())) {
+					if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()!=SoldierEnum.CROSS)) {
 						// Soldier on own land, skip it.
 					} else {
 						// log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
-						list2.add(land);
+						list2.add(land1);
 					}
 				}
 			}
@@ -157,46 +157,46 @@ public class LandUtils {
 		return list2;
 	}
 	
-	public static List <Land> getNewLand(int x, int y) {
+	public static List <Land> getBotNewLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		List <Land> list1 = LandUtils.getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();						
 		while (iter1.hasNext()) {			
-			Land land = (Land) iter1.next();			
-			if ((land.getType()!=LandEnum.WATER) && (land.getType()!=LandEnum.OCEAN) && (land.getPlayer()==null)) {
+			Land land1 = (Land) iter1.next();			
+			if ((land1.getType()!=LandEnum.WATER) && (land1.getType()!=LandEnum.OCEAN) && (land1.getPlayer()==null)) {
 				//log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");
-				list2.add(land);				
+				list2.add(land1);				
 			}
 		}			
 		return list2;
 	}
 	
-	public static List <Land> getRegionLand(int x, int y, Player player) {
+	public static List <Land> getBotRegionLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(x, y);
+		List <Land> list1 = LandUtils.getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();						
 		while (iter1.hasNext()) {			
-			Land land = (Land) iter1.next();			
-			if ((land.getType()!=LandEnum.WATER) && (land.getType()!=LandEnum.OCEAN) && 
-				(land.getPlayer()!=null) && land.getPlayer().equals(player) && land.getRegion()==0) {				
-					list2.add(land);				
+			Land land1 = (Land) iter1.next();			
+			if ((land1.getType()!=LandEnum.WATER) && (land1.getType()!=LandEnum.OCEAN) && 
+				(land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer()) && land1.getRegion()==0) {				
+					list2.add(land1);				
 			}
 		}			
 		return list2;
 	}
 	
-	public static Land getLand(double mouseX, double mouseY) {
+	public static Land getPlayerSelectedLand(double mouseX, double mouseY) {
 		
 		Point2D point = new Point2D(mouseX, mouseY);
 		
 		for (int x=0; x<Constants.SEGMENT_X; x++) {			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
-			    if (land[x][y].getPolygon().contains(point)) {
-			       return land[x][y];
+			    if (lands[x][y].getPolygon().contains(point)) {
+			       return lands[x][y];
 			    }		
 			}
 		}	
@@ -205,79 +205,135 @@ public class LandUtils {
 	
 	public static void moveSoldier(Land source, Land destination) {
 		
-		log.info("Move soldier from ["+source.getX()+","+source.getY()+"]->["+destination.getX()+","+destination.getY()+"]");
+		Region srcRegion = RegionUtils.getRegion(source);
+		Region dstRegion = RegionUtils.getRegion(destination);
+		
+		//log.info("Move soldier ["+source.getX()+","+source.getY()+"]->["+destination.getX()+","+destination.getY()+"]");
+		
+		if ( (destination.getSoldier()!=null) && (destination.getPlayer()!=null) && destination.getPlayer().equals(source.getPlayer())) {
+			
+			// Soldier upgrade
+			
+			if (destination.getSoldier().getType()!=SoldierEnum.PAWN) {
+				// upgrade only allowed with Pawn, so skip upgrade
+				//log.info("Not pawn, upgrade skipped");
+				return;
+			}
+			
+			SoldierEnum nextType = SoldierUtils.upgrade(source.getSoldier().getType());				
+			if (srcRegion.foodAvailable()<=SoldierUtils.food(nextType)) {
+				log.info("Not food enough, upgrade skipped");
+				// Not enough food, so skip upgrade.
+				return;
+			}
+			source.getSoldier().setType(nextType);
+		}
 		
 		destination.setSoldier(source.getSoldier());
 		destination.setPlayer(source.getPlayer());		
 		destination.getSoldier().setLand(destination);		
-		destination.getSoldier().setMoved(true);
+		destination.getSoldier().setEnabled(false);
+			
 		source.setSoldier(null);
 				
-		// Remove land from old region
-		Region region2 = PlayerUtils.getRegion(destination);
-		if (region2!=null) {
-			region2.getLands().remove(destination);
-		}	
+		// Remove land from old region		
+		if (dstRegion!=null) {
+			dstRegion.getLands().remove(destination);
+		}
 		
 		// Add land to new region
-		Region region1 = PlayerUtils.getRegion(source);
-		region1.getLands().add(destination);
+		srcRegion.getLands().add(destination);		
+	}
+	
+	public static void createSoldier(Land source, Land destination) {
+		
+		Region srcRegion = RegionUtils.getRegion(source);
+		Region dstRegion = RegionUtils.getRegion(destination);
+		
+		Soldier soldier = new Soldier(SoldierEnum.PAWN, source.getPlayer(), destination);
+		
+		source.getSoldier().setEnabled(false);
+		
+		destination.setSoldier(soldier);
+		destination.setPlayer(source.getPlayer());		
+		destination.getSoldier().setLand(destination);		
+		destination.getSoldier().setEnabled(false);
+		
+		// Remove land from old region		
+		if (dstRegion!=null) {
+			dstRegion.getLands().remove(destination);			
+		}
+		
+		// Add land to new region
+		srcRegion.getLands().add(destination);
 	}
 		
-	public static void getMoveToLand(Land land3, Player player) {
+	private static void resetSelected() {
+
+		for (int x=0; x<Constants.SEGMENT_X; x++) {			
+			for (int y=0; y<Constants.SEGMENT_Y; y++) {
+				lands[x][y].setDestination(false);
+				lands[x][y].setSource(false);
+			}		
+		}
+	}
+	
+	public static void doPlayerActions(Land land3, Player player) {
 	
 		if (land3.isDestination()) {
 						
 			// Search source land
-			List <Land> list1 = LandUtils.getNeigbors(land3.getX(), land3.getY());
+			List <Land> list1 = LandUtils.getNeigbors(land3);
 			Iterator<Land> iter1 = list1.iterator();						
 			while (iter1.hasNext()) {			
 				Land land2 = (Land) iter1.next();	
 				if (land2.isSource()) {
+				
+					if (land2.getSoldier().getType()==SoldierEnum.TOWER) { 
+													
+						createSoldier(land2, land3);
+						
+					} else {
 					
-					moveSoldier(land2, land3);
+						moveSoldier(land2, land3);
+					}
 					break;
 				}
 			}	
 			
-			// Reset current selected land
-			for (int x=0; x<Constants.SEGMENT_X; x++) {			
-				for (int y=0; y<Constants.SEGMENT_Y; y++) {
-					land[x][y].setDestination(false);
-					land[x][y].setSource(false);
-				}		
-			}	
+			resetSelected();
 			
 		} else {
 						
 			if ( (land3.getPlayer()!=null) && 
 			     (land3.getPlayer().equals(player)) && 
 				 (land3.getSoldier()!=null) && 
-				 (land3.getSoldier().isMoved()==false) &&
-			     (land3.getSoldier().getType()!=SoldierEnum.TOWER) &&
+				 land3.getSoldier().isEnabled() &&			     
 				 (land3.getSoldier().getType()!=SoldierEnum.CROSS))
 			{			
-						
-				// Reset current selected land
-				for (int x=0; x<Constants.SEGMENT_X; x++) {			
-					for (int y=0; y<Constants.SEGMENT_Y; y++) {
-						land[x][y].setDestination(false);
-						land[x][y].setSource(false);
-					}		
-				}	
-							
+				resetSelected();
+					
 				// 	Select source
 				land3.setSource(true);
-			
+					
 				// Select destination
-				List <Land> list1 = LandUtils.getNeigbors(land3.getX(), land3.getY());
+				List <Land> list1 = LandUtils.getNeigbors(land3);
 				Iterator<Land> iter1 = list1.iterator();						
 				while (iter1.hasNext()) {			
 					Land land2 = (Land) iter1.next();			
 					if ((land2.getType()!=LandEnum.WATER) && (land2.getType()!=LandEnum.OCEAN)) {
-						if ((land2.getSoldier()!=null && land2.getSoldier().getType()==SoldierEnum.TOWER)) {
-						} else {		
-							land2.setDestination(true);
+						if (land3.getSoldier().getType()==SoldierEnum.TOWER) {
+							if ((land2.getSoldier()!=null) && (land2.getSoldier().getType()!=SoldierEnum.CROSS)) {								
+							} else {
+								// New Soldier can only go to new free land.
+								land2.setDestination(true);
+							}							
+						} else {
+							if ((land2.getSoldier()!=null) && (land2.getSoldier().getType()==SoldierEnum.TOWER)) {
+							} else {		
+								// Existing soldier can move every expect tower land
+								land2.setDestination(true);
+							}
 						}
 					}
 				}
@@ -291,113 +347,117 @@ public class LandUtils {
 	 * @param y
 	 * @return
 	 */
-	public static List <Land> getNeigbors(int x, int y) {
+	public static List <Land> getNeigbors(Land land) {
 				
+		int x = land.getX();
+		int y = land.getY();
+		
 		List <Land> list = new ArrayList<Land>();
 		
 		if (y+1<Constants.SEGMENT_Y) {
-			list.add(land[x][y+1]);
+			list.add(lands[x][y+1]);
 		}
 		
 		if (y-1>=0) {
-			list.add(land[x][y-1]);
+			list.add(lands[x][y-1]);
 		}
 		
 		if (y+2<Constants.SEGMENT_Y) {
-			list.add(land[x][y+2]);
+			list.add(lands[x][y+2]);
 		}
 		
 		if (y-2>=0) {
-			list.add(land[x][y-2]);
+			list.add(lands[x][y-2]);
 		}
 		
 		if (y%2==1) {	
 			if ((x+1<Constants.SEGMENT_X) && (y+1<Constants.SEGMENT_Y)) {
-				list.add(land[x+1][y+1]);
+				list.add(lands[x+1][y+1]);
 			}
 			
 			if ((x+1<Constants.SEGMENT_X) && (y-1>=0)) {
-				list.add(land[x+1][y-1]);
+				list.add(lands[x+1][y-1]);
 			}						
 		} else {
 			
 			if ((x-1>=0) && (y+1<Constants.SEGMENT_Y)) {
-				list.add(land[x-1][y+1]);
+				list.add(lands[x-1][y+1]);
 			}
 			
 			if ((x-1>=0) && (y-1>=0)) {
-				list.add(land[x-1][y-1]);
+				list.add(lands[x-1][y-1]);
 			}			
 		}
 		
-		//log.info("getNeigbors [x="+x+"|y="+y+"|size="+list.size()+"]");
 		return list;
 	}
 		
-	public static List <Land> getNeigbors2(int x, int y) {
+	public static List <Land> getNeigbors2(Land land) {
+		
+		int x = land.getX();
+		int y = land.getY();
 		
 		List <Land> list = new ArrayList<Land>();
 		
 		if (y-4>=0) {
-			list.add(land[x][y-4]);
+			list.add(lands[x][y-4]);
 		}
 		
 		if (y-3>=0) {
-			list.add(land[x][y-3]);
+			list.add(lands[x][y-3]);
 		}
 		
 		if ((x+1<Constants.SEGMENT_X) && (y-2>=0)) {
-			list.add(land[x+1][y-2]);
+			list.add(lands[x+1][y-2]);
 		}
 				
 		if (x+1<Constants.SEGMENT_X) {
-			list.add(land[x+1][y]);
+			list.add(lands[x+1][y]);
 		}
 		
 		if ((x+1<Constants.SEGMENT_X) && (y+2<Constants.SEGMENT_Y)) {
-			list.add(land[x+1][y+2]);
+			list.add(lands[x+1][y+2]);
 		}
 		
 		if (y+3<Constants.SEGMENT_Y) {
-			list.add(land[x][y+3]);
+			list.add(lands[x][y+3]);
 		}
 		
 		if (y+4<Constants.SEGMENT_Y) {
-			list.add(land[x][y+4]);
+			list.add(lands[x][y+4]);
 		}
 			
 		if ((x-1>=0) && (y+2<Constants.SEGMENT_Y)) {
-			list.add(land[x-1][y+2]);
+			list.add(lands[x-1][y+2]);
 		}
 				
 		if (x-1>=0) {
-			list.add(land[x-1][y]);
+			list.add(lands[x-1][y]);
 		}
 		
 		if ((x-1>=0) && (y-2>=0)) {
-			list.add(land[x-1][y-2]);
+			list.add(lands[x-1][y-2]);
 		}
 				
 		if (y%2==1) {	
 			
 			if ((x+1<Constants.SEGMENT_X) && (y-3>=0)) {
-				list.add(land[x+1][y-3]);
+				list.add(lands[x+1][y-3]);
 			}
 			
 			if ((x+1<Constants.SEGMENT_X) && (y+3<Constants.SEGMENT_Y)) {
-				list.add(land[x+1][y+3]);
+				list.add(lands[x+1][y+3]);
 			}
 		} else {
 			if ((x-1>=0) && (y+3<Constants.SEGMENT_Y)) {
-				list.add(land[x-1][y+3]);
+				list.add(lands[x-1][y+3]);
 			}
 						
 			if ((x-1>=0) && (y-3>=0)) {
-				list.add(land[x-1][y-3]);
+				list.add(lands[x-1][y-3]);
 			}
 		}
 				
-		//log.info("getNeigbors [x="+x+"|y="+y+"|size="+list.size()+"]");
 		return list;
 	}
 		
@@ -407,10 +467,10 @@ public class LandUtils {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if (land[x][y].getType()==LandEnum.COAST) {
+				if (lands[x][y].getType()==LandEnum.COAST) {
 					
 					int found=0;
-					List <Land> list = getNeigbors(x,y);
+					List <Land> list = getNeigbors(lands[x][y]);
 					Iterator<Land> iter = list.iterator();    	
 					while (iter.hasNext()) {
 						Land land = (Land) iter.next();
@@ -419,7 +479,7 @@ public class LandUtils {
 						}
 					}				
 					if (found==0) {
-					    land[x][y].setType(LandEnum.GRASS);
+					    lands[x][y].setType(LandEnum.GRASS);
 					}
 				};				
 			}
@@ -432,27 +492,13 @@ public class LandUtils {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if ((land[x][y].getType()==LandEnum.GRASS) && (MyRandom.nextInt(2)==1)) {
+				if ((lands[x][y].getType()==LandEnum.GRASS) && (MyRandom.nextInt(2)==1)) {
 					
 					if (MyRandom.nextInt(2)==1) {
-						land[x][y].setType(LandEnum.FOREST);
+						lands[x][y].setType(LandEnum.FOREST);
 					} else {
-						land[x][y].setType(LandEnum.MOUNTAIN);
+						lands[x][y].setType(LandEnum.MOUNTAIN);
 					}
-				};				
-			}
-		}		
-	}
-
-
-	private static void createOcean() {
-		
-		for (int x=0; x<Constants.SEGMENT_X; x++) {
-			
-			for (int y=0; y<Constants.SEGMENT_Y; y++) {
-			
-				if (land[x][y].getType()==LandEnum.NONE) {					
-					land[x][y].setType(LandEnum.OCEAN);
 				};				
 			}
 		}		
@@ -464,12 +510,12 @@ public class LandUtils {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if (land[x][y].getType()==LandEnum.COAST) {					
-					List <Land> list = getNeigbors(x,y);
+				if (lands[x][y].getType()==LandEnum.COAST) {					
+					List <Land> list = getNeigbors(lands[x][y]);
 					Iterator<Land> iter = list.iterator();    	
 					while (iter.hasNext()) {
 						Land segment = (Land) iter.next();
-						if (segment.getType()==LandEnum.NONE) {
+						if (segment.getType()==LandEnum.OCEAN) {
 							segment.setType(LandEnum.WATER);
 						}
 					}					
@@ -484,12 +530,12 @@ public class LandUtils {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
 			
-				if (land[x][y].getType()==LandEnum.GRASS) {					
-					List <Land> list = getNeigbors(x,y);
+				if (lands[x][y].getType()==LandEnum.GRASS) {					
+					List <Land> list = getNeigbors(lands[x][y]);
 					Iterator<Land> iter = list.iterator();    	
 					while (iter.hasNext()) {
 						Land segment = (Land) iter.next();
-						if (segment.getType()==LandEnum.NONE) {
+						if (segment.getType()==LandEnum.OCEAN) {
 							segment.setType(LandEnum.COAST);
 						}
 					}
@@ -509,9 +555,9 @@ public class LandUtils {
 
 			for (int j=0; j<Constants.SEGMENT_Y; j++) {
 				
-				land[x][y].setType(LandEnum.GRASS);
+				lands[x][y].setType(LandEnum.GRASS);
 		 
-				List <Land> list = getNeigbors(x,y);
+				List <Land> list = getNeigbors(lands[x][y]);
 				Iterator<Land> iter = list.iterator();
 									
 				int next = MyRandom.nextInt(list.size()); 
@@ -536,14 +582,13 @@ public class LandUtils {
 					
 		for (int x=0; x<Constants.SEGMENT_X; x++) {	
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
-				land[x][y] = new Land(gc, x, y, size, LandEnum.NONE);				
+				lands[x][y] = new Land(gc, x, y, size, LandEnum.OCEAN);				
 			}
 		}
 		
 		createGrass();
 		createCoast();	
 		createWater();
-		createOcean();
 		createForestMountain();
 		optimizeMap();			
 	}		
@@ -551,12 +596,12 @@ public class LandUtils {
 	public static void drawMap() {
 		for (int x=0; x<Constants.SEGMENT_X; x++) {					
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {				
-				land[x][y].draw();				
+				lands[x][y].draw();				
 			}
 		}		
 	}
 	
-	public static Land[][] getLand() {
-		return land;
+	public static Land[][] getLands() {
+		return lands;
 	}	
 }

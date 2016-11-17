@@ -21,15 +21,17 @@
 
 package nl.plaatsoft.knightsquest.ui;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import javafx.animation.AnimationTimer;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -40,7 +42,12 @@ import javafx.scene.paint.Color;
 
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
+import nl.plaatsoft.knightsquest.model.ScoreDAO;
+import nl.plaatsoft.knightsquest.network.CloudScore;
+import nl.plaatsoft.knightsquest.network.CloudUser;
+import nl.plaatsoft.knightsquest.model.Score;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyRandom;
 import nl.plaatsoft.knightsquest.utils.Constants;
 import nl.plaatsoft.knightsquest.utils.LandUtils;
 import nl.plaatsoft.knightsquest.utils.PlayerUtils;
@@ -51,11 +58,14 @@ public class Game extends StackPane {
 
 	private GraphicsContext gc;
 	private Canvas canvas;
-	private Player[] player = new Player[6];	
+	private Player[] player = new Player[Constants.START_PLAYERS+1];;	
 	private Pane pane2; 
 	private double offsetX = 0;
 	private double offsetY = 0;
 	private AnimationTimer timer;
+	private boolean gameOver;
+	private int turn;
+	private Task<Void> task;
 
 	public void redraw() {
 		
@@ -67,11 +77,29 @@ public class Game extends StackPane {
 			player[i].draw();
 		}
 	}
+		
+	public int storeScore(int points, int level) {
+		
+		Score score = new Score(new Date(), points, level, CloudUser.getNickname(), "");				
+	  	int rank = ScoreDAO.addLocal(score);	 
+	  	 
+	  	/* Sent score to cloud server */
+	  	task = new Task<Void>() {
+	  	   public Void call() {
+	  		   CloudScore.set(Constants.APP_WS_NAME, Constants.APP_VERSION, score ); 
+	  		   return null;
+	  	   }
+		};
+		new Thread(task).start();
+		   
+		return rank;
+	}
+		
+	public void start() {
 
-	
-	@SuppressWarnings("unused")
-	public void draw() {
-
+		gameOver = false;
+		turn = 1;
+			
 		// ------------------------------------------------------
 		// BACKGROUND LAYER 1
 		// ------------------------------------------------------
@@ -111,7 +139,7 @@ public class Game extends StackPane {
 		pane3.setScaleY(Constants.SCALE);
 		pane3.setId("control");
 						
-		MyButton btn = new MyButton(Constants.WIDTH-210, Constants.HEIGHT-60, "Turn", 18, Navigator.NONE);		
+		MyButton btn = new MyButton(Constants.WIDTH-210, Constants.HEIGHT-60, "Turn ["+turn+"]", 18, Navigator.NONE);		
 		pane3.getChildren().add(btn);
 		getChildren().add(pane3);
 				
@@ -129,31 +157,28 @@ public class Game extends StackPane {
 		// Human Player Actions
 		// ------------------------------------------------------
 				
+		// Mouse select land piece on map
 		pane3.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
 
-				Land land = LandUtils.getLand(offsetX,offsetY);				
+				Land land = LandUtils.getPlayerSelectedLand(offsetX,offsetY);				
 				if (land!=null) {
 					//log.info("land ["+land.getX()+","+land.getY()+" scale="+pane2.getScaleX()+"] selected");
-					LandUtils.getMoveToLand(land, player[1]);
+					LandUtils.doPlayerActions(land, player[1]);
 					redraw();
 				}
 			}
 		});
 		
+		// Scroll the map
 		pane3.setOnMousePressed(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
 				offsetX = me.getSceneX() - canvas.getLayoutX();
 				offsetY = me.getSceneY() - canvas.getLayoutY();
-	
-				if (me.getButton() == MouseButton.SECONDARY) {
-					timer.stop();
-					Navigator.go(Navigator.HOME);
-				}
 			}
 		});
 
-		// Scroll map
+		// Scroll the map
 		pane3.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
 
@@ -165,33 +190,52 @@ public class Game extends StackPane {
 			}
 		});
 		
+		// Button actions
 		btn.setOnAction(new EventHandler<ActionEvent>() { 
 			public void handle(ActionEvent event) {
-				PlayerUtils.nextTurn();
+				
+				turn++;
+				btn.setText("Turn ["+turn+"]");
+				
+				if (gameOver) {
+					timer.stop();
+					Navigator.go(Navigator.HOME);
+					
+				} else {
+					
+					PlayerUtils.nextTurn();
+					
+					if (PlayerUtils.checkGameOver1()) {
+															
+						log.info("game over, player dead");
+						gameOver=true;
+					
+						storeScore(turn, MyRandom.getSeek());
+						
+						// player dead, fight on with the remaining bots
+						timer.start();
+					}
+				}
 				redraw();
 			}
 		});
 		
-		
-		// ------------------------------------------------------ 
-		// 100% Bot mode
-		// ------------------------------------------------------
-				
-		if (Constants.BOTS_MODE == 1) {
-			
-			timer = new AnimationTimer() {
-
-				@Override
-				public void handle(long now) {
-							
-					// Move bot players
-					if (PlayerUtils.nextTurn() == true) {
-						timer.stop();
-					}
-					redraw();
+		timer = new AnimationTimer() {
+			public void handle(long now) {
+											
+				// Move bot players automaticly
+				turn++;
+				PlayerUtils.nextTurn();
+				if (PlayerUtils.checkGameOver2()) {
+					
+					log.info("game over, all bots dead");
+					
+					// One bot won
+					timer.stop();		
 				}
-			};			
-			timer.start();
-		}		
+				btn.setText("End ["+turn+"]");
+				redraw();				
+			}		
+		};		
 	}
 }

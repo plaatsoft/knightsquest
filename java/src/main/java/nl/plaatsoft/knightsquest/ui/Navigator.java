@@ -66,46 +66,7 @@ public class Navigator {
 	public static final int HELP = 12;
 	public static final int SETTINGS = 13;
 	public static final int EXIT = 14;
-			
-	public static Scene getScene() {
-		return scene;
-	}
-	
-	//handles mouse scrolling
-	/*private static void setSceneEvents(final Scene scene, final Pane page) {	    
-	    scene.setOnScroll(
-	            new EventHandler<ScrollEvent>() {
-	              public void handle(ScrollEvent event) {
-	                double zoomFactor = 1.10;
-	                double deltaY = event.getDeltaY();
-	                if (deltaY < 0){
-	                  zoomFactor = 2.0 - zoomFactor;
-	                }
-	                	               	               
-	               Iterator <Node> iter =  page.getChildren().iterator();			
-	    		   while(iter.hasNext()) {		
-	    			 	    
-	    				Node node = (Node) iter.next();
-	    				if(node instanceof Pane){
-	    			         Pane pane = (Pane) node;
-	    			         if ( pane.getId().equals("map") {
-	    			        	 
-	    			        	 double scale = pane.getScaleX() * zoomFactor;
-	    			        	 
-	    			        	 //if (scale>(Constants.SCALE-0.05)) 
-	    			        	 {	                	
-	    			              	pane.setScaleX(scale);
-	    			               	pane.setScaleY(scale);
-	    			               	event.consume();
-	    			             }
-	    			         }
-	    			    }      
-	    		   }
-	           }
-	      });
-	  }*/
-	
-	
+				
 	public static void go(int page) {
 				
 	  switch (page ) {
@@ -138,7 +99,7 @@ public class Navigator {
 			
 		case GAME:
 			game = new Game();				
-			game.draw();						
+			game.start();						
 			scene.setRoot(game);	
 			//setSceneEvents(scene, game);
 			break;	
@@ -198,4 +159,45 @@ public class Navigator {
 			break;
 		}
 	}
+	
+	//handles mouse scrolling
+	/*private static void setSceneEvents(final Scene scene, final Pane page) {	    
+	    scene.setOnScroll(
+	            new EventHandler<ScrollEvent>() {
+	              public void handle(ScrollEvent event) {
+	                double zoomFactor = 1.10;
+	                double deltaY = event.getDeltaY();
+	                if (deltaY < 0){
+	                  zoomFactor = 2.0 - zoomFactor;
+	                }
+	                	               	               
+	               Iterator <Node> iter =  page.getChildren().iterator();			
+	    		   while(iter.hasNext()) {		
+	    			 	    
+	    				Node node = (Node) iter.next();
+	    				if(node instanceof Pane){
+	    			         Pane pane = (Pane) node;
+	    			         if ( pane.getId().equals("map") {
+	    			        	 
+	    			        	 double scale = pane.getScaleX() * zoomFactor;
+	    			        	 
+	    			        	 //if (scale>(Constants.SCALE-0.05)) 
+	    			        	 {	                	
+	    			              	pane.setScaleX(scale);
+	    			               	pane.setScaleY(scale);
+	    			               	event.consume();
+	    			             }
+	    			         }
+	    			    }      
+	    		   }
+	           }
+	      });
+	  }*/
+	
+	
+	public static Scene getScene() {
+		return scene;
+	}
+	
+	
 }

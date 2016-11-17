@@ -40,7 +40,29 @@ public class RegionUtils {
 
 	final private static Logger log = Logger.getLogger(RegionUtils.class);
 
-
+	public static Region getRegion(Land newLand) {
+		
+		Iterator<Player> iter1 = PlayerUtils.getPlayers().iterator();  	
+		while (iter1.hasNext()) {
+			Player player = (Player) iter1.next();			
+			
+			Iterator<Region> iter2 = player.getRegion().iterator();  
+			while (iter2.hasNext()) {
+				Region region = (Region) iter2.next();
+				
+				Iterator<Land> iter3 = region.getLands().iterator();  
+				while (iter3.hasNext()) {
+					Land land = (Land) iter3.next();
+					
+					if (land.equals(newLand)) {
+						return region;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public static Region createStartRegion(int regionId, Player player, Pane pane) {
 
 		Region region = null;
@@ -54,7 +76,7 @@ public class RegionUtils {
 			int y = MyRandom.nextInt(Constants.SEGMENT_Y);
 
 			// Each start region must have two lands between each other)
-			List<Land> list1 = LandUtils.getNeigbors(x, y);
+			List<Land> list1 = LandUtils.getNeigbors(LandUtils.getLands()[x][y]);
 			Iterator<Land> iter1 = list1.iterator();
 			while (iter1.hasNext()) {
 				Land land1 = (Land) iter1.next();
@@ -63,7 +85,7 @@ public class RegionUtils {
 				}
 			}
 
-			List<Land> list2 = LandUtils.getNeigbors2(x, y);
+			List<Land> list2 = LandUtils.getNeigbors2(LandUtils.getLands()[x][y]);
 			Iterator<Land> iter2 = list2.iterator();
 			while (iter2.hasNext()) {
 				Land land2 = (Land) iter2.next();
@@ -74,7 +96,7 @@ public class RegionUtils {
 
 			if (!bad) {
 
-				Land land3 = LandUtils.getLand()[x][y];
+				Land land3 = LandUtils.getLands()[x][y];
 				if (land3.getType() == LandEnum.GRASS) {
 
 					// Clain land
@@ -84,7 +106,7 @@ public class RegionUtils {
 					Soldier soldier3 = new Soldier(SoldierEnum.TOWER, player, land3);		
 					land3.setSoldier(soldier3);
 					
-					log.info("New "+soldier3.getType()+" [x="+land3.getX()+"|y="+land3.getY()+"] created!");
+					//log.info("New "+soldier3.getType()+" [x="+land3.getX()+"|y="+land3.getY()+"] created!");
 
 					// Create new region
 					region = new Region(player.getId(), player);
@@ -96,16 +118,19 @@ public class RegionUtils {
 					player.getRegion().add(region);
 
 					// Add some more lands to region
-					List<Land> list4 = LandUtils.getNewLand(x, y);
+					List<Land> list4 = LandUtils.getBotNewLand(land3);
 					Land land4 = MyRandom.nextLand(list4);
 					if (land4 != null) {
 						land4.setPlayer(player);
 						region.getLands().add(land4);
 						
 						Soldier soldier4 = new Soldier(SoldierEnum.PAWN, player, land4);
+						if (!player.isBot()) {
+							soldier4.setEnabled(true);
+						}
 						land4.setSoldier(soldier4);
 						
-						log.info("New "+soldier4.getType()+" [x="+land4.getX()+"|y="+land4.getY()+"|regionId="+region.getId()+"] created!");
+						//log.info("New "+soldier4.getType()+" [x="+land4.getX()+"|y="+land4.getY()+"|regionId="+region.getId()+"] created!");
 					}
 
 					done = true;
@@ -134,7 +159,7 @@ public class RegionUtils {
 
 		land2.setRegion(regionId);
 
-		List<Land> list = LandUtils.getRegionLand(land2.getX(), land2.getY(), land2.getPlayer());
+		List<Land> list = LandUtils.getBotRegionLand(land2);
 		Iterator<Land> iter = list.iterator();
 		while (iter.hasNext()) {
 			Land land = (Land) iter.next();
@@ -147,7 +172,7 @@ public class RegionUtils {
 		int regionId = 0;
 
 		// Reset all castles
-		Land lands[][] = LandUtils.getLand();
+		Land lands[][] = LandUtils.getLands();
 		for (int x = 0; x < Constants.SEGMENT_X; x++) {
 			for (int y = 0; y < Constants.SEGMENT_Y; y++) {
 				lands[x][y].setRegion(regionId);
@@ -186,7 +211,7 @@ public class RegionUtils {
 			}
 		}
 
-		Land lands[][] = LandUtils.getLand();
+		Land lands[][] = LandUtils.getLands();
 
 		// Detect new regions with castle and assign them to player again
 		for (int regionId = 1; regionId <= amountOfRegions; regionId++) {
@@ -205,8 +230,8 @@ public class RegionUtils {
 
 						if (lands[x][y].getSoldier() != null) {
 
-							foodNeeded += SoldierUtils.getFoodNeeds(lands[x][y].getSoldier().getType());
-							log.info("FoodNeeded="+foodNeeded+" ["+x+","+y+"]");
+							foodNeeded += SoldierUtils.food(lands[x][y].getSoldier().getType());
+							//log.info("FoodNeeded="+foodNeeded+" ["+x+","+y+"]");
 							if (lands[x][y].getSoldier().getType() == SoldierEnum.TOWER) {
 								if (++castleCount > 1) {
 
@@ -222,7 +247,7 @@ public class RegionUtils {
 				}
 			}
 
-			log.info("check food [regionId="+regionId+" foodAvailable=" + foodAvailable + " foodNeeded="+foodNeeded+"]");
+			//log.info("check food [regionId="+regionId+" foodAvailable=" + foodAvailable + " foodNeeded="+foodNeeded+"]");
 			
 			if (foodAvailable < foodNeeded) {
 				Iterator<Land> iter = list.iterator();

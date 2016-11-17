@@ -59,7 +59,7 @@ public class HighScore1 extends MyPanel {
     	getChildren().add(new MyLabel(30, y, "Nr", 25));
     	getChildren().add(new MyLabel(80, y, "Date", 25));
 		getChildren().add(new MyLabel(300, y, "Score", 25));	
-		getChildren().add(new MyLabel(400, y, "Level", 25));
+		getChildren().add(new MyLabel(400, y, "Map", 25));
 		getChildren().add(new MyLabel(490, y, "Awards", 25));	
 		y+=20;
 				

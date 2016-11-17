@@ -24,6 +24,8 @@ package nl.plaatsoft.knightsquest.utils;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.image.Image;
 
 import nl.plaatsoft.knightsquest.model.Region;
@@ -33,25 +35,33 @@ import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 
-public class SoldierUtils {
+public class  SoldierUtils {
 	
+	final private static Logger log = Logger.getLogger(SoldierUtils.class);
+		
 	private static Image tower = new Image("images/tower.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
+	private static Image tower2 = new Image("images/tower2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 	private static Image pawn = new Image("images/pawn.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
+	private static Image pawn2 = new Image("images/pawn2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 	private static Image horse = new Image("images/horse.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
+	private static Image horse2 = new Image("images/horse2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 	private static Image bishop = new Image("images/bishop.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
+	private static Image bishop2 = new Image("images/bishop2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 	private static Image queen = new Image("images/queen.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
+	private static Image queen2 = new Image("images/queen2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 	private static Image king = new Image("images/king.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
+	private static Image king2 = new Image("images/king2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 	private static Image cross = new Image("images/cross.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
 			
-	public static void createSoldier(Region region) {
+	public static void createBotSoldier(Region region) {
 						
 		/* Create new Soldier if there is enough food */  
-		if (region.foodAvailable()>=getFoodNeeds(SoldierEnum.PAWN)) {
+		if (region.foodAvailable()>=food(SoldierEnum.PAWN)) {
 						
 			Land land1 = RegionUtils.getTowerPosition(region);
 			if (land1!=null) {
 				/* Create new Soldier if there is room around the castle */  
-				List <Land> list2 = LandUtils.getOwnLand(land1.getX(), land1.getY(), region.getPlayer());			
+				List <Land> list2 = LandUtils.getBotOwnLand(land1);			
 				Iterator<Land> iter2 = list2.iterator();  						
 				if (iter2.hasNext()) {				
 					Land land2 = (Land) iter2.next();
@@ -62,21 +72,38 @@ public class SoldierUtils {
 			}							
 		}
 	}
-	
-	public static int enableMove(Player player) {
+		
+	public static void newSoldierArrive(Region region) {
+		
+		/* Inform player that new soldier has arrived if there is enough food */  
+		if (region.foodAvailable()>=food(SoldierEnum.PAWN)) {
+						
+			Land land = RegionUtils.getTowerPosition(region);
+			if (land!=null) {
+				
+				/* Enable castle. So player know new soldier is possible */  
+				land.getSoldier().setEnabled(true);
+			}							
+		}
+	}
+		
+	public static int enableSoldier(Player player) {
 		
 		int count = 0;
+	
 		Iterator<Region> iter2 = player.getRegion().iterator();  
 		while (iter2.hasNext()) {
 			Region region = (Region) iter2.next();
+			
+			log.info(player+" "+region+" size="+region.getLands().size());
 			
 			Iterator<Land> iter3 = region.getLands().iterator();  
 			while (iter3.hasNext()) {
 				Land land = (Land) iter3.next();
 				
 				if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierEnum.TOWER)) {
-					land.getSoldier().setMoved(false);
-					 count++;
+					land.getSoldier().setEnabled(true);
+					count++;
 				}
 			}
 		}
@@ -84,7 +111,7 @@ public class SoldierUtils {
 	}
 		
 	// Move bots
-	public static void moveSoldier(Region region) {
+	public static void moveBotSoldier(Region region) {
 		
 		//log.info("soldier move start");
 		
@@ -93,40 +120,17 @@ public class SoldierUtils {
 			Land land1 = (Land) iter1.next();
 			
 			if ((land1.getSoldier()!=null) && 
-				!land1.getSoldier().isMoved() && 
+				land1.getSoldier().isEnabled() && 
 				(land1.getSoldier().getType()!=SoldierEnum.CROSS) && 
 				(land1.getSoldier().getType()!=SoldierEnum.TOWER)) {
 					
 				//log.info(land1.getSoldier().getType()+" found [x="+land1.getX()+"|y="+land1.getY()+"]");	
 				
-				/* --------------------------- */
-				/* Upgrade soldier if possible */
-				/* --------------------------- */
-				
-				if (land1.getSoldier().getType()!=SoldierEnum.KING) {
-					List <Land> list2 = LandUtils.getUpgradeSoldiers(land1.getX(), land1.getY(), region.getPlayer());
-					Iterator<Land> iter2 = list2.iterator();
-					while (iter2.hasNext()) {
-						Land land2 = (Land) iter2.next();
-
-						// Only upgrade if there is enough food
-						SoldierEnum nextType = upgrade(land1.getSoldier().getType());	
-						
-						if (region.foodAvailable()>SoldierUtils.getFoodNeeds(nextType)) {
-																								
-							land1.getSoldier().setType(nextType);
-																												
-							LandUtils.moveSoldier(land1, land2);			
-							return;
-						}
-					}
-				}
-				
 				/* ------------------------------------- */
 				/* Conquer enemy land or defend own land */
 				/* ------------------------------------- */
 				
-				List <Land> list2 = LandUtils.getEnemyLand(land1.getX(), land1.getY(), region.getPlayer());	
+				List <Land> list2 = LandUtils.getBotEnemyLand(land1);	
 				Land land2 = MyRandom.nextLand(list2);
 				if (land2!=null) {
 									
@@ -148,12 +152,12 @@ public class SoldierUtils {
 						return;				
 					}
 				}
-								
+				
 				/* ------------------------ */
 				/* Move soldier to new land */		
 				/* ------------------------ */
 				
-				List <Land> list4 = LandUtils.getNewLand(land1.getX(), land1.getY());					
+				List <Land> list4 = LandUtils.getBotNewLand(land1);					
 				Land land4 = MyRandom.nextLand(list4);
 				if (land4!=null) {
 											
@@ -163,46 +167,91 @@ public class SoldierUtils {
 					region.getLands().add(land4);
 					return;
 				}
+				
+				/* --------------------------- */
+				/* Upgrade soldier if possible */
+				/* --------------------------- */
+				
+				if (land1.getSoldier().getType()!=SoldierEnum.KING) {
+					List <Land> list5 = LandUtils.getUpgradeSoldiers(land1);
+					Iterator<Land> iter5 = list5.iterator();
+					while (iter5.hasNext()) {
+						Land land5 = (Land) iter5.next();
+
+						// Only upgrade if there is enough food
+						SoldierEnum nextType = upgrade(land1.getSoldier().getType());	
 						
+						if (region.foodAvailable()>SoldierUtils.food(nextType)) {
+																																																				
+							LandUtils.moveSoldier(land1, land5);			
+							return;
+						}
+					}
+				}
+
 				/* ------------------------ */
 				// Move soldier on own land
 				/* ------------------------ */
 				
-				List <Land> list5 = LandUtils.getOwnLand(land1.getX(), land1.getY(), region.getPlayer());	
-				Land land5 = MyRandom.nextLand(list5);
-				if (land5!=null) {
-					LandUtils.moveSoldier(land1, land5);
+				List <Land> list6 = LandUtils.getBotOwnLand(land1);	
+				Land land6 = MyRandom.nextLand(list6);
+				if (land6!=null) {
+					LandUtils.moveSoldier(land1, land6);
 					return;
 				}		
 			}
 		}	
 	}
 
-	public static Image get(SoldierEnum army) {
+	public static Image get(SoldierEnum army, boolean enabled) {
 	
 		switch(army) {
 	
 			case TOWER: 
-				return tower;
+				if (enabled) {
+					return tower2;
+				} else {
+					return tower;
+				}
 		
 			case PAWN:
-				return pawn;
+				if (enabled) {
+					return pawn2;
+				} else {
+					return pawn;
+				}
 								
 			case BISHOP:
-				return bishop;
+				if (enabled) {
+					return bishop2;
+				} else {
+					return bishop;
+				}
 				
 			case HORSE:
-				return horse;
+				if (enabled) {
+					return horse2;
+				} else {
+					return horse;
+				}
 				
 			case QUEEN:
-				return queen;
+				if (enabled) {
+					return queen2;
+				} else {
+					return queen;
+				}
 				
 			case KING:
-				return king;
+				if (enabled) {
+					return king2;
+				} else {
+					return king;
+				}
 				
 			case CROSS:
 				return cross;
-			
+
 			default:
 				break;
 		}
@@ -239,7 +288,7 @@ public class SoldierUtils {
 		return value;
 	}
 	
-	public static int getFoodNeeds(SoldierEnum type) {
+	public static int food(SoldierEnum type) {
 			
 		int value=0;
 				
