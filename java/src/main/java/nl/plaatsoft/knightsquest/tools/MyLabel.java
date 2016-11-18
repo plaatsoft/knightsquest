@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.TextAlignment;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class MyLabel extends Label {
 
@@ -38,7 +39,7 @@ public class MyLabel extends Label {
 		setStyle("-fx-font-size:"+fontSize+"px; -fx-text-fill:"+color+"; "+options);
 		
 		if (x==0) {
-			setMinWidth(640);
+			setMinWidth(Constants.WIDTH);
 			setAlignment(Pos.CENTER);
 			setTextAlignment(TextAlignment.CENTER);
 			
@@ -56,7 +57,7 @@ public class MyLabel extends Label {
 		setStyle("-fx-font-size:"+fontSize+"px; -fx-text-fill:"+color+"; ");
 		
 		if (x==0) {
-			setMinWidth(640);
+			setMinWidth(Constants.WIDTH);
 			setAlignment(Pos.CENTER);
 			setTextAlignment(TextAlignment.CENTER);
 			
@@ -74,7 +75,7 @@ public class MyLabel extends Label {
 		setStyle("-fx-font-size:"+fontSize+"px; -fx-text-fill:white; ");
 		
 		if (x==0) {
-			setMinWidth(640);
+			setMinWidth(Constants.WIDTH);
 			setAlignment(Pos.CENTER);
 			setTextAlignment(TextAlignment.CENTER);
 			

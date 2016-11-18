@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -47,12 +46,12 @@ public class LandUtils {
 	
 	private static Land[][] lands = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
 		
-	private static Image water = new Image("images/water.png");
-	private static Image ocean = new Image("images/ocean.png");
+	//private static Image water = new Image("images/water.png");
+	//private static Image ocean = new Image("images/ocean.png");
 	private static Image forest = new Image("images/forest.png");
-	private static Image coast = new Image("images/coast.png");
+	//private static Image coast = new Image("images/coast.png");
 	private static Image rock = new Image("images/rock.png");
-	private static Image grass = new Image("images/grass.png");
+	//private static Image grass = new Image("images/grass.png");
 			
 	public static void getTexture(GraphicsContext gc, LandEnum type) {
 		
@@ -63,11 +62,13 @@ public class LandUtils {
 					break;	
 					
 			case GRASS:
-					gc.setFill(new ImagePattern(grass, 0, 0, 1, 1, true));
+					gc.setFill(Color.DARKGREEN);
+					//gc.setFill(new ImagePattern(grass, 0, 0, 1, 1, true));
 					break;	
 					
 			case COAST: 
-					gc.setFill(new ImagePattern(coast, 0, 0, 1, 1, true));
+					gc.setFill(Color.BURLYWOOD);
+					//gc.setFill(new ImagePattern(coast, 0, 0, 1, 1, true));
 					break;	
 				
 			case MOUNTAIN:
@@ -75,13 +76,13 @@ public class LandUtils {
 					break;
 				
 			case WATER:
-					//gc.setFill(Color.BLUE);
-					gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
+					gc.setFill(Color.BLUE);
+					//gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
 					break;
 					
 			case OCEAN:
-					//gc.setFill(Color.DARKBLUE);
-					gc.setFill(new ImagePattern(ocean, 0, 0, 1, 1, true));
+					gc.setFill(Color.DARKBLUE);
+					//gc.setFill(new ImagePattern(ocean, 0, 0, 1, 1, true));
 					break;
 					
 			default:
@@ -266,7 +267,7 @@ public class LandUtils {
 		srcRegion.getLands().add(destination);
 	}
 		
-	private static void resetSelected() {
+	public static void resetSelected() {
 
 		for (int x=0; x<Constants.SEGMENT_X; x++) {			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
@@ -678,7 +679,7 @@ public class LandUtils {
 		createGrass();
 		createCoast();	
 		createWater();
-		createForestMountain();
+		//createForestMountain();
 		optimizeMap();			
 	}		
 		

@@ -44,17 +44,19 @@ import nl.plaatsoft.knightsquest.utils.LandUtils;
 public class MapSelector extends MyPanel {
 
 	final static Logger log = Logger.getLogger(MapSelector.class);
-	final static int SIZE = 3;
+	
+	
+	private int SIZE = 4;
 	
 	private Task<Void> task;
 
 	private static GraphicsContext[] gc = new GraphicsContext[6];
-	private static int seek[] = { 1, 4, 6, 8, 9, 10};
+	private static int seek[] = { 1, 2, 6, 8, 9, 10};
 
-	private void createMap(GraphicsContext gc, int seek) {
+	private void createMap(GraphicsContext gc, int seek, int size) {
 		
 		MyRandom.setSeek(seek);
-		LandUtils.createMap(gc, SIZE);
+		LandUtils.createMap(gc, size);
 		LandUtils.drawMap();
 	}
 
@@ -79,6 +81,17 @@ public class MapSelector extends MyPanel {
 
 	public void draw() {
 
+		int size=3;
+		int offsetX = 200;
+		int offsetY = 150;
+		
+		if (Constants.WIDTH==800) {
+			
+			size=4;
+			offsetX = 250;
+			offsetY = 200;
+		}
+				
 		Image image1 = new Image("images/background4.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
 		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT,
@@ -90,32 +103,30 @@ public class MapSelector extends MyPanel {
 		getChildren().add(new MyLabel(0, y, "Map Selector", 50, "white", "-fx-font-weight: bold;"));
 
 		y += 90;
+		
 		x = 25;
 		createCanvas(0, x, y, SIZE, seek[0]);
-
-		x += 200;
+		x += offsetX;
 		createCanvas(1, x, y, SIZE, seek[1]);
-
-		x += 200;
+		x += offsetX;
 		createCanvas(2, x, y, SIZE, seek[2]);
-
-		y += 150;
+		
+		y += offsetY;
 
 		x = 25;
 		createCanvas(3, x, y, SIZE, seek[3]);
-
-		x += 200;
+		x += offsetX;
 		createCanvas(4, x, y, SIZE, seek[4]);
-
-		x += 200;
+		x += offsetX;
 		createCanvas(5, x, y, SIZE, seek[5]);
 
-		getChildren().add(new MyButton(230, 420, "Close", 18, Navigator.HOME));
+	
+		getChildren().add(new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));
 
 		task = new Task<Void>() {
 			public Void call() {
 				for (int i = 0; i < 6; i++) {
-					createMap(gc[i], seek[i]);						
+					createMap(gc[i], seek[i], size);						
 				}
 				return null;
 			}

@@ -40,6 +40,7 @@ import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.tools.MySwitch;
+import nl.plaatsoft.knightsquest.utils.Constants;
 import nl.plaatsoft.knightsquest.tools.MyComboBox;
 
 public class Settings extends MyPanel {
@@ -127,7 +128,7 @@ public class Settings extends MyPanel {
 			x+=70;
 		}			
 		
-		MyButton button = new MyButton(230, 420, "Close", 18, Navigator.HOME);		
+		MyButton button = new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME);		
 		getChildren().add(button);	
 		
 		y+=150;		

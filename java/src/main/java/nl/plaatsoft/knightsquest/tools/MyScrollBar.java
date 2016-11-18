@@ -21,32 +21,23 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-
-import nl.plaatsoft.knightsquest.ui.Navigator;
+import javafx.geometry.Orientation;
+import javafx.scene.control.ScrollBar;
 import nl.plaatsoft.knightsquest.utils.Constants;
 
-public class MyButton extends Button {
+public class MyScrollBar extends ScrollBar {
 
-	public MyButton(int x, int y, String value, int fontSize, final int page) {
-				
-		int width = 180;
-		if (x==0) {
-			x= (Constants.WIDTH/2)-(width/2);
-		}				
-		setText(value);
-	    setPrefWidth(180);
-	    setStyle("-fx-font-size:"+fontSize+"px;");	     
-	    	  
-		setLayoutX(x);
-		setLayoutY(y);
-		
-	    setOnAction(new EventHandler<ActionEvent>() { 
-            public void handle(ActionEvent event) {
-            	Navigator.go(page);
-            }
-        });
-	}     
+	public MyScrollBar(int max) {
+		setMin(0);
+		setMax(max - 1);
+		setValue(0);
+		setUnitIncrement(1);
+		setBlockIncrement(1);
+		setLayoutX(Constants.WIDTH-50);
+		setLayoutY(125);
+		setMinWidth(25);
+		setMinHeight(Constants.HEIGHT-205);
+		setOrientation(Orientation.VERTICAL);
+	}
+	
 }

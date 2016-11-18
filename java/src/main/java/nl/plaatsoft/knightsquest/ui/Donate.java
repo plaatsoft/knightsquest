@@ -59,11 +59,11 @@ public class Donate extends MyPanel {
     	y+=60;  	
      	
     	// Force focus on button
-    	getChildren().add(new MyButton(230, 420, "Close", 18, Navigator.HOME));		
+    	getChildren().add(new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));		
     	
     	getChildren().add(new MyLabel(0, y, "Click on below link and follow the instructions", 20, "white"));    	
     	y+=25;
-    	getChildren().add(new MyHyperlink(180, y, Constants.APP_DONATE_URL, 20));
+    	getChildren().add(new MyHyperlink(0, y, Constants.APP_DONATE_URL, 20));
     	y+=60;
     	getChildren().add(new MyLabel(0, y, "Many thanks for your support!", 20, "white"));    	
 	}

@@ -22,6 +22,7 @@
 package nl.plaatsoft.knightsquest.ui;
 
 import java.util.Date;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -39,9 +40,10 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-
+import javafx.scene.shape.Rectangle;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
+import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.ScoreDAO;
 import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.network.CloudUser;
@@ -59,17 +61,18 @@ public class Game extends StackPane {
 
 	private GraphicsContext gc;
 	private Canvas canvas;
-	private static Player[] players = new Player[Constants.START_PLAYERS+1];;	
+	private static Player[] players = new Player[Constants.START_PLAYERS+1];
 	private Pane pane2; 
 	private double offsetX = 0;
 	private double offsetY = 0;
 	private AnimationTimer timer;
 	private boolean gameOver;
 	private int turn;
-	private Task<Void> task;
+	private Task<Void> task;	
 	private static MyLabel label1;
 	private static MyLabel label2;
-
+	private static MyLabel[] label3 = new MyLabel[Constants.START_PLAYERS+1];
+	
 	public void redraw() {
 		
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -132,6 +135,22 @@ public class Game extends StackPane {
 		return true;		
 	}
 	
+	public static void drawPlayerScore() {
+
+		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
+			
+			int amount = 0; 
+			Iterator<Region> iter2 = players[i].getRegion().iterator();  
+			while (iter2.hasNext()) {
+				Region region = (Region) iter2.next();
+				
+				amount += region.getLands().size();  
+			}
+			
+			label3[i].setText("Player "+i+" - "+amount);
+		}
+	}
+		
 	public void start() {
 
 		gameOver = false;
@@ -177,10 +196,37 @@ public class Game extends StackPane {
 		pane3.setId("control");
 						
 		label1 = new MyLabel(0, (Constants.HEIGHT/2)-120, "", 80, "white", "-fx-font-weight: bold;");
-		label2 = new MyLabel(0, (Constants.HEIGHT/2)-20, "", 60, "white", "-fx-font-weight: bold;");	
-		MyButton btn = new MyButton(Constants.WIDTH-210, Constants.HEIGHT-60, "Turn ["+turn+"]", 18, Navigator.NONE);
+		label2 = new MyLabel(0, (Constants.HEIGHT/2)-20, "", 60, "white", "-fx-font-weight: bold;");
+		
+		int y=10;
+		for (int i = 1; i <= Constants.START_PLAYERS; i++) {			
+			label3[i] = new MyLabel(20, y, "", 15, PlayerUtils.getColor(i), "-fx-font-weight: bold;");
+			y+=18;
+		}
+		
+		MyButton btn = new MyButton(Constants.WIDTH-160, Constants.HEIGHT-60, "Turn ["+turn+"]", 18, Navigator.NONE);
+		btn.setPrefWidth(140);
 		pane3.getChildren().add(label1);
 		pane3.getChildren().add(label2);
+		
+		// ------------------------------------------------------ 
+		// Player score board
+		// ------------------------------------------------------
+			
+		Rectangle r = new Rectangle();
+		r.setX(10);
+		r.setY(10);
+		r.setWidth(115);
+		r.setHeight(115);
+		r.setArcWidth(20);
+		r.setArcHeight(20);
+		r.setFill(Color.rgb(0, 0, 0, 0.7));
+		
+		pane3.getChildren().add(r);
+		
+		for (int i = 1; i <= Constants.START_PLAYERS; i++) {		
+			pane3.getChildren().add(label3[i]);
+		}		
 		pane3.getChildren().add(btn);
 		getChildren().add(pane3);
 				
@@ -193,6 +239,7 @@ public class Game extends StackPane {
 		}
 		
 		redraw();
+		drawPlayerScore();
 		
 		// ------------------------------------------------------ 
 		// Human Player Actions
@@ -207,6 +254,7 @@ public class Game extends StackPane {
 					log.info("land ["+land.getX()+","+land.getY()+" scale="+land.getScale()+"] selected");
 					LandUtils.doPlayerActions(land, players[1]);
 					redraw();
+					drawPlayerScore();
 				}
 			}
 		});
@@ -258,6 +306,7 @@ public class Game extends StackPane {
 					}
 				}
 				redraw();
+				drawPlayerScore();
 			}
 		});
 		
@@ -273,7 +322,8 @@ public class Game extends StackPane {
 					timer.stop();		
 				}
 				btn.setText("End ["+turn+"]");
-				redraw();				
+				redraw();	
+				drawPlayerScore();
 			}		
 		};		
 	}

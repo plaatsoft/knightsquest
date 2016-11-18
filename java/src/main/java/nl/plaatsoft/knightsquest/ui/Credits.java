@@ -30,6 +30,7 @@ import javafx.scene.layout.BackgroundSize;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class Credits extends MyPanel {
 
@@ -61,7 +62,7 @@ public class Credits extends MyPanel {
 	    y+=35;
 	    getChildren().add( new MyLabel(0, y, "wplaat, lplaat, splaat, bplaat", 18, "white"));
 	    	     
-	    getChildren().add( new MyButton(230, 420, "Close", 18, Navigator.HOME));		
+	    getChildren().add( new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));		
 	}
 
 	@Override

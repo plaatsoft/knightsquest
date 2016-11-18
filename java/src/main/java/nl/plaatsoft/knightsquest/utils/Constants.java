@@ -36,11 +36,11 @@ public class Constants {
 	public final static int WIDTH = 640; 
 	public final static int HEIGHT = 480;	
 	
-	public final static double SCALE = 1; //0.55;
-	public final static double OFFSET_X = 10; //-260;
-	public final static double OFFSET_Y = 10; //-200;	
+	public final static double SCALE = 1; 
+	public final static double OFFSET_X = 15; 
+	public final static double OFFSET_Y = 10; 	
 	
-	public final static int SEGMENT_SIZE = 15;	
+	public final static int SEGMENT_SIZE = 10;	
 	public final static int SEGMENT_X = 15;
 	public final static int SEGMENT_Y = 45;
 	 
@@ -48,5 +48,5 @@ public class Constants {
 	public final static int MAP_HEIGHT = SEGMENT_SIZE * 2 * SEGMENT_Y;	
 	
 	public final static int START_PLAYERS = 6;
-	public final static int START_TOWERS = 3;	
+	public final static int START_TOWERS = 2;	
 }

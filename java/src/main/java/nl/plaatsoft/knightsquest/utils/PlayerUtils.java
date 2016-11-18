@@ -70,6 +70,31 @@ public class PlayerUtils {
 		}		
 	}	
 	
+	public static String getColor(int player) { 
+		
+		switch(player) {
+		
+			case 1: // Player 1
+					return "yellow";
+
+			case 2: // Player 2
+					return "red";
+			
+			case 3: // Player 3
+					return "cyan";
+		
+			case 4: // Player 4
+					return "magenta";
+					
+			case 5: // Player 5
+					return "brown";
+					
+			case 6: // Player 6
+					return "lightblue";
+		}		
+		return "";
+	}	
+	
 	public static Player createPlayer(GraphicsContext gc, int id, Pane pane) {
 			
 		Boolean bot = true;
@@ -79,7 +104,6 @@ public class PlayerUtils {
 		
 		Player player = new Player(id, bot);
 		players.add(player);
-		//log.info("Player [id="+id+"] created");
 		
 		for (int i=1; i<=Constants.START_TOWERS; i++) {
 						
@@ -91,6 +115,8 @@ public class PlayerUtils {
 	public static void nextTurn() {
 	
 		log.info("-------");
+		
+		LandUtils.resetSelected();
 		
 		Iterator<Player> iter1 = players.iterator();  	
 		while (iter1.hasNext()) {

@@ -60,24 +60,35 @@ public class Home extends MyPanel {
 		getChildren().add(label3);
 				
 		int y = 30;
-		getChildren().add( new MyButton(430, y, "Play", 18, Navigator.MAP_SELECTOR));
+		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Play", 18, Navigator.MAP_SELECTOR));
 		y += 45;
-		getChildren().add( new MyButton(430, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
+		getChildren().add( new MyButton(Constants.WIDTH-210, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
 		y += 45;	
-		getChildren().add( new MyButton(430, y, "Settings", 18, Navigator.SETTINGS));
+		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Settings", 18, Navigator.SETTINGS));
 		y += 45;
-		getChildren().add( new MyButton(430, y, "Help", 18, Navigator.HELP));
+		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Help", 18, Navigator.HELP));
 		y += 45;
-		getChildren().add( new MyButton(430, y, "Credits", 18, Navigator.CREDITS));
+		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Credits", 18, Navigator.CREDITS));
 		y += 45;
-		getChildren().add( new MyButton(430, y, "Release Notes", 18, Navigator.RELEASE_NOTES));
+		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Release Notes", 18, Navigator.RELEASE_NOTES));
 		y += 45;
-		getChildren().add( new MyButton(430, y, "Donate", 18, Navigator.DONATE));
+		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Donate", 18, Navigator.DONATE));
 		
-		y = Constants.HEIGHT-70;
-		getChildren().add( new MyButton(430, y, "Exit", 18, Navigator.EXIT));	
-				
-		getChildren().add( new MyImageView(-10, 60, "images/knight1.png", 0.75));
+		getChildren().add( new MyButton(Constants.WIDTH-210, Constants.HEIGHT-70, "Exit", 18, Navigator.EXIT));	
+			
+		int x =0;
+		double scale = 1;
+		if (Constants.WIDTH==640) {
+			x = -10;
+			y = 60;
+			scale = 0.75;
+		} else {
+			x = 10;
+			y = 130;
+			scale = 1;
+		}
+		
+		getChildren().add( new MyImageView(x, y, "images/knight1.png", scale));
 					
 	    task = new Task<Void>() {
 	        public Void call() {

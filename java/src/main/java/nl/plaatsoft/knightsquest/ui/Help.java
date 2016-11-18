@@ -32,6 +32,7 @@ import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
+import nl.plaatsoft.knightsquest.utils.Constants;
 import nl.plaatsoft.knightsquest.utils.SoldierUtils;
 
 public class Help extends MyPanel {
@@ -97,6 +98,6 @@ public class Help extends MyPanel {
     	getChildren().add( new MyLabel(250, y, "0", 20, "white"));
     	getChildren().add( new MyLabel(400, y, "0 (Dead soldier)", 20, "white"));
     	       		
-    	getChildren().add( new MyButton(230, 420, "Close", 18, Navigator.HOME));		
+    	getChildren().add( new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));		
 	}
 }

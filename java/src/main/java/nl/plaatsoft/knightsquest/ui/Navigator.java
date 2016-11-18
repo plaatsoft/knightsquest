@@ -102,7 +102,7 @@ public class Navigator {
 			game = new Game();				
 			game.start();						
 			scene.setRoot(game);	
-			setSceneEvents(scene, game);
+			//setSceneEvents(scene, game);
 			break;	
 			
 		case LOCAL_HIGHSCORE:			

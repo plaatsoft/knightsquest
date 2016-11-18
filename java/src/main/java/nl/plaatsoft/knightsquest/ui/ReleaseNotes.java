@@ -23,8 +23,6 @@ package nl.plaatsoft.knightsquest.ui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Orientation;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -34,21 +32,24 @@ import javafx.scene.layout.BackgroundSize;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
+import nl.plaatsoft.knightsquest.tools.MyScrollBar;
+import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class ReleaseNotes extends MyPanel {
 
 	private static String[] version = {
 
-			"18-11-2016 (Version 0.2)\n" 
+			"18-11-2016 (Version 0.2 Beta)\n" 
 					+ "- Added human player functionality.\n"
-					+ "- Improve bots behalvior"
+					+ "- Add information boxes on game screen\n"
+					+ "- Improve bots behalvior\n"
 					+ "- Added new background.\n" 
 					+ "- Improve help, credit, donate page.\n" 
 					+ "- Added intro movie.\n"
 					+ "- Improve network detection.\n"
 					+ "- Add setting option to switch off the music.\n",
 
-			"12-11-2016 (Version 0.1)\n" 
+			"12-11-2016 (Version 0.1 Beta)\n" 
 					+ "- Added basic game engine (only bot mode for now).\n" 
 					+ "- Added six maps.\n"
 					+ "- Added intro background music.\n" 
@@ -68,18 +69,7 @@ public class ReleaseNotes extends MyPanel {
 
 		setBackground(background);
 
-		ScrollBar s1 = new ScrollBar();
-		s1.setMin(0);
-		s1.setMax(version.length - 1);
-		s1.setValue(0);
-		s1.setUnitIncrement(1);
-		s1.setBlockIncrement(1);
-		s1.setLayoutX(590);
-		s1.setLayoutY(125);
-		s1.setMinWidth(25);
-		s1.setMinHeight(275);
-		s1.setOrientation(Orientation.VERTICAL);
-
+		MyScrollBar s1 = new MyScrollBar(version.length);
 		s1.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
 				text.setText(version[new_val.intValue()]);
@@ -91,7 +81,7 @@ public class ReleaseNotes extends MyPanel {
 		getChildren().add(new MyLabel(0, 20, "Release Notes", 50, "white", "-fx-font-weight: bold;"));
 		text = new MyLabel(30, 120, version[0], 20, "white");
 		getChildren().add(text);
-		getChildren().add(new MyButton(230, 420, "Close", 18, Navigator.HOME));
+		getChildren().add(new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));
 	}
 
 	@Override
