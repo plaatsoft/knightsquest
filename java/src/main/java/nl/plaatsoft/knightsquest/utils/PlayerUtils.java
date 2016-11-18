@@ -32,7 +32,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import nl.plaatsoft.knightsquest.model.Region;
-import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
 
 public class PlayerUtils {

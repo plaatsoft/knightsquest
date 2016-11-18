@@ -204,7 +204,7 @@ public class Game extends StackPane {
 
 				Land land = LandUtils.getPlayerSelectedLand(offsetX,offsetY);				
 				if (land!=null) {
-					//log.info("land ["+land.getX()+","+land.getY()+" scale="+pane2.getScaleX()+"] selected");
+					log.info("land ["+land.getX()+","+land.getY()+" scale="+land.getScale()+"] selected");
 					LandUtils.doPlayerActions(land, players[1]);
 					redraw();
 				}

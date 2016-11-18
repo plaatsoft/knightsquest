@@ -191,11 +191,9 @@ public class LandUtils {
 	
 	public static Land getPlayerSelectedLand(double mouseX, double mouseY) {
 		
-		Point2D point = new Point2D(mouseX, mouseY);
-		
 		for (int x=0; x<Constants.SEGMENT_X; x++) {			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
-			    if (lands[x][y].getPolygon().contains(point)) {
+			    if (lands[x][y].getPolygon().contains(mouseX, mouseY)) {
 			       return lands[x][y];
 			    }		
 			}
@@ -277,8 +275,7 @@ public class LandUtils {
 			}		
 		}
 	}
-	
-	
+		
 	public static void setPlayerSoldierMoveDestinations(Land land) {
 		
 		List <Land> list1 = LandUtils.getNeigbors(land);
@@ -301,6 +298,12 @@ public class LandUtils {
 					 continue;
 				 }
 				
+				 // Target land has cross
+				 if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.CROSS)) { 
+					 land1.setDestination(true);
+					 continue;
+				 }
+				 
 				 // Target land is owner by bot but soldier is less strong
 				 if ((land1.getPlayer()!=null) && (!land1.getPlayer().equals(land.getPlayer())) && (land1.getSoldier()!=null) && 
 			    		 (land1.getSoldier().getType().getValue()<land.getSoldier().getType().getValue())) {
@@ -338,14 +341,14 @@ public class LandUtils {
 					 continue;
 				 }
 				
-				// Target land has cross
-				 if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.CROSS)) { 
+				// Target land without soldier
+				 if (land1.getSoldier()==null) {
 					 land1.setDestination(true);
 					 continue;
 				 }
 				 
-				 // Target land is owned and does not have soldier on it
-				 if ((land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer()) && (land1.getSoldier()==null)) { 
+				// Target land has cross
+				 if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.CROSS)) { 
 					 land1.setDestination(true);
 					 continue;
 				 }
@@ -372,6 +375,10 @@ public class LandUtils {
 					
 						moveSoldier(land2, land3);
 					}
+					
+					/* Rebuild all regions */
+					int regions = RegionUtils.detectedRegions();		
+					RegionUtils.rebuildRegions(regions);	
 					break;
 				}
 			}	
@@ -385,17 +392,27 @@ public class LandUtils {
 				 (land3.getSoldier()!=null) && 
 				 land3.getSoldier().isEnabled() &&			     
 				 (land3.getSoldier().getType()!=SoldierEnum.CROSS))
-			{			
-				resetSelected();
+			{		
+				
+				if (land3.isSource()) {
+				
+					// Deselect soldier
+					resetSelected();
 					
-				// 	Select source
-				land3.setSource(true);
-					
-				// Select destination				
-				if (land3.getSoldier().getType()==SoldierEnum.TOWER) {
-					setPlayerNewSoldierDestinations(land3);
 				} else {
-					setPlayerSoldierMoveDestinations(land3);
+					
+					// Select soldier
+					resetSelected();
+					
+					/* Select source */
+					land3.setSource(true);
+					
+					/* Select destination */				
+					if (land3.getSoldier().getType()==SoldierEnum.TOWER) {
+						setPlayerNewSoldierDestinations(land3);
+					} else {
+						setPlayerSoldierMoveDestinations(land3);
+					}
 				}
 			}
 		}	
@@ -520,7 +537,19 @@ public class LandUtils {
 				
 		return list;
 	}
+	
+	public static void scaleMap(double scale) {
 		
+		log.info("scale="+scale);
+		for (int x=0; x<Constants.SEGMENT_X; x++) {
+			
+			for (int y=0; y<Constants.SEGMENT_Y; y++) {
+			
+				lands[x][y].setScale(scale);	
+			}
+		}		
+	}
+
 	private static void optimizeMap() {
 		
 		for (int x=0; x<Constants.SEGMENT_X; x++) {

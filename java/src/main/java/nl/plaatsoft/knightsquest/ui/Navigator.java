@@ -32,6 +32,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 
 import nl.plaatsoft.knightsquest.utils.Constants;
+import nl.plaatsoft.knightsquest.utils.LandUtils;
 
 public class Navigator {
 		
@@ -101,7 +102,7 @@ public class Navigator {
 			game = new Game();				
 			game.start();						
 			scene.setRoot(game);	
-			//setSceneEvents(scene, game);
+			setSceneEvents(scene, game);
 			break;	
 			
 		case LOCAL_HIGHSCORE:			
@@ -161,7 +162,7 @@ public class Navigator {
 	}
 	
 	//handles mouse scrolling
-	/*private static void setSceneEvents(final Scene scene, final Pane page) {	    
+	private static void setSceneEvents(final Scene scene, final Pane page) {	    
 	    scene.setOnScroll(
 	            new EventHandler<ScrollEvent>() {
 	              public void handle(ScrollEvent event) {
@@ -177,22 +178,22 @@ public class Navigator {
 	    				Node node = (Node) iter.next();
 	    				if(node instanceof Pane){
 	    			         Pane pane = (Pane) node;
-	    			         if ( pane.getId().equals("map") {
+	    			         if (pane.getId().equals("map")) {
 	    			        	 
 	    			        	 double scale = pane.getScaleX() * zoomFactor;
+	    			        	 log.info("scale="+scale);
+            			         pane.setScaleX(scale);
+	    			             pane.setScaleY(scale);
+	    			              			        
+	    			        	 LandUtils.scaleMap(scale);
 	    			        	 
-	    			        	 //if (scale>(Constants.SCALE-0.05)) 
-	    			        	 {	                	
-	    			              	pane.setScaleX(scale);
-	    			               	pane.setScaleY(scale);
-	    			               	event.consume();
-	    			             }
+	    			        	 event.consume();
 	    			         }
 	    			    }      
 	    		   }
 	           }
 	      });
-	  }*/
+	  }
 	
 	
 	public static Scene getScene() {

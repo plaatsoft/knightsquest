@@ -38,6 +38,7 @@ public class Land {
 	private int y;
 	private int size;
 	private LandEnum type; 
+	private double scale;
 	private Polygon polygon = new Polygon();
 	
 	// Needed to move player soldier
@@ -117,7 +118,7 @@ public class Land {
 				new double[]{size+(y*size), (y*size), (y*size),	size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7
 		);	
 		
-		if (size>30) {
+		if (size>=20) {
 			gc.setFill(Color.WHITE);
 			gc.fillText("["+x+","+y+"]",(x*(size*4))+offset+15,size+(y*size));
 			gc.fillText(""+region,(x*(size*4))+offset+25,size+(y*size)+15);
@@ -214,5 +215,15 @@ public class Land {
 
 	public void setDestination(boolean destination) {
 		this.destination = destination;
+	}
+
+	public double getScale() {
+		return scale;
+	}
+
+	public void setScale(double scale) {
+		this.scale = scale;
+		polygon.setScaleX(scale);
+		polygon.setScaleY(scale);
 	}
 }

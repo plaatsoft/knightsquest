@@ -39,10 +39,12 @@ public class ReleaseNotes extends MyPanel {
 
 	private static String[] version = {
 
-			"15-11-2016 (Version 0.2)\n" 
+			"18-11-2016 (Version 0.2)\n" 
+					+ "- Added human player functionality.\n"
+					+ "- Improve bots behalvior"
 					+ "- Added new background.\n" 
-					+ "- Improve help page.\n" 
-					+ "- Add intro movie.\n"
+					+ "- Improve help, credit, donate page.\n" 
+					+ "- Added intro movie.\n"
 					+ "- Improve network detection.\n"
 					+ "- Add setting option to switch off the music.\n",
 
