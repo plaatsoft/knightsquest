@@ -29,6 +29,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
@@ -98,6 +99,6 @@ public class Help extends MyPanel {
     	getChildren().add( new MyLabel(250, y, "0", 20, "white"));
     	getChildren().add( new MyLabel(400, y, "0 (Dead soldier)", 20, "white"));
     	       		
-    	getChildren().add( new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));		
+    	getChildren().add( new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));		
 	}
 }

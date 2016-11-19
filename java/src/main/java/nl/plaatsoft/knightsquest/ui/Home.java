@@ -21,8 +21,6 @@
 
 package nl.plaatsoft.knightsquest.ui;
 
-import org.apache.log4j.Logger;
-
 import javafx.concurrent.Task;
 
 import javafx.scene.image.Image;
@@ -34,14 +32,13 @@ import javafx.scene.layout.BackgroundSize;
 import nl.plaatsoft.knightsquest.network.CloudCheck;
 import nl.plaatsoft.knightsquest.network.CloudNewVersion;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class Home extends MyPanel {
-
-	final static Logger log = Logger.getLogger( Home.class);
 		
 	private MyLabel label3;
 	private Task<Void> task;
@@ -60,32 +57,36 @@ public class Home extends MyPanel {
 		getChildren().add(label3);
 				
 		int y = 30;
-		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Play", 18, Navigator.MAP_SELECTOR));
+		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Play", 18, Navigator.MAP_SELECTOR));
 		y += 45;
-		getChildren().add( new MyButton(Constants.WIDTH-210, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
+		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
 		y += 45;	
-		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Settings", 18, Navigator.SETTINGS));
+		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Settings", 18, Navigator.SETTINGS));
 		y += 45;
-		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Help", 18, Navigator.HELP));
+		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Help", 18, Navigator.HELP));
 		y += 45;
-		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Credits", 18, Navigator.CREDITS));
+		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Credits", 18, Navigator.CREDITS));
 		y += 45;
-		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Release Notes", 18, Navigator.RELEASE_NOTES));
+		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Release Notes", 18, Navigator.RELEASE_NOTES));
 		y += 45;
-		getChildren().add( new MyButton(Constants.WIDTH-210, y, "Donate", 18, Navigator.DONATE));
+		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Donate", 18, Navigator.DONATE));
 		
-		getChildren().add( new MyButton(Constants.WIDTH-210, Constants.HEIGHT-70, "Exit", 18, Navigator.EXIT));	
+		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, MyFactory.getConfig().getHeight()-70, "Exit", 18, Navigator.EXIT));	
 			
 		int x =0;
 		double scale = 1;
-		if (Constants.WIDTH==640) {
+		if (MyFactory.getConfig().getWidth()==640) {
 			x = -10;
 			y = 60;
 			scale = 0.75;
-		} else {
+		} else if (MyFactory.getConfig().getWidth()==800) {
 			x = 10;
 			y = 130;
 			scale = 1;
+		} else {
+			x = 90;
+			y = 200;
+			scale = 1.4;
 		}
 		
 		getChildren().add( new MyImageView(x, y, "images/knight1.png", scale));

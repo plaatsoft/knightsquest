@@ -21,19 +21,42 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
-import javafx.scene.control.ComboBox;
+public class MyConfig {
 
-public class MyComboBox extends ComboBox<Object> {
-
-	public MyComboBox(int x, int y, String selected, String[] options ) {
+	private int width;
+	private int height;
+	private boolean musicEnabled;
+	private int amountOfPlayers;
 	
-		setLayoutX(x);
-		setLayoutY(y);
-		
-		setValue(selected);
-		
-		for (int i=0; i<options.length; i++) {
-			getItems().add(options[i]);
-		}
-	};       
+	public boolean isMusicEnabled() {
+		return musicEnabled;
+	}
+
+	public void setMusicEnabled(boolean musicEnabled) {
+		this.musicEnabled = musicEnabled;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int heigth) {
+		this.height = heigth;
+	}
+
+	public int getAmountOfPlayers() {
+		return amountOfPlayers;
+	}
+
+	public void setAmountOfPlayers(int amountOfPlayers) {
+		this.amountOfPlayers = amountOfPlayers;
+	}
 }

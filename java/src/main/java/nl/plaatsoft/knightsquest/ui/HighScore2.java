@@ -38,6 +38,7 @@ import nl.plaatsoft.knightsquest.model.Score;
 import nl.plaatsoft.knightsquest.model.ScoreDAO;
 import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
@@ -102,7 +103,7 @@ public class HighScore2 extends MyPanel {
 		getChildren().add(new MyLabel(300, y, "Score", 25));	
 		getChildren().add(new MyLabel(400, y, "Nickname", 25));
 				
-		MyButton button1 = new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME);
+		MyButton button1 = new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME);
 		
 		getChildren().add(button1);	
 				

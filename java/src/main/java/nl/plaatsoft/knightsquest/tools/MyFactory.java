@@ -21,19 +21,15 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
-import javafx.scene.control.ComboBox;
+public class MyFactory {
 
-public class MyComboBox extends ComboBox<Object> {
-
-	public MyComboBox(int x, int y, String selected, String[] options ) {
-	
-		setLayoutX(x);
-		setLayoutY(y);
+	static MyConfig config;
+				
+	public static MyConfig getConfig() {
 		
-		setValue(selected);
-		
-		for (int i=0; i<options.length; i++) {
-			getItems().add(options[i]);
+		if (config==null) {
+			config = new MyConfig();
 		}
-	};       
+		return config;
+	}
 }

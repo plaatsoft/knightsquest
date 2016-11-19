@@ -30,8 +30,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-
-import nl.plaatsoft.knightsquest.utils.Constants;
+import javafx.stage.Stage;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.utils.LandUtils;
 
 public class Navigator {
@@ -52,6 +52,7 @@ public class Navigator {
 	private static Settings settings;	
 	
 	private static Scene scene;	
+	private static Stage stage;
 			
 	public static final int NONE = 0;
 	public static final int INTRO1 = 1;
@@ -75,7 +76,7 @@ public class Navigator {
 		case INTRO1:
 			intro1 = new Intro1();
 			intro1.draw();
-			scene = new Scene(intro1, Constants.WIDTH, Constants.HEIGHT);	
+			scene = new Scene(intro1, MyFactory.getConfig().getWidth(), MyFactory.getConfig().getHeight());	
 			break;
 						
 		case INTRO2:
@@ -85,9 +86,7 @@ public class Navigator {
 			break;
 			
 		case HOME:
-			if (home==null) {
-				home = new Home();
-			}
+			home = new Home();
 			home.draw();
 			scene.setRoot(home);	
 			break;		
@@ -118,33 +117,25 @@ public class Navigator {
 			break;	
 			
 		case DONATE:
-			if (donate==null) {
-				donate = new Donate();
-			}			
+			donate = new Donate();
 			donate.draw();
 			scene.setRoot(donate);
 			break;
 							
 		case CREDITS:
-			if (credits==null) {
-				credits = new Credits();
-			}
+			credits = new Credits();
 			credits.draw();			
 			scene.setRoot(credits);
 			break;	
 			
 		case RELEASE_NOTES:
-			if (releaseNotes==null) {
-				releaseNotes = new ReleaseNotes();
-			}
+			releaseNotes = new ReleaseNotes();
 			releaseNotes.draw();
 			scene.setRoot(releaseNotes);				
 			break;		
 			
 		case SETTINGS:
-			if (settings==null) {
-				settings = new Settings();
-			}
+			settings = new Settings();
 			settings.draw();
 			scene.setRoot(settings);			
 			break;	
@@ -198,6 +189,14 @@ public class Navigator {
 	
 	public static Scene getScene() {
 		return scene;
+	}
+
+	public static Stage getStage() {
+		return stage;
+	}
+
+	public static void setStage(Stage stage) {
+		Navigator.stage = stage;
 	}
 	
 	

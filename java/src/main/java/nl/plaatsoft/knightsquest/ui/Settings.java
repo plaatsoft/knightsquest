@@ -40,11 +40,11 @@ import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.tools.MySwitch;
-import nl.plaatsoft.knightsquest.utils.Constants;
 import nl.plaatsoft.knightsquest.tools.MyComboBox;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 
 public class Settings extends MyPanel {
-
+	
 	private final static int MAX=8;
 	private Label[] label = new Label[MAX];
 	private char[] letters = {'-','-','-','-','-','-','-','-'};
@@ -118,8 +118,9 @@ public class Settings extends MyPanel {
     	y+=80;    
     	getChildren().add (new MyLabel(0, y, "Below nickname is used in the highscore area", 20, "white"));		
     	
-    	y+=60;   	
-		int x=30;
+    	y+=60;   
+    	    	
+		int x=(MyFactory.getConfig().getWidth()-(MAX*70))/2;
 		
 		for (int i=0; i<MAX ;i++) {
 			getChildren().add(buttonSpecial(i, x+25, y-20, "+", true));	
@@ -128,22 +129,88 @@ public class Settings extends MyPanel {
 			x+=70;
 		}			
 		
-		MyButton button = new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME);		
+		MyButton button = new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME);		
 		getChildren().add(button);	
 		
 		y+=150;		
-		getChildren().add (new MyLabel(115, y, "Music", 20));
-		getChildren().add (new MyLabel(250, y, "AmountOfBots", 20));
-		getChildren().add (new MyLabel(470, y, "Level", 20 ));
-		y+=30;
-		getChildren().add(new MySwitch(100,y));	
+		x=(MyFactory.getConfig().getWidth()/8)*1;		
+		getChildren().add (new MyLabel(x, y, "Music", 20));
 		
-		String[] options1 = {"3", "4", "5"};		
-        getChildren().add(new MyComboBox(290,y,"5", options1));
+		y+=30;
+		getChildren().add(new MySwitch(x-10,y));	
+		
+		 /* --------------------------------------- */
+		
+		y-=30;
+		
+		x=(MyFactory.getConfig().getWidth()/8)*3;
+		getChildren().add (new MyLabel(x, y, "AmountOfPlayers", 20));
+		
+		y+=30;
+		
+		String[] options1 = {"3", "4", "5", "6"};		
+		MyComboBox comboBox2 = new MyComboBox(x+40,y, ""+MyFactory.getConfig().getAmountOfPlayers(), options1);		
+        getChildren().add(comboBox2);
         
-        String[] options2 = {"Easy", "Medium", "Hard"};		
-        getChildren().add(new MyComboBox(450,y,"Hard", options2));
-                    
+        comboBox2.setOnAction(new EventHandler<ActionEvent>() { 
+        	public void handle(ActionEvent event) {
+        		String value =  comboBox2.getSelectionModel().getSelectedItem().toString();
+        		int amount = Integer.parseInt(value);
+        		MyFactory.getConfig().setAmountOfPlayers(amount);
+        	}
+        });
+        
+        /* --------------------------------------- */
+        
+        y-=30;
+        
+        x=(MyFactory.getConfig().getWidth()/8)*6;
+		getChildren().add (new MyLabel(x, y, "Size", 20 ));
+		
+		y+=30;
+		
+        String[] options2 = {"640x480", "800x600", "1024x768"};
+        
+        String value = "640x480";
+        if (MyFactory.getConfig().getWidth()==800) {
+        	value = "800x600";
+        } else if (MyFactory.getConfig().getWidth()==1024) {
+        	value = "1024x768";
+        }
+        MyComboBox comboBox1 = new MyComboBox(x-20, y, value, options2);
+        comboBox1.setOnAction(new EventHandler<ActionEvent>() { 
+        	public void handle(ActionEvent event) {
+        		String value =  comboBox1.getSelectionModel().getSelectedItem().toString();    
+      	        if (value=="640x480") {
+      	        	MyFactory.getConfig().setWidth(640);
+       	        	MyFactory.getConfig().setHeight(480);
+       	        	Navigator.getStage().setWidth(640);
+       	        	Navigator.getStage().setHeight(480+20);
+       	        	setMinWidth(640);
+       	        	setMinHeight(480);       
+       	        	
+       	        } else if (value=="800x600") {
+       	        	MyFactory.getConfig().setWidth(800);
+       	        	MyFactory.getConfig().setHeight(600);
+       	        	Navigator.getStage().setWidth(800);
+       	        	Navigator.getStage().setHeight(600+20);
+       	        	
+       	        } else {
+       	        	MyFactory.getConfig().setWidth(1024);
+       	        	MyFactory.getConfig().setHeight(768);  
+       	        	Navigator.getStage().setWidth(1024);
+       	        	Navigator.getStage().setHeight(768+20);
+       	        	
+       	        }
+      	        Navigator.go(Navigator.HOME);
+            }            	
+        });
+        
+        getChildren().add(comboBox1);
+        
+        
+        /* --------------------------------------- */
+        
 		task = new Task<Void>() {
 	        public Void call() {
 	        	CloudUser.set(new String(letters).replaceAll("-", ""));         

@@ -30,10 +30,10 @@ import javafx.scene.layout.BackgroundSize;
 import nl.plaatsoft.knightsquest.model.Score;
 import nl.plaatsoft.knightsquest.model.ScoreDAO;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
-import nl.plaatsoft.knightsquest.utils.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
@@ -85,6 +85,6 @@ public class HighScore1 extends MyPanel {
 			}
 		}
 		
-		getChildren().add( new MyButton(0, Constants.HEIGHT-60, "Next", 18, Navigator.GLOBAL_HIGHSCORE));				
+		getChildren().add( new MyButton(0, MyFactory.getConfig().getHeight()-60, "Next", 18, Navigator.GLOBAL_HIGHSCORE));				
 	}
 }

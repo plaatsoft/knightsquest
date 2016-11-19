@@ -28,6 +28,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyHyperlink;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
@@ -59,7 +60,7 @@ public class Donate extends MyPanel {
     	y+=60;  	
      	
     	// Force focus on button
-    	getChildren().add(new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));		
+    	getChildren().add(new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));		
     	
     	getChildren().add(new MyLabel(0, y, "Click on below link and follow the instructions", 20, "white"));    	
     	y+=25;

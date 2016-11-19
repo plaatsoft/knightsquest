@@ -25,7 +25,6 @@ import org.apache.log4j.Logger;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class MyMusic {
 
@@ -45,7 +44,7 @@ public class MyMusic {
 		if (mp==null) {
 			init();
 		}
-        if (Constants.MUSIC_MODE==1) {
+        if (MyFactory.getConfig().isMusicEnabled()) {
         	mp.play();
         }
 	}

@@ -29,18 +29,23 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.tools.MyScrollBar;
-import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class ReleaseNotes extends MyPanel {
 
 	private static String[] version = {
 
+			"19-11-2016 (Version 0.3)\n" 
+					+ "- Added screen resize option.\n"
+					+ "- Added setting to selection amount of players.\n",
+			
 			"18-11-2016 (Version 0.2 Beta)\n" 
-					+ "- Added human player functionality.\n"
+					
 					+ "- Add information boxes on game screen\n"
 					+ "- Improve bots behalvior\n"
 					+ "- Added new background.\n" 
@@ -81,7 +86,7 @@ public class ReleaseNotes extends MyPanel {
 		getChildren().add(new MyLabel(0, 20, "Release Notes", 50, "white", "-fx-font-weight: bold;"));
 		text = new MyLabel(30, 120, version[0], 20, "white");
 		getChildren().add(text);
-		getChildren().add(new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));
+		getChildren().add(new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));
 	}
 
 	@Override

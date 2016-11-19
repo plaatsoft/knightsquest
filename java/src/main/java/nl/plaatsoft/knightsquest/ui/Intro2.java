@@ -15,6 +15,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.utils.Constants;
@@ -33,8 +34,8 @@ public class Intro2 extends MyPanel {
 			mediaPlayer.setAutoPlay(true);
 			
 			MediaView mediaView = new MediaView(mediaPlayer);	    
-			mediaView.setFitWidth(Constants.WIDTH);
-			mediaView.setFitHeight(Constants.HEIGHT);
+			mediaView.setFitWidth(MyFactory.getConfig().getWidth());
+			mediaView.setFitHeight(MyFactory.getConfig().getHeight());
 			
 			getChildren().add(mediaView);
 				

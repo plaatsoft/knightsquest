@@ -49,6 +49,7 @@ import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.model.Score;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 import nl.plaatsoft.knightsquest.utils.Constants;
@@ -61,7 +62,7 @@ public class Game extends StackPane {
 
 	private GraphicsContext gc;
 	private Canvas canvas;
-	private static Player[] players = new Player[Constants.START_PLAYERS+1];
+	private static Player[] players = new Player[Constants.MAX_PLAYERS+1];
 	private Pane pane2; 
 	private double offsetX = 0;
 	private double offsetY = 0;
@@ -71,7 +72,7 @@ public class Game extends StackPane {
 	private Task<Void> task;	
 	private static MyLabel label1;
 	private static MyLabel label2;
-	private static MyLabel[] label3 = new MyLabel[Constants.START_PLAYERS+1];
+	private static MyLabel[] label3 = new MyLabel[Constants.MAX_PLAYERS+1];
 	
 	public void redraw() {
 		
@@ -79,7 +80,7 @@ public class Game extends StackPane {
 		
 		LandUtils.drawMap();
 		
-		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
+		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
 			players[i].draw();
 		}
 	}
@@ -105,7 +106,7 @@ public class Game extends StackPane {
 
 		int count=0;
 
-		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
+		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
 			
 			if (players[i].getRegion().size()>0) {
 				count++;
@@ -137,7 +138,7 @@ public class Game extends StackPane {
 	
 	public static void drawPlayerScore() {
 
-		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
+		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
 			
 			int amount = 0; 
 			Iterator<Region> iter2 = players[i].getRegion().iterator();  
@@ -195,16 +196,16 @@ public class Game extends StackPane {
 		pane3.setScaleY(Constants.SCALE);
 		pane3.setId("control");
 						
-		label1 = new MyLabel(0, (Constants.HEIGHT/2)-120, "", 80, "white", "-fx-font-weight: bold;");
-		label2 = new MyLabel(0, (Constants.HEIGHT/2)-20, "", 60, "white", "-fx-font-weight: bold;");
+		label1 = new MyLabel(0, (MyFactory.getConfig().getHeight()/2)-120, "", 80, "white", "-fx-font-weight: bold;");
+		label2 = new MyLabel(0, (MyFactory.getConfig().getHeight()/2)-20, "", 60, "white", "-fx-font-weight: bold;");
 		
 		int y=10;
-		for (int i = 1; i <= Constants.START_PLAYERS; i++) {			
+		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {			
 			label3[i] = new MyLabel(20, y, "", 15, PlayerUtils.getColor(i), "-fx-font-weight: bold;");
 			y+=18;
 		}
 		
-		MyButton btn = new MyButton(Constants.WIDTH-160, Constants.HEIGHT-60, "Turn ["+turn+"]", 18, Navigator.NONE);
+		MyButton btn = new MyButton(MyFactory.getConfig().getWidth()-160,MyFactory.getConfig().getHeight()-60, "Turn ["+turn+"]", 18, Navigator.NONE);
 		btn.setPrefWidth(140);
 		pane3.getChildren().add(label1);
 		pane3.getChildren().add(label2);
@@ -216,15 +217,15 @@ public class Game extends StackPane {
 		Rectangle r = new Rectangle();
 		r.setX(10);
 		r.setY(10);
-		r.setWidth(115);
-		r.setHeight(115);
+		r.setWidth(115);		
+		r.setHeight(MyFactory.getConfig().getAmountOfPlayers()*20);
 		r.setArcWidth(20);
 		r.setArcHeight(20);
 		r.setFill(Color.rgb(0, 0, 0, 0.7));
 		
 		pane3.getChildren().add(r);
 		
-		for (int i = 1; i <= Constants.START_PLAYERS; i++) {		
+		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {		
 			pane3.getChildren().add(label3[i]);
 		}		
 		pane3.getChildren().add(btn);
@@ -234,7 +235,7 @@ public class Game extends StackPane {
 		// Create players
 		// ------------------------------------------------------
 		
-		for (int i = 1; i <= Constants.START_PLAYERS; i++) {
+		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
 			players[i] = PlayerUtils.createPlayer(gc, i, pane2);
 		}
 		

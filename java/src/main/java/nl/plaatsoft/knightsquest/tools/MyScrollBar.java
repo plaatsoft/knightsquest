@@ -33,10 +33,10 @@ public class MyScrollBar extends ScrollBar {
 		setValue(0);
 		setUnitIncrement(1);
 		setBlockIncrement(1);
-		setLayoutX(Constants.WIDTH-50);
+		setLayoutX(MyFactory.getConfig().getWidth()-50);
 		setLayoutY(125);
 		setMinWidth(25);
-		setMinHeight(Constants.HEIGHT-205);
+		setMinHeight(MyFactory.getConfig().getHeight()-205);
 		setOrientation(Orientation.VERTICAL);
 	}
 	

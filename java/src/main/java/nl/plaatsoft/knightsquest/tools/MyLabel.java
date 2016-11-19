@@ -39,7 +39,7 @@ public class MyLabel extends Label {
 		setStyle("-fx-font-size:"+fontSize+"px; -fx-text-fill:"+color+"; "+options);
 		
 		if (x==0) {
-			setMinWidth(Constants.WIDTH);
+			setMinWidth(MyFactory.getConfig().getWidth());
 			setAlignment(Pos.CENTER);
 			setTextAlignment(TextAlignment.CENTER);
 			
@@ -57,7 +57,7 @@ public class MyLabel extends Label {
 		setStyle("-fx-font-size:"+fontSize+"px; -fx-text-fill:"+color+"; ");
 		
 		if (x==0) {
-			setMinWidth(Constants.WIDTH);
+			setMinWidth(MyFactory.getConfig().getWidth());
 			setAlignment(Pos.CENTER);
 			setTextAlignment(TextAlignment.CENTER);
 			
@@ -75,7 +75,7 @@ public class MyLabel extends Label {
 		setStyle("-fx-font-size:"+fontSize+"px; -fx-text-fill:white; ");
 		
 		if (x==0) {
-			setMinWidth(Constants.WIDTH);
+			setMinWidth(MyFactory.getConfig().getWidth());
 			setAlignment(Pos.CENTER);
 			setTextAlignment(TextAlignment.CENTER);
 			

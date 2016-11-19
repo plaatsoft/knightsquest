@@ -35,6 +35,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
@@ -44,10 +45,7 @@ import nl.plaatsoft.knightsquest.utils.LandUtils;
 public class MapSelector extends MyPanel {
 
 	final static Logger log = Logger.getLogger(MapSelector.class);
-	
-	
-	private int SIZE = 4;
-	
+			
 	private Task<Void> task;
 
 	private static GraphicsContext[] gc = new GraphicsContext[6];
@@ -85,11 +83,17 @@ public class MapSelector extends MyPanel {
 		int offsetX = 200;
 		int offsetY = 150;
 		
-		if (Constants.WIDTH==800) {
+		if (MyFactory.getConfig().getWidth()==800) {
 			
 			size=4;
 			offsetX = 250;
 			offsetY = 200;
+			
+		} else if (MyFactory.getConfig().getWidth()==1024) {
+			
+			size=5;
+			offsetX = 325;
+			offsetY = 250;	
 		}
 				
 		Image image1 = new Image("images/background4.jpg");
@@ -105,33 +109,35 @@ public class MapSelector extends MyPanel {
 		y += 90;
 		
 		x = 25;
-		createCanvas(0, x, y, SIZE, seek[0]);
+		createCanvas(0, x, y, size, seek[0]);
 		x += offsetX;
-		createCanvas(1, x, y, SIZE, seek[1]);
+		createCanvas(1, x, y, size, seek[1]);
 		x += offsetX;
-		createCanvas(2, x, y, SIZE, seek[2]);
+		createCanvas(2, x, y, size, seek[2]);
 		
 		y += offsetY;
 
 		x = 25;
-		createCanvas(3, x, y, SIZE, seek[3]);
+		createCanvas(3, x, y, size, seek[3]);
 		x += offsetX;
-		createCanvas(4, x, y, SIZE, seek[4]);
+		createCanvas(4, x, y, size, seek[4]);
 		x += offsetX;
-		createCanvas(5, x, y, SIZE, seek[5]);
+		createCanvas(5, x, y, size, seek[5]);
 
+		for (int i = 0; i < 6; i++) {
+			createMap(gc[i], seek[i], size);						
+		}
+		
 	
-		getChildren().add(new MyButton(0, Constants.HEIGHT-60, "Close", 18, Navigator.HOME));
+		getChildren().add(new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));
 
-		task = new Task<Void>() {
+		/*task = new Task<Void>() {
 			public Void call() {
-				for (int i = 0; i < 6; i++) {
-					createMap(gc[i], seek[i], size);						
-				}
+				
 				return null;
 			}
 		};
 
-		new Thread(task).start();
+		new Thread(task).start();*/
 	}
 }
