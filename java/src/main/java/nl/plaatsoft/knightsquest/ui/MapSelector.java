@@ -23,7 +23,6 @@ package nl.plaatsoft.knightsquest.ui;
 
 import org.apache.log4j.Logger;
 
-import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -34,6 +33,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
@@ -46,10 +46,8 @@ public class MapSelector extends MyPanel {
 
 	final static Logger log = Logger.getLogger(MapSelector.class);
 			
-	private Task<Void> task;
-
 	private static GraphicsContext[] gc = new GraphicsContext[6];
-	private static int seek[] = { 1, 2, 6, 8, 9, 10};
+	private static int seek[] = { 1, 3, 6, 8, 11, 10};
 
 	private void createMap(GraphicsContext gc, int seek, int size) {
 		
@@ -127,17 +125,7 @@ public class MapSelector extends MyPanel {
 		for (int i = 0; i < 6; i++) {
 			createMap(gc[i], seek[i], size);						
 		}
-		
-	
+
 		getChildren().add(new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));
-
-		/*task = new Task<Void>() {
-			public Void call() {
-				
-				return null;
-			}
-		};
-
-		new Thread(task).start();*/
 	}
 }

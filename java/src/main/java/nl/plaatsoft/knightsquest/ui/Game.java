@@ -55,6 +55,7 @@ import nl.plaatsoft.knightsquest.tools.MyRandom;
 import nl.plaatsoft.knightsquest.utils.Constants;
 import nl.plaatsoft.knightsquest.utils.LandUtils;
 import nl.plaatsoft.knightsquest.utils.PlayerUtils;
+import nl.plaatsoft.knightsquest.utils.SoldierUtils;
 
 public class Game extends StackPane {
 
@@ -101,7 +102,18 @@ public class Game extends StackPane {
 		   
 		return rank;
 	}
+	
+	public static boolean checkGameOver1() {
 		
+		if (players[1].getRegion().size()>0) {
+			return false;
+		}
+		
+		label1.setText("Game Over");
+		label2.setText("Bots won!");
+		return true;		
+	}
+
 	public static boolean checkGameOver2() {
 
 		int count=0;
@@ -124,18 +136,7 @@ public class Game extends StackPane {
 		}
 		return true;		
 	}
-	
-	public static boolean checkGameOver1() {
 		
-		if (players[1].getRegion().size()>0) {
-			return false;
-		}
-		
-		label1.setText("Game Over");
-		label2.setText("Bots won!");
-		return true;		
-	}
-	
 	public static void drawPlayerScore() {
 
 		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
@@ -175,14 +176,40 @@ public class Game extends StackPane {
 		pane2.setScaleX(Constants.SCALE);
 		pane2.setScaleY(Constants.SCALE);
 		pane2.setId("map");
-		
-		canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
-		canvas.setLayoutX(Constants.OFFSET_X);
-		canvas.setLayoutY(Constants.OFFSET_Y);
-		
+				
+		int size=0;
+		if (MyFactory.getConfig().getWidth()==640) {
+					
+			size = Constants.SEGMENT_SIZE_640;
+			SoldierUtils.init(size);
+			
+			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
+			canvas.setLayoutX(Constants.OFFSET_X_640);
+			canvas.setLayoutY(Constants.OFFSET_Y_480);
+			
+		} else if (MyFactory.getConfig().getWidth()==800) {
+			
+			size = Constants.SEGMENT_SIZE_800;
+			SoldierUtils.init(size);
+			
+			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
+			canvas.setLayoutX(Constants.OFFSET_X_800);
+			canvas.setLayoutY(Constants.OFFSET_Y_600);
+			
+		} else {
+			
+			size = Constants.SEGMENT_SIZE_1024;
+			SoldierUtils.init(size);
+			
+			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
+			canvas.setLayoutX(Constants.OFFSET_X_1024);
+			canvas.setLayoutY(Constants.OFFSET_Y_768);
+		}
+	
+		log.info("size="+size);
 		gc = canvas.getGraphicsContext2D();
 		
-		LandUtils.createMap(gc, Constants.SEGMENT_SIZE);
+		LandUtils.createMap(gc, size);
 		
 		pane2.getChildren().add(canvas);
 		getChildren().add(pane2);
@@ -198,13 +225,7 @@ public class Game extends StackPane {
 						
 		label1 = new MyLabel(0, (MyFactory.getConfig().getHeight()/2)-120, "", 80, "white", "-fx-font-weight: bold;");
 		label2 = new MyLabel(0, (MyFactory.getConfig().getHeight()/2)-20, "", 60, "white", "-fx-font-weight: bold;");
-		
-		int y=10;
-		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {			
-			label3[i] = new MyLabel(20, y, "", 15, PlayerUtils.getColor(i), "-fx-font-weight: bold;");
-			y+=18;
-		}
-		
+				
 		MyButton btn = new MyButton(MyFactory.getConfig().getWidth()-160,MyFactory.getConfig().getHeight()-60, "Turn ["+turn+"]", 18, Navigator.NONE);
 		btn.setPrefWidth(140);
 		pane3.getChildren().add(label1);
@@ -215,15 +236,20 @@ public class Game extends StackPane {
 		// ------------------------------------------------------
 			
 		Rectangle r = new Rectangle();
-		r.setX(10);
+		r.setX(MyFactory.getConfig().getWidth()-135);
 		r.setY(10);
 		r.setWidth(115);		
 		r.setHeight(MyFactory.getConfig().getAmountOfPlayers()*20);
 		r.setArcWidth(20);
 		r.setArcHeight(20);
-		r.setFill(Color.rgb(0, 0, 0, 0.7));
-		
+		r.setFill(Color.rgb(0, 0, 0, 0.7));		
 		pane3.getChildren().add(r);
+		
+		int y=15;
+		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {			
+			label3[i] = new MyLabel(MyFactory.getConfig().getWidth()-125, y, "", 15, PlayerUtils.getColor(i), "-fx-font-weight: bold;");
+			y+=18;
+		}
 		
 		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {		
 			pane3.getChildren().add(label3[i]);
@@ -252,8 +278,15 @@ public class Game extends StackPane {
 
 				Land land = LandUtils.getPlayerSelectedLand(offsetX,offsetY);				
 				if (land!=null) {
-					log.info("land ["+land.getX()+","+land.getY()+" scale="+land.getScale()+"] selected");
+					//log.info("land ["+land.getX()+","+land.getY()+" scale="+land.getScale()+"] selected");
 					LandUtils.doPlayerActions(land, players[1]);
+										
+					if (PlayerUtils.hasPlayerNoMoves(players[1])) {
+						turn++;
+						btn.setText("Turn ["+turn+"]");
+						PlayerUtils.nextTurn();
+					}
+					
 					redraw();
 					drawPlayerScore();
 				}

@@ -32,6 +32,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import nl.plaatsoft.knightsquest.model.Region;
+import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
 
 public class PlayerUtils {
@@ -110,6 +111,25 @@ public class PlayerUtils {
 			RegionUtils.createStartRegion(i, player, pane);		
 		}		
 		return player;
+	}
+	
+	public static boolean hasPlayerNoMoves(Player player) {
+	
+		log.info("move?");
+		Iterator<Region> iter2 = player.getRegion().iterator();  
+		while (iter2.hasNext()) {
+			Region region = (Region) iter2.next();
+				
+			Iterator<Land> iter3 = region.getLands().iterator();  
+			while (iter3.hasNext()) {
+				Land land = (Land) iter3.next();
+					
+				if ((land.getSoldier()!=null) && land.getSoldier().isEnabled()) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	public static void nextTurn() {

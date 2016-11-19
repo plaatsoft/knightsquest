@@ -39,20 +39,35 @@ public class  SoldierUtils {
 	
 	final private static Logger log = Logger.getLogger(SoldierUtils.class);
 		
-	private static Image tower = new Image("images/tower.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image tower2 = new Image("images/tower2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image pawn = new Image("images/pawn.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image pawn2 = new Image("images/pawn2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image horse = new Image("images/horse.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image horse2 = new Image("images/horse2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image bishop = new Image("images/bishop.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image bishop2 = new Image("images/bishop2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image queen = new Image("images/queen.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image queen2 = new Image("images/queen2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image king = new Image("images/king.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image king2 = new Image("images/king2.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
-	private static Image cross = new Image("images/cross.png", Constants.SEGMENT_SIZE+4, Constants.SEGMENT_SIZE+4, false, false);
+	private static Image tower;
+	private static Image tower2;
+	private static Image pawn;
+	private static Image pawn2;
+	private static Image horse;
+	private static Image horse2;
+	private static Image bishop;
+	private static Image bishop2;
+	private static Image queen;
+	private static Image queen2;
+	private static Image king;
+	private static Image king2;
+	private static Image cross;
 			
+	public static void init(int size) {
+		tower = new Image("images/tower.png", size+4, size+4, false, false);
+		tower2 = new Image("images/tower2.png", size+4, size+4, false, false);
+		pawn = new Image("images/pawn.png", size+4, size+4, false, false);
+		pawn2 = new Image("images/pawn2.png", size+4, size+4, false, false);
+		horse = new Image("images/horse.png", size+4, size+4, false, false);
+		horse2 = new Image("images/horse2.png", size+4, size+4, false, false);
+		bishop = new Image("images/bishop.png", size+4, size+4, false, false);
+		bishop2 = new Image("images/bishop2.png", size+4, size+4, false, false);
+		queen = new Image("images/queen.png", size+4, size+4, false, false);
+		queen2 = new Image("images/queen2.png", size+4, size+4, false, false);
+		king = new Image("images/king.png", size+4, size+4, false, false);
+		king2 = new Image("images/king2.png", size+4, size+4, false, false);
+		cross = new Image("images/cross.png", size+4, size+4, false, false);		
+	}
 	public static void createBotSoldier(Region region) {
 						
 		/* Create new Soldier if there is enough food */  
@@ -95,7 +110,7 @@ public class  SoldierUtils {
 		while (iter2.hasNext()) {
 			Region region = (Region) iter2.next();
 			
-			log.info(player+" "+region+" size="+region.getLands().size());
+			//log.info(player+" "+region+" size="+region.getLands().size());
 			
 			Iterator<Land> iter3 = region.getLands().iterator();  
 			while (iter3.hasNext()) {

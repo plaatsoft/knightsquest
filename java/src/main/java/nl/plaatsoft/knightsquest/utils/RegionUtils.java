@@ -76,19 +76,10 @@ public class RegionUtils {
 			int y = MyRandom.nextInt(Constants.SEGMENT_Y);
 
 			// Each start region must have two lands between each other)
-			List<Land> list1 = LandUtils.getNeigbors(LandUtils.getLands()[x][y]);
+			List<Land> list1 = LandUtils.getNeigbors2(LandUtils.getLands()[x][y]);
 			Iterator<Land> iter1 = list1.iterator();
 			while (iter1.hasNext()) {
-				Land land1 = (Land) iter1.next();
-				if (land1.getPlayer() != null) {
-					bad = true;
-				}
-			}
-
-			List<Land> list2 = LandUtils.getNeigbors2(LandUtils.getLands()[x][y]);
-			Iterator<Land> iter2 = list2.iterator();
-			while (iter2.hasNext()) {
-				Land land2 = (Land) iter2.next();
+				Land land2 = (Land) iter1.next();
 				if (land2.getPlayer() != null) {
 					bad = true;
 				}

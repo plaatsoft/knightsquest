@@ -31,20 +31,26 @@ public class Constants {
 	public final static String APP_WS_URL = "service.plaatsoft.nl";
 	public final static String APP_DONATE_URL = "http://www.plaatsoft.nl/donate";
 		
-	public final static int WIDTH = 640; 
-	public final static int HEIGHT = 480;	
+	public final static int WIDTH = 1024; 
+	public final static int HEIGHT = 768;	
 	
 	public final static double SCALE = 1; 
-	public final static double OFFSET_X = 15; 
-	public final static double OFFSET_Y = 10; 	
 	
-	public final static int SEGMENT_SIZE = 10;	
+	public final static int SEGMENT_SIZE_640 = 10;		
+	public final static double OFFSET_X_640 = 15; 
+	public final static double OFFSET_Y_480 = 10;
+	
+	public final static int SEGMENT_SIZE_800 = 12;	
+	public final static double OFFSET_X_800 = 30; 
+	public final static double OFFSET_Y_600 = 20;
+	
+	public final static int SEGMENT_SIZE_1024 = 16;	
+	public final static double OFFSET_X_1024 = 20; 
+	public final static double OFFSET_Y_768 = 10; 	
+			
 	public final static int SEGMENT_X = 15;
 	public final static int SEGMENT_Y = 45;
-	 
-	public final static int MAP_WIDTH = SEGMENT_SIZE * 4 * (SEGMENT_X+1);
-	public final static int MAP_HEIGHT = SEGMENT_SIZE * 2 * SEGMENT_Y;	
-	
+	 	
 	public final static int MAX_PLAYERS = 6;
-	public final static int START_TOWERS = 2;	
+	public final static int START_TOWERS = 3;	
 }

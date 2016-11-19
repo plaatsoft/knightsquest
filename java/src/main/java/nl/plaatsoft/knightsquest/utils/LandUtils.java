@@ -46,12 +46,12 @@ public class LandUtils {
 	
 	private static Land[][] lands = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
 		
-	//private static Image water = new Image("images/water.png");
+	private static Image water = new Image("images/water.png");
 	//private static Image ocean = new Image("images/ocean.png");
 	private static Image forest = new Image("images/forest.png");
-	//private static Image coast = new Image("images/coast.png");
+	private static Image coast = new Image("images/coast.png");
 	private static Image rock = new Image("images/rock.png");
-	//private static Image grass = new Image("images/grass.png");
+	private static Image grass = new Image("images/grass.png");
 			
 	public static void getTexture(GraphicsContext gc, LandEnum type) {
 		
@@ -62,13 +62,13 @@ public class LandUtils {
 					break;	
 					
 			case GRASS:
-					gc.setFill(Color.DARKGREEN);
-					//gc.setFill(new ImagePattern(grass, 0, 0, 1, 1, true));
+					//gc.setFill(Color.DARKGREEN);
+					gc.setFill(new ImagePattern(grass, 0, 0, 1, 1, true));
 					break;	
 					
 			case COAST: 
-					gc.setFill(Color.BURLYWOOD);
-					//gc.setFill(new ImagePattern(coast, 0, 0, 1, 1, true));
+					//gc.setFill(Color.BURLYWOOD);
+					gc.setFill(new ImagePattern(coast, 0, 0, 1, 1, true));
 					break;	
 				
 			case MOUNTAIN:
@@ -76,8 +76,8 @@ public class LandUtils {
 					break;
 				
 			case WATER:
-					gc.setFill(Color.BLUE);
-					//gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
+					//gc.setFill(Color.BLUE);
+					gc.setFill(new ImagePattern(water, 0, 0, 1, 1, true));
 					break;
 					
 			case OCEAN:
@@ -211,11 +211,9 @@ public class LandUtils {
 		
 		if ( (destination.getSoldier()!=null) && (destination.getPlayer()!=null) && destination.getPlayer().equals(source.getPlayer())) {
 			
-			// Soldier upgrade
-			
+			// Soldier upgrade			
 			if (destination.getSoldier().getType()!=SoldierEnum.PAWN) {
 				// upgrade only allowed with Pawn, so skip upgrade
-				//log.info("Not pawn, upgrade skipped");
 				return;
 			}
 			
@@ -277,9 +275,30 @@ public class LandUtils {
 		}
 	}
 		
-	public static void setPlayerSoldierMoveDestinations(Land land) {
-		
+	public static boolean getPlayerLandHasFriendlyNeigbor(Land land, Player player) {
+			
 		List <Land> list1 = LandUtils.getNeigbors(land);
+		Iterator<Land> iter1 = list1.iterator();						
+		while (iter1.hasNext()) {			
+			Land land1 = (Land) iter1.next();			
+			if ((land1.getPlayer()!=null) && land1.getPlayer().equals(player)) {				
+			   return true;		
+			}
+		}			
+		return false;
+	}
+
+	public static void setPlayerSoldierMoveDestinations(Land land) {
+				
+		List <Land> list1;
+		
+		if (land.getSoldier().getType()==SoldierEnum.PAWN) {
+			// Pawn can move to two land tills per turn
+			list1 = LandUtils.getNeigbors2(land);
+		} else {
+			// All other soldier types can only move one land till per turn
+			list1 = LandUtils.getNeigbors(land);
+		}
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
@@ -287,8 +306,14 @@ public class LandUtils {
 			if ( (land1.getType()!=LandEnum.WATER) && 
 				 (land1.getType()!=LandEnum.OCEAN)) {
 			
-				 // Target land is free
-				 if (land1.getPlayer()==null) {
+				if (land.getSoldier().getType()==SoldierEnum.PAWN) {
+					if (!getPlayerLandHasFriendlyNeigbor(land1, land.getPlayer())) {
+						continue;
+					}
+				}
+				
+				// Target land is free
+				if (land1.getPlayer()==null) {
 					 land1.setDestination(true);
 					 continue;
 				 }
@@ -362,7 +387,7 @@ public class LandUtils {
 		if (land3.isDestination()) {
 						
 			// Search source land
-			List <Land> list1 = LandUtils.getNeigbors(land3);
+			List <Land> list1 = LandUtils.getNeigbors2(land3);
 			Iterator<Land> iter1 = list1.iterator();						
 			while (iter1.hasNext()) {			
 				Land land2 = (Land) iter1.next();	
@@ -477,6 +502,22 @@ public class LandUtils {
 		
 		List <Land> list = new ArrayList<Land>();
 		
+		if (y+1<Constants.SEGMENT_Y) {
+			list.add(lands[x][y+1]);
+		}
+		
+		if (y-1>=0) {
+			list.add(lands[x][y-1]);
+		}
+		
+		if (y+2<Constants.SEGMENT_Y) {
+			list.add(lands[x][y+2]);
+		}
+		
+		if (y-2>=0) {
+			list.add(lands[x][y-2]);
+		}
+		
 		if (y-4>=0) {
 			list.add(lands[x][y-4]);
 		}
@@ -526,6 +567,15 @@ public class LandUtils {
 			if ((x+1<Constants.SEGMENT_X) && (y+3<Constants.SEGMENT_Y)) {
 				list.add(lands[x+1][y+3]);
 			}
+			
+			if ((x+1<Constants.SEGMENT_X) && (y+1<Constants.SEGMENT_Y)) {
+				list.add(lands[x+1][y+1]);
+			}
+			
+			if ((x+1<Constants.SEGMENT_X) && (y-1>=0)) {
+				list.add(lands[x+1][y-1]);
+			}			
+			
 		} else {
 			if ((x-1>=0) && (y+3<Constants.SEGMENT_Y)) {
 				list.add(lands[x-1][y+3]);
@@ -534,6 +584,14 @@ public class LandUtils {
 			if ((x-1>=0) && (y-3>=0)) {
 				list.add(lands[x-1][y-3]);
 			}
+			
+			if ((x-1>=0) && (y+1<Constants.SEGMENT_Y)) {
+				list.add(lands[x-1][y+1]);
+			}
+			
+			if ((x-1>=0) && (y-1>=0)) {
+				list.add(lands[x-1][y-1]);
+			}		
 		}
 				
 		return list;
@@ -679,7 +737,7 @@ public class LandUtils {
 		createGrass();
 		createCoast();	
 		createWater();
-		//createForestMountain();
+		createForestMountain();
 		optimizeMap();			
 	}		
 		
