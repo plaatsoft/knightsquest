@@ -75,16 +75,19 @@ public class  SoldierDAO {
 		/* Create new Soldier if there is enough food */  
 		if (region.foodAvailable()>=food(SoldierEnum.PAWN)) {
 						
-			Land land1 = MyFactory.getRegionDAO().getTowerPosition(region);
-			if (land1!=null) {
-				/* Create new Soldier if there is room around the castle */  
-				List <Land> list2 = MyFactory.getLandDAO().getBotOwnLand(land1);			
-				Iterator<Land> iter2 = list2.iterator();  						
-				if (iter2.hasNext()) {				
-					Land land2 = (Land) iter2.next();
+			if (MyRandom.nextInt(3)==1) {
+				Land land1 = MyFactory.getRegionDAO().getTowerPosition(region);
+				if (land1!=null) {
 					
-					Soldier soldier = new Soldier(SoldierEnum.PAWN, region.getPlayer(), land2);
-					land2.setSoldier(soldier);
+					/* Create new Soldier if there is room around the castle */  
+					List <Land> list2 = MyFactory.getLandDAO().getBotOwnLand(land1);			
+					Iterator<Land> iter2 = list2.iterator();  						
+					if (iter2.hasNext()) {				
+						Land land2 = (Land) iter2.next();
+						
+						Soldier soldier = new Soldier(SoldierEnum.PAWN, region.getPlayer(), land2);
+						land2.setSoldier(soldier);
+					}
 				}
 			}							
 		}

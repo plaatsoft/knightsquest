@@ -120,7 +120,7 @@ public class LandDAO {
 			Land land1 = (Land) iter1.next();
 			if ((land1.getType()!=LandEnum.WATER) && (land1.getType()!=LandEnum.OCEAN)) {				
 				if ((land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer())) {
-					if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()!=SoldierEnum.CROSS)) {
+					if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()!=SoldierEnum.TOWER)) {
 						// Soldier on own land, skip it.
 					} else {
 						// log.info("land [x="+land.getX()+"|y="+land.getY()+"|player="+land.getPlayer()+"|type="+land.getType()+"|soldier="+land.getSoldier()+"]");

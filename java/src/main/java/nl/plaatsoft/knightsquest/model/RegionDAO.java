@@ -250,6 +250,7 @@ public class RegionDAO {
 
 						// No food, soldiers die
 						land.getSoldier().setType(SoldierEnum.CROSS);
+						land.getSoldier().setEnabled(false);
 					}
 				}
 			}
@@ -272,6 +273,7 @@ public class RegionDAO {
 					Land land = (Land) iter.next();
 					if ((land.getSoldier() != null) && (land.getSoldier().getType() == SoldierEnum.TOWER)) {
 						land.getSoldier().setType(SoldierEnum.CROSS);
+						land.getSoldier().setEnabled(false);
 					}
 				}
 			}

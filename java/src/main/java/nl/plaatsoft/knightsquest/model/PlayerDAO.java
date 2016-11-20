@@ -101,6 +101,8 @@ public class PlayerDAO {
 	
 	public boolean hasPlayerNoMoves(Player player) {
 	
+		int amount=0;
+		
 		Iterator<Region> iter2 = player.getRegion().iterator();  
 		while (iter2.hasNext()) {
 			Region region = (Region) iter2.next();
@@ -110,11 +112,16 @@ public class PlayerDAO {
 				Land land = (Land) iter3.next();
 					
 				if ((land.getSoldier()!=null) && land.getSoldier().isEnabled()) {
-					return false;
+					amount++;
 				}
 			}
 		}
-		return true;
+		
+		log.info("amount="+amount);
+		if (amount==0) {
+			return true;
+		}
+		return false;
 	}
 	
 	public void nextTurn() {

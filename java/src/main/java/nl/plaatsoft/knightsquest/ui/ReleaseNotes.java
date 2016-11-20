@@ -40,10 +40,12 @@ public class ReleaseNotes extends MyPanel {
 
 	private static String[] version = {
 
-			"19-11-2016 (Version 0.3)\n" 
+			"20-11-2016 (Version 0.3)\n" 
 					+ "- Added 3 screen resolutions.\n"
 					+ "- Added pawn can now move two land tills per turn.\n"
-					+ "- Added setting to selection amount of players.\n",
+					+ "- Added setting to select amount of players.\n"
+					+ "- Bugfix: Now second game initialization is working fine.\n"
+					+ "- Bugfix: Now next turn detection is working fine\n",
 			
 			"18-11-2016 (Version 0.2 Beta)\n" 					
 					+ "- Add information boxes on game screen\n"

@@ -56,6 +56,13 @@ public class HighScore2 extends MyPanel {
 			
 	private void showTable() {
 		
+		int offset = ((MyFactory.getConfig().getWidth()-640)/2);
+		int x1 = 30 + offset;
+		int x2 = 80 + offset;
+		int x3 = 300 + offset;
+		int x4 = 397 + offset;
+		int x5 = 430 + offset;
+		
 		y=120;
 				
 		lines=1;
@@ -64,18 +71,18 @@ public class HighScore2 extends MyPanel {
 			y+=18;
 			
 			Score score = (Score) iter.next();	
-			getChildren().add(new MyLabel(30, y, ""+lines, 18));					
-			getChildren().add(new MyLabel(80, y, formatter.format(score.getTimestamp()), 18));
-			getChildren().add(new MyLabel(300, y, ""+score.getScore(), 18));	
+			getChildren().add(new MyLabel(x1, y, ""+lines, 18));					
+			getChildren().add(new MyLabel(x2, y, formatter.format(score.getTimestamp()), 18));
+			getChildren().add(new MyLabel(x3, y, ""+score.getScore(), 18));	
 			
 			if (score.getCountry().length()>0) {
 				try { 
-					getChildren().add(new MyImageView(397,y+4,"images/flags/"+score.getCountry()+".png", 0.6));
+					getChildren().add(new MyImageView(x4,y+4,"images/flags/"+score.getCountry()+".png", 0.6));
 				} catch (Exception e) {
 					// flag filename not found
 				}
 			}
-			getChildren().add(new MyLabel(430, y, ""+score.getNickname(), 20));
+			getChildren().add(new MyLabel(x5, y, ""+score.getNickname(), 20));
 			
 			if (++lines>15) {
 				break;
@@ -93,14 +100,20 @@ public class HighScore2 extends MyPanel {
     	Background background = new Background(backgroundImage);
 		setBackground(background);
 		
+		int offset = ((MyFactory.getConfig().getWidth()-640)/2);
+		int x1 = 30 + offset;
+		int x2 = 80 + offset;
+		int x3 = 300 + offset;
+		int x4 = 400 + offset;
+		
 		y=20;
 		getChildren().add(new MyLabel(0, y, "Worldwide High Score", 50, "white", "-fx-font-weight: bold;"));		
 				
 		y+=80;  
-    	getChildren().add(new MyLabel(30, y, "Nr", 25));
-    	getChildren().add(new MyLabel(80, y, "Date", 25));
-		getChildren().add(new MyLabel(300, y, "Score", 25));	
-		getChildren().add(new MyLabel(400, y, "Nickname", 25));
+    	getChildren().add(new MyLabel(x1, y, "Nr", 25));
+    	getChildren().add(new MyLabel(x2, y, "Date", 25));
+		getChildren().add(new MyLabel(x3, y, "Score", 25));	
+		getChildren().add(new MyLabel(x4, y, "Nickname", 25));
 				
 		MyButton button1 = new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME);
 		

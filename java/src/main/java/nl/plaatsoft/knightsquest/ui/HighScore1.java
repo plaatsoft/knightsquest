@@ -27,8 +27,8 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+
 import nl.plaatsoft.knightsquest.model.Score;
-import nl.plaatsoft.knightsquest.model.ScoreDAO;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
@@ -53,15 +53,22 @@ public class HighScore1 extends MyPanel {
     	Background background = new Background(backgroundImage);
 		setBackground(background);
 		
+		int offset = ((MyFactory.getConfig().getWidth()-640)/2);
+		int x1 = 30 + offset;
+		int x2 = 80 + offset;
+		int x3 = 300 + offset;
+		int x4 = 400 + offset;
+		int x5 = 470 + offset;
+		
 		y=20;
 		getChildren().add (new MyLabel(0, y, "Personal High Score", 50, "white", "-fx-font-weight: bold;"));		
 		                
     	y+=80;    	
-    	getChildren().add(new MyLabel(30, y, "Nr", 25));
-    	getChildren().add(new MyLabel(80, y, "Date", 25));
-		getChildren().add(new MyLabel(300, y, "Score", 25));	
-		getChildren().add(new MyLabel(400, y, "Map", 25));
-		getChildren().add(new MyLabel(490, y, "Awards", 25));	
+    	getChildren().add(new MyLabel(x1, y, "Nr", 25));
+    	getChildren().add(new MyLabel(x2, y, "Date", 25));
+		getChildren().add(new MyLabel(x3, y, "Score", 25));	
+		getChildren().add(new MyLabel(x4, y, "Map", 25));
+		getChildren().add(new MyLabel(x5, y, "Awards", 25));	
 		y+=20;
 				
 		lines=1;
@@ -69,14 +76,14 @@ public class HighScore1 extends MyPanel {
 		while (iter.hasNext()) {
 			y+=18;
 			Score score = (Score) iter.next();	
-			getChildren().add(new MyLabel(30, y, ""+lines, 18));					
-			getChildren().add(new MyLabel(80, y, formatter.format(score.getTimestamp()), 18));
-			getChildren().add(new MyLabel(300, y, ""+score.getScore(), 18));	
-			getChildren().add(new MyLabel(400, y, ""+score.getLevel(), 18));	
+			getChildren().add(new MyLabel(x1, y, ""+lines, 18));					
+			getChildren().add(new MyLabel(x2, y, formatter.format(score.getTimestamp()), 18));
+			getChildren().add(new MyLabel(x3, y, ""+score.getScore(), 18));	
+			getChildren().add(new MyLabel(x4, y, ""+score.getLevel(), 18));	
 			
 			if (lines<6) {
 				for (int x=0; x<(6-lines); x++) {
-					getChildren().add( new MyImageView(470+(x*25),y-20, "images/star.png", 0.3));
+					getChildren().add( new MyImageView(x5+(x*25)-20,y-20, "images/star.png", 0.3));
 				}
 			}
 			

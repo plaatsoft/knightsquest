@@ -151,6 +151,9 @@ public class Game extends StackPane {
 		
 	public void start() {
 
+		// Clear previous game 
+		MyFactory.clearFactory();
+		
 		gameOver = false;
 		turn = 1;
 			

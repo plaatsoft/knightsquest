@@ -120,6 +120,12 @@ public class Settings extends MyPanel {
     	
     	y+=60;   
     	    	
+    	int offset = ((MyFactory.getConfig().getWidth()-640)/2);    	
+    	int x1 = 100 + offset;
+    	int x2 = 250 + offset;
+    	int x3 = 480 + offset;
+		
+		
 		int x=(MyFactory.getConfig().getWidth()-(MAX*70))/2;
 		
 		for (int i=0; i<MAX ;i++) {
@@ -133,23 +139,22 @@ public class Settings extends MyPanel {
 		getChildren().add(button);	
 		
 		y+=150;		
-		x=(MyFactory.getConfig().getWidth()/8)*1;		
-		getChildren().add (new MyLabel(x, y, "Music", 20));
+
+		getChildren().add (new MyLabel(x1, y, "Music", 20));
 		
 		y+=30;
-		getChildren().add(new MySwitch(x-10,y));	
+		getChildren().add(new MySwitch(x1-10,y));	
 		
 		 /* --------------------------------------- */
 		
 		y-=30;
 		
-		x=(MyFactory.getConfig().getWidth()/8)*3;
-		getChildren().add (new MyLabel(x, y, "AmountOfPlayers", 20));
+		getChildren().add (new MyLabel(x2, y, "AmountOfPlayers", 20));
 		
 		y+=30;
 		
 		String[] options1 = {"3", "4", "5", "6"};		
-		MyComboBox comboBox2 = new MyComboBox(x+40,y, ""+MyFactory.getConfig().getAmountOfPlayers(), options1);		
+		MyComboBox comboBox2 = new MyComboBox(x2+40,y, ""+MyFactory.getConfig().getAmountOfPlayers(), options1);		
         getChildren().add(comboBox2);
         
         comboBox2.setOnAction(new EventHandler<ActionEvent>() { 
@@ -164,8 +169,7 @@ public class Settings extends MyPanel {
         
         y-=30;
         
-        x=(MyFactory.getConfig().getWidth()/8)*6;
-		getChildren().add (new MyLabel(x, y, "Size", 20 ));
+		getChildren().add (new MyLabel(x3, y, "Size", 20 ));
 		
 		y+=30;
 		
@@ -177,7 +181,7 @@ public class Settings extends MyPanel {
         } else if (MyFactory.getConfig().getWidth()==1024) {
         	value = "1024x768";
         }
-        MyComboBox comboBox1 = new MyComboBox(x-20, y, value, options2);
+        MyComboBox comboBox1 = new MyComboBox(x3-20, y, value, options2);
         comboBox1.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event) {
         		String value =  comboBox1.getSelectionModel().getSelectedItem().toString();    

@@ -57,11 +57,12 @@ public class Help extends MyPanel {
     	getChildren().add( new MyLabel(0, y, "the whole world you have won!", 20));
     	y+=50;  
     	
-    	int x1=50;
-    	int x2=110;
-    	int x3=210;
-    	int x4=320;
-    	int x5=500;
+    	int offset = ((MyFactory.getConfig().getWidth()-640)/2);
+    	int x1=50+offset;
+    	int x2=110+offset;
+    	int x3=210+offset;
+    	int x4=320+offset;
+    	int x5=500+offset;
     	
     	getChildren().add( new MyLabel(x1, y, "Icon", 20, "white", "-fx-font-weight: bold;"));
     	getChildren().add( new MyLabel(x2, y, "Type", 20, "white", "-fx-font-weight: bold;"));
@@ -111,7 +112,7 @@ public class Help extends MyPanel {
     	getChildren().add( new MyLabel(x4, y, "0", 20, "white"));
     	getChildren().add( new MyLabel(x5, y, "0", 20, "white"));
     	y+=25;
-    	getChildren().add( new MyImageView(50, y, MyFactory.getSoldierDAO().get(SoldierEnum.CROSS, enabled), scale, true));
+    	getChildren().add( new MyImageView(x1, y, MyFactory.getSoldierDAO().get(SoldierEnum.CROSS, enabled), scale, true));
     	getChildren().add( new MyLabel(x2, y, "Cross", 20, "white"));
     	getChildren().add( new MyLabel(x3, y, "0", 20, "white"));
     	getChildren().add( new MyLabel(x4, y, "0 (Dead soldier)", 20, "white"));

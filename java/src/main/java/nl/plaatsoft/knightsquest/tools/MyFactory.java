@@ -83,4 +83,13 @@ public class MyFactory {
 		}
 		return regionDAO;
 	}
+	
+	public static void clearFactory() {
+		
+		playerDAO = null;
+		scoreDAO = null;
+		landDAO = null;
+		soldierDAO = null;
+		regionDAO = null;
+	}
 }
