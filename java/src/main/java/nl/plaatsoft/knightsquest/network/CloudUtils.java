@@ -30,7 +30,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import nl.plaatsoft.knightsquest.utils.Constants;
+import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class CloudUtils {
 

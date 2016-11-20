@@ -30,8 +30,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import nl.plaatsoft.knightsquest.model.Score;
-import nl.plaatsoft.knightsquest.model.ScoreDAO;
-import nl.plaatsoft.knightsquest.utils.Constants;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
+import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class CloudScore {
 
@@ -78,7 +78,7 @@ public class CloudScore {
 			    Date date = df.parse(dt);
 			    
 				Score score = new Score(date, points, level, nickname, country);
-				ScoreDAO.addLocal(score);  	   
+				MyFactory.getScoreDAO().addLocal(score);  	   
 			}			
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -109,7 +109,7 @@ public class CloudScore {
 			    Date date = df.parse(dt);
 			    
 				Score score = new Score(date, points, level, nickname, country);
-			  	ScoreDAO.addGlobal(score);   
+				MyFactory.getScoreDAO().addGlobal(score);   
 			}			
 		} catch (Exception e) {
 			log.error(e.getMessage());

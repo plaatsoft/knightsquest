@@ -19,7 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package nl.plaatsoft.knightsquest.utils;
+package nl.plaatsoft.knightsquest.model;
 
 import java.util.Iterator;
 import java.util.List;
@@ -33,11 +33,12 @@ import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 
-public class  SoldierUtils {
+public class  SoldierDAO {
 	
-	final private static Logger log = Logger.getLogger(SoldierUtils.class);
+	final private static Logger log = Logger.getLogger(SoldierDAO.class);
 		
 	private static Image tower;
 	private static Image tower2;
@@ -53,7 +54,7 @@ public class  SoldierUtils {
 	private static Image king2;
 	private static Image cross;
 			
-	public static void init(int size) {
+	public void init(int size) {
 		tower = new Image("images/tower.png", size+4, size+4, false, false);
 		tower2 = new Image("images/tower2.png", size+4, size+4, false, false);
 		pawn = new Image("images/pawn.png", size+4, size+4, false, false);
@@ -68,15 +69,16 @@ public class  SoldierUtils {
 		king2 = new Image("images/king2.png", size+4, size+4, false, false);
 		cross = new Image("images/cross.png", size+4, size+4, false, false);		
 	}
-	public static void createBotSoldier(Region region) {
+	
+	public void createBotSoldier(Region region) {
 						
 		/* Create new Soldier if there is enough food */  
 		if (region.foodAvailable()>=food(SoldierEnum.PAWN)) {
 						
-			Land land1 = RegionUtils.getTowerPosition(region);
+			Land land1 = MyFactory.getRegionDAO().getTowerPosition(region);
 			if (land1!=null) {
 				/* Create new Soldier if there is room around the castle */  
-				List <Land> list2 = LandUtils.getBotOwnLand(land1);			
+				List <Land> list2 = MyFactory.getLandDAO().getBotOwnLand(land1);			
 				Iterator<Land> iter2 = list2.iterator();  						
 				if (iter2.hasNext()) {				
 					Land land2 = (Land) iter2.next();
@@ -88,12 +90,12 @@ public class  SoldierUtils {
 		}
 	}
 		
-	public static void newSoldierArrive(Region region) {
+	public void newSoldierArrive(Region region) {
 		
 		/* Inform player that new soldier has arrived if there is enough food */  
 		if (region.foodAvailable()>=food(SoldierEnum.PAWN)) {
 						
-			Land land = RegionUtils.getTowerPosition(region);
+			Land land = MyFactory.getRegionDAO().getTowerPosition(region);
 			if (land!=null) {
 				
 				/* Enable castle. So player know new soldier is possible */  
@@ -102,7 +104,7 @@ public class  SoldierUtils {
 		}
 	}
 		
-	public static int enableSoldier(Player player) {
+	public int enableSoldier(Player player) {
 		
 		int count = 0;
 	
@@ -116,7 +118,7 @@ public class  SoldierUtils {
 			while (iter3.hasNext()) {
 				Land land = (Land) iter3.next();
 				
-				if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierEnum.TOWER)) {
+				if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierEnum.TOWER) && (land.getSoldier().getType()!=SoldierEnum.CROSS)) {
 					land.getSoldier().setEnabled(true);
 					count++;
 				}
@@ -126,7 +128,7 @@ public class  SoldierUtils {
 	}
 		
 	// Move bots
-	public static void moveBotSoldier(Region region) {
+	public void moveBotSoldier(Region region) {
 		
 		//log.info("soldier move start");
 		
@@ -146,7 +148,7 @@ public class  SoldierUtils {
 				/* --------------------------- */
 				
 				if (land1.getSoldier().getType()!=SoldierEnum.KING) {
-					List <Land> list5 = LandUtils.getUpgradeSoldiers(land1);
+					List <Land> list5 = MyFactory.getLandDAO().getUpgradeSoldiers(land1);
 					Iterator<Land> iter5 = list5.iterator();
 					while (iter5.hasNext()) {
 						Land land5 = (Land) iter5.next();
@@ -154,9 +156,9 @@ public class  SoldierUtils {
 						// Only upgrade if there is enough food
 						SoldierEnum nextType = upgrade(land1.getSoldier().getType());	
 						
-						if (region.foodAvailable()>SoldierUtils.food(nextType)) {
+						if (region.foodAvailable()>MyFactory.getSoldierDAO().food(nextType)) {
 																																																				
-							LandUtils.moveSoldier(land1, land5);			
+							MyFactory.getLandDAO().moveSoldier(land1, land5);			
 							return;
 						}
 					}
@@ -166,7 +168,7 @@ public class  SoldierUtils {
 				/* Conquer enemy land or defend own land */
 				/* ------------------------------------- */
 				
-				List <Land> list2 = LandUtils.getBotEnemyLand(land1);	
+				List <Land> list2 = MyFactory.getLandDAO().getBotEnemyLand(land1);	
 				Land land2 = MyRandom.nextLand(list2);
 				if (land2!=null) {
 									
@@ -178,13 +180,13 @@ public class  SoldierUtils {
 						
 						if (attackStrength>defendStrength) {
 								
-							LandUtils.moveSoldier(land1, land2);
+							MyFactory.getLandDAO().moveSoldier(land1, land2);
 							return;
 						} 
 							
 					} else {
 						/* Enemy land is unprotected */
-						LandUtils.moveSoldier(land1, land2);
+						MyFactory.getLandDAO().moveSoldier(land1, land2);
 						return;				
 					}
 				}
@@ -193,10 +195,10 @@ public class  SoldierUtils {
 				/* Move soldier to new land */		
 				/* ------------------------ */
 				
-				List <Land> list4 = LandUtils.getBotNewLand(land1);					
+				List <Land> list4 = MyFactory.getLandDAO().getBotNewLand(land1);					
 				Land land4 = MyRandom.nextLand(list4);
 				if (land4!=null) {											
-					LandUtils.moveSoldier(land1, land4);											
+					MyFactory.getLandDAO().moveSoldier(land1, land4);											
 					return;
 				}
 				
@@ -204,17 +206,17 @@ public class  SoldierUtils {
 				// Move soldier on own land
 				/* ------------------------ */
 				
-				List <Land> list6 = LandUtils.getBotOwnLand(land1);	
+				List <Land> list6 = MyFactory.getLandDAO().getBotOwnLand(land1);	
 				Land land6 = MyRandom.nextLand(list6);
 				if (land6!=null) {
-					LandUtils.moveSoldier(land1, land6);
+					MyFactory.getLandDAO().moveSoldier(land1, land6);
 					return;
 				}		
 			}
 		}	
 	}
 
-	public static Image get(SoldierEnum army, boolean enabled) {
+	public Image get(SoldierEnum army, boolean enabled) {
 	
 		switch(army) {
 	
@@ -269,7 +271,7 @@ public class  SoldierUtils {
 		return null;
 	}		
 	
-	public static SoldierEnum upgrade(SoldierEnum type) {
+	public SoldierEnum upgrade(SoldierEnum type) {
 		
 		SoldierEnum value;
 		
@@ -299,7 +301,7 @@ public class  SoldierUtils {
 		return value;
 	}
 	
-	public static int food(SoldierEnum type) {
+	public int food(SoldierEnum type) {
 			
 		int value=0;
 				
@@ -310,19 +312,19 @@ public class  SoldierUtils {
 				break;
 				
 			case BISHOP:
-				value = 5;
+				value = 4;
 				break;
 				
 			case HORSE:
-				value = 10;
+				value = 8;
 				break;
 				
 			case QUEEN:
-				value = 20;
+				value = 10;
 				break;
 				
 			case KING:
-				value = 40;
+				value = 12;
 				break;
 				
 			default:

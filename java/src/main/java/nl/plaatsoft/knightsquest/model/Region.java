@@ -27,7 +27,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import nl.plaatsoft.knightsquest.utils.SoldierUtils;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 
 public class Region {
 
@@ -65,7 +65,7 @@ public class Region {
 		while (iter.hasNext()) {				
 			Land land = (Land) iter.next();
 			if (land.getSoldier()!=null) {					
-				foodDemand += SoldierUtils.food(land.getSoldier().getType());
+				foodDemand += MyFactory.getSoldierDAO().food(land.getSoldier().getType());
 			}		
 		}	
 				

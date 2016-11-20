@@ -21,9 +21,20 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
+import nl.plaatsoft.knightsquest.model.LandDAO;
+import nl.plaatsoft.knightsquest.model.PlayerDAO;
+import nl.plaatsoft.knightsquest.model.RegionDAO;
+import nl.plaatsoft.knightsquest.model.ScoreDAO;
+import nl.plaatsoft.knightsquest.model.SoldierDAO;
+
 public class MyFactory {
 
 	static MyConfig config;
+	static PlayerDAO playerDAO;
+	static ScoreDAO scoreDAO;
+	static LandDAO landDAO;
+	static SoldierDAO soldierDAO;
+	static RegionDAO regionDAO;
 				
 	public static MyConfig getConfig() {
 		
@@ -31,5 +42,45 @@ public class MyFactory {
 			config = new MyConfig();
 		}
 		return config;
+	}
+	
+	public static PlayerDAO getPlayerDAO() {
+		
+		if (playerDAO==null) {
+			playerDAO = new PlayerDAO();
+		}
+		return playerDAO;
+	}
+	
+	public static ScoreDAO getScoreDAO() {
+		
+		if (scoreDAO==null) {
+			scoreDAO = new ScoreDAO();
+		}
+		return scoreDAO;
+	}
+	
+	public static LandDAO getLandDAO() {
+		
+		if (landDAO==null) {
+			landDAO = new LandDAO();
+		}
+		return landDAO;
+	}
+	
+	public static SoldierDAO getSoldierDAO() {
+		
+		if (soldierDAO==null) {
+			soldierDAO = new SoldierDAO();
+		}
+		return soldierDAO;
+	}
+	
+	public static RegionDAO getRegionDAO() {
+		
+		if (regionDAO==null) {
+			regionDAO = new RegionDAO();
+		}
+		return regionDAO;
 	}
 }

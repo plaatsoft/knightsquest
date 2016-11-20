@@ -1,25 +1,4 @@
-/**
- *  @file
- *  @brief 
- *  @author wplaat
- *
- *  Copyright (C) 2008-2016 PlaatSoft
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, version 3.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
-package nl.plaatsoft.knightsquest.utils;
+package nl.plaatsoft.knightsquest.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,29 +10,24 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-
-import nl.plaatsoft.knightsquest.model.Land;
-import nl.plaatsoft.knightsquest.model.LandEnum;
-import nl.plaatsoft.knightsquest.model.Player;
-import nl.plaatsoft.knightsquest.model.Region;
-import nl.plaatsoft.knightsquest.model.Soldier;
-import nl.plaatsoft.knightsquest.model.SoldierEnum;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
+import nl.plaatsoft.knightsquest.ui.Constants;
 
-public class LandUtils {
+public class LandDAO {
+
+	final static Logger log = Logger.getLogger( LandDAO.class);
 	
-	final static Logger log = Logger.getLogger( LandUtils.class);
+	private Land[][] lands = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y];
 	
-	private static Land[][] lands = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y]; 	
-		
-	private static Image water = new Image("images/water.png");
+	private Image water = new Image("images/water.png");
 	//private static Image ocean = new Image("images/ocean.png");
-	private static Image forest = new Image("images/forest.png");
-	private static Image coast = new Image("images/coast.png");
-	private static Image rock = new Image("images/rock.png");
-	private static Image grass = new Image("images/grass.png");
+	private Image forest = new Image("images/forest.png");
+	private Image coast = new Image("images/coast.png");
+	private Image rock = new Image("images/rock.png");
+	private Image grass = new Image("images/grass.png");
 			
-	public static void getTexture(GraphicsContext gc, LandEnum type) {
+	public void getTexture(GraphicsContext gc, LandEnum type) {
 		
 		switch(type) {
 		
@@ -91,11 +65,11 @@ public class LandUtils {
 		}
 	}
 	
-	public static List <Land> getUpgradeSoldiers(Land land) {
+	public List <Land> getUpgradeSoldiers(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(land);
+		List <Land> list1 = getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
@@ -112,11 +86,11 @@ public class LandUtils {
 		return list2;
 	}
 
-	public static List <Land> getBotEnemyLand(Land land) {
+	public List <Land> getBotEnemyLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(land);
+		List <Land> list1 =getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
@@ -135,11 +109,11 @@ public class LandUtils {
 		return list2;
 	}
 
-	public static List <Land> getBotOwnLand(Land land) {
+	public List <Land> getBotOwnLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(land);
+		List <Land> list1 = getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
@@ -158,11 +132,11 @@ public class LandUtils {
 		return list2;
 	}
 	
-	public static List <Land> getBotNewLand(Land land) {
+	public List <Land> getBotNewLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(land);
+		List <Land> list1 = getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();						
 		while (iter1.hasNext()) {			
 			Land land1 = (Land) iter1.next();			
@@ -174,11 +148,11 @@ public class LandUtils {
 		return list2;
 	}
 
-	public static List <Land> getBotRegionLand(Land land) {
+	public List <Land> getBotRegionLand(Land land) {
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = LandUtils.getNeigbors(land);
+		List <Land> list1 = getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();						
 		while (iter1.hasNext()) {			
 			Land land1 = (Land) iter1.next();			
@@ -190,7 +164,7 @@ public class LandUtils {
 		return list2;
 	}
 	
-	public static Land getPlayerSelectedLand(double mouseX, double mouseY) {
+	public Land getPlayerSelectedLand(double mouseX, double mouseY) {
 		
 		for (int x=0; x<Constants.SEGMENT_X; x++) {			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
@@ -202,10 +176,10 @@ public class LandUtils {
 		return null;
 	}
 	
-	public static void moveSoldier(Land source, Land destination) {
+	public void moveSoldier(Land source, Land destination) {
 		
-		Region srcRegion = RegionUtils.getRegion(source);
-		Region dstRegion = RegionUtils.getRegion(destination);
+		Region srcRegion = MyFactory.getRegionDAO().getRegion(source);
+		Region dstRegion = MyFactory.getRegionDAO().getRegion(destination);
 		
 		//log.info("Move soldier ["+source.getX()+","+source.getY()+"]->["+destination.getX()+","+destination.getY()+"]");
 		
@@ -217,9 +191,9 @@ public class LandUtils {
 				return;
 			}
 			
-			SoldierEnum nextType = SoldierUtils.upgrade(source.getSoldier().getType());				
-			if (srcRegion.foodAvailable()<=SoldierUtils.food(nextType)) {
-				log.info("Not food enough, upgrade skipped");
+			SoldierEnum nextType = MyFactory.getSoldierDAO().upgrade(source.getSoldier().getType());				
+			if (srcRegion.foodAvailable()<=MyFactory.getSoldierDAO().food(nextType)) {
+				//log.info("Not food enough, upgrade skipped");
 				// Not enough food, so skip upgrade.
 				return;
 			}
@@ -242,10 +216,10 @@ public class LandUtils {
 		srcRegion.getLands().add(destination);		
 	}
 	
-	public static void createSoldier(Land source, Land destination) {
+	public void createSoldier(Land source, Land destination) {
 		
-		Region srcRegion = RegionUtils.getRegion(source);
-		Region dstRegion = RegionUtils.getRegion(destination);
+		Region srcRegion = MyFactory.getRegionDAO().getRegion(source);
+		Region dstRegion = MyFactory.getRegionDAO().getRegion(destination);
 		
 		Soldier soldier = new Soldier(SoldierEnum.PAWN, source.getPlayer(), destination);
 		
@@ -265,7 +239,7 @@ public class LandUtils {
 		srcRegion.getLands().add(destination);
 	}
 		
-	public static void resetSelected() {
+	public void resetSelected() {
 
 		for (int x=0; x<Constants.SEGMENT_X; x++) {			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
@@ -275,9 +249,9 @@ public class LandUtils {
 		}
 	}
 		
-	public static boolean getPlayerLandHasFriendlyNeigbor(Land land, Player player) {
+	public boolean getPlayerLandHasFriendlyNeigbor(Land land, Player player) {
 			
-		List <Land> list1 = LandUtils.getNeigbors(land);
+		List <Land> list1 = getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();						
 		while (iter1.hasNext()) {			
 			Land land1 = (Land) iter1.next();			
@@ -288,16 +262,16 @@ public class LandUtils {
 		return false;
 	}
 
-	public static void setPlayerSoldierMoveDestinations(Land land) {
+	public void setPlayerSoldierMoveDestinations(Land land) {
 				
 		List <Land> list1;
 		
 		if (land.getSoldier().getType()==SoldierEnum.PAWN) {
 			// Pawn can move to two land tills per turn
-			list1 = LandUtils.getNeigbors2(land);
+			list1 = getNeigbors2(land);
 		} else {
 			// All other soldier types can only move one land till per turn
-			list1 = LandUtils.getNeigbors(land);
+			list1 = getNeigbors(land);
 		}
 		Iterator<Land> iter1 = list1.iterator();
 						
@@ -338,12 +312,12 @@ public class LandUtils {
 				 }
 				 				 
 				 // Target land is owned, Pawn soldier available and there is food available for upgrade. 
-				 Region region = RegionUtils.getRegion(land);
-				 SoldierEnum nextType = SoldierUtils.upgrade(land.getSoldier().getType());	
+				 Region region = MyFactory.getRegionDAO().getRegion(land);
+				 SoldierEnum nextType = MyFactory.getSoldierDAO().upgrade(land.getSoldier().getType());	
 				 
 				 if ((land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer()) && 
 					 (land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.PAWN) &&
-					 (region.foodAvailable()>SoldierUtils.food(nextType))) {
+					 (region.foodAvailable()>MyFactory.getSoldierDAO().food(nextType))) {
 					 land1.setDestination(true);
 					 continue;				 
 				 }
@@ -351,9 +325,9 @@ public class LandUtils {
 		}	
 	}
 	
-	public static void setPlayerNewSoldierDestinations(Land land) {
+	public void setPlayerNewSoldierDestinations(Land land) {
 		
-		List <Land> list1 = LandUtils.getNeigbors(land);
+		List <Land> list1 = getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
@@ -382,12 +356,12 @@ public class LandUtils {
 		}	
 	}
 	
-	public static void doPlayerActions(Land land3, Player player) {
+	public void doPlayerActions(Land land3, Player player) {
 	
 		if (land3.isDestination()) {
 						
 			// Search source land
-			List <Land> list1 = LandUtils.getNeigbors2(land3);
+			List <Land> list1 = getNeigbors2(land3);
 			Iterator<Land> iter1 = list1.iterator();						
 			while (iter1.hasNext()) {			
 				Land land2 = (Land) iter1.next();	
@@ -403,8 +377,8 @@ public class LandUtils {
 					}
 					
 					/* Rebuild all regions */
-					int regions = RegionUtils.detectedRegions();		
-					RegionUtils.rebuildRegions(regions);	
+					int regions = MyFactory.getRegionDAO().detectedRegions();		
+					MyFactory.getRegionDAO().rebuildRegions(regions);	
 					break;
 				}
 			}	
@@ -450,7 +424,7 @@ public class LandUtils {
 	 * @param y
 	 * @return
 	 */
-	public static List <Land> getNeigbors(Land land) {
+	public List <Land> getNeigbors(Land land) {
 				
 		int x = land.getX();
 		int y = land.getY();
@@ -495,7 +469,7 @@ public class LandUtils {
 		return list;
 	}
 		
-	public static List <Land> getNeigbors2(Land land) {
+	public List <Land> getNeigbors2(Land land) {
 		
 		int x = land.getX();
 		int y = land.getY();
@@ -597,9 +571,9 @@ public class LandUtils {
 		return list;
 	}
 	
-	public static void scaleMap(double scale) {
+	public void scaleMap(double scale) {
 		
-		log.info("scale="+scale);
+		//log.info("scale="+scale);
 		for (int x=0; x<Constants.SEGMENT_X; x++) {
 			
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
@@ -609,7 +583,7 @@ public class LandUtils {
 		}		
 	}
 
-	private static void optimizeMap() {
+	private void optimizeMap() {
 		
 		for (int x=0; x<Constants.SEGMENT_X; x++) {
 			
@@ -634,7 +608,7 @@ public class LandUtils {
 		}		
 	}
 
-	private static void createForestMountain() {
+	private void createForestMountain() {
 				
 		for (int x=0; x<Constants.SEGMENT_X; x++) {
 			
@@ -652,7 +626,7 @@ public class LandUtils {
 		}		
 	}
 
-	private static void createWater() {
+	private  void createWater() {
 		
 		for (int x=0; x<Constants.SEGMENT_X; x++) {
 			
@@ -672,7 +646,7 @@ public class LandUtils {
 		}		
 	}
 
-	private static void createCoast() {
+	private void createCoast() {
 		
 		for (int x=0; x<Constants.SEGMENT_X; x++) {
 			
@@ -694,7 +668,7 @@ public class LandUtils {
 	}
 	
 	
-	private static void createGrass() {
+	private void createGrass() {
 						
 		for (int i=0; i<(Constants.SEGMENT_X*0.70); i++) {
 			
@@ -726,7 +700,7 @@ public class LandUtils {
 		}
 	}
 	
-	public static void createMap(GraphicsContext gc, int size) {
+	public void createMap(GraphicsContext gc, int size) {
 					
 		for (int x=0; x<Constants.SEGMENT_X; x++) {	
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
@@ -741,7 +715,7 @@ public class LandUtils {
 		optimizeMap();			
 	}		
 		
-	public static void drawMap() {
+	public void drawMap() {
 		for (int x=0; x<Constants.SEGMENT_X; x++) {					
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {				
 				lands[x][y].draw();				
@@ -749,7 +723,7 @@ public class LandUtils {
 		}		
 	}
 	
-	public static Land[][] getLands() {
+	public Land[][] getLands() {
 		return lands;
 	}	
 }

@@ -41,10 +41,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Region;
-import nl.plaatsoft.knightsquest.model.ScoreDAO;
 import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.model.Score;
@@ -52,10 +52,6 @@ import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
-import nl.plaatsoft.knightsquest.utils.Constants;
-import nl.plaatsoft.knightsquest.utils.LandUtils;
-import nl.plaatsoft.knightsquest.utils.PlayerUtils;
-import nl.plaatsoft.knightsquest.utils.SoldierUtils;
 
 public class Game extends StackPane {
 
@@ -79,7 +75,7 @@ public class Game extends StackPane {
 		
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
-		LandUtils.drawMap();
+		MyFactory.getLandDAO().drawMap();
 		
 		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
 			players[i].draw();
@@ -89,7 +85,7 @@ public class Game extends StackPane {
 	public int storeScore(int points, int level) {
 		
 		Score score = new Score(new Date(), points, level, CloudUser.getNickname(), "");				
-	  	int rank = ScoreDAO.addLocal(score);	 
+	  	int rank = MyFactory.getScoreDAO().addLocal(score);	 
 	  	 
 	  	/* Sent score to cloud server */
 	  	task = new Task<Void>() {
@@ -181,7 +177,7 @@ public class Game extends StackPane {
 		if (MyFactory.getConfig().getWidth()==640) {
 					
 			size = Constants.SEGMENT_SIZE_640;
-			SoldierUtils.init(size);
+			MyFactory.getSoldierDAO().init(size);
 			
 			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
 			canvas.setLayoutX(Constants.OFFSET_X_640);
@@ -190,7 +186,7 @@ public class Game extends StackPane {
 		} else if (MyFactory.getConfig().getWidth()==800) {
 			
 			size = Constants.SEGMENT_SIZE_800;
-			SoldierUtils.init(size);
+			MyFactory.getSoldierDAO().init(size);
 			
 			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
 			canvas.setLayoutX(Constants.OFFSET_X_800);
@@ -199,7 +195,7 @@ public class Game extends StackPane {
 		} else {
 			
 			size = Constants.SEGMENT_SIZE_1024;
-			SoldierUtils.init(size);
+			MyFactory.getSoldierDAO().init(size);
 			
 			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
 			canvas.setLayoutX(Constants.OFFSET_X_1024);
@@ -209,7 +205,7 @@ public class Game extends StackPane {
 		log.info("size="+size);
 		gc = canvas.getGraphicsContext2D();
 		
-		LandUtils.createMap(gc, size);
+		MyFactory.getLandDAO().createMap(gc, size);
 		
 		pane2.getChildren().add(canvas);
 		getChildren().add(pane2);
@@ -247,7 +243,7 @@ public class Game extends StackPane {
 		
 		int y=15;
 		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {			
-			label3[i] = new MyLabel(MyFactory.getConfig().getWidth()-125, y, "", 15, PlayerUtils.getColor(i), "-fx-font-weight: bold;");
+			label3[i] = new MyLabel(MyFactory.getConfig().getWidth()-125, y, "", 15, MyFactory.getPlayerDAO().getColor(i), "-fx-font-weight: bold;");
 			y+=18;
 		}
 		
@@ -262,7 +258,7 @@ public class Game extends StackPane {
 		// ------------------------------------------------------
 		
 		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
-			players[i] = PlayerUtils.createPlayer(gc, i, pane2);
+			players[i] =MyFactory.getPlayerDAO().createPlayer(gc, i, pane2);
 		}
 		
 		redraw();
@@ -276,15 +272,15 @@ public class Game extends StackPane {
 		pane3.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
 
-				Land land = LandUtils.getPlayerSelectedLand(offsetX,offsetY);				
+				Land land = MyFactory.getLandDAO().getPlayerSelectedLand(offsetX,offsetY);				
 				if (land!=null) {
 					//log.info("land ["+land.getX()+","+land.getY()+" scale="+land.getScale()+"] selected");
-					LandUtils.doPlayerActions(land, players[1]);
+					MyFactory.getLandDAO().doPlayerActions(land, players[1]);
 										
-					if (PlayerUtils.hasPlayerNoMoves(players[1])) {
+					if (MyFactory.getPlayerDAO().hasPlayerNoMoves(players[1])) {
 						turn++;
 						btn.setText("Turn ["+turn+"]");
-						PlayerUtils.nextTurn();
+						MyFactory.getPlayerDAO().nextTurn();
 					}
 					
 					redraw();
@@ -326,7 +322,7 @@ public class Game extends StackPane {
 					
 				} else {
 					
-					PlayerUtils.nextTurn();
+					MyFactory.getPlayerDAO().nextTurn();
 					
 					if (checkGameOver1() || checkGameOver2()) {
 															
@@ -349,7 +345,7 @@ public class Game extends StackPane {
 											
 				// Move bot players automatic
 				turn++;
-				PlayerUtils.nextTurn();
+				MyFactory.getPlayerDAO().nextTurn();
 				if (checkGameOver2()) {
 					
 					log.info("game over, only one player over!");

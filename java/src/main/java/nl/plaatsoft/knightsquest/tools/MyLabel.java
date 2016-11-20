@@ -26,7 +26,6 @@ import org.apache.log4j.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.TextAlignment;
-import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class MyLabel extends Label {
 

@@ -32,7 +32,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
-import nl.plaatsoft.knightsquest.utils.LandUtils;
 
 public class Navigator {
 		
@@ -176,7 +175,7 @@ public class Navigator {
             			         pane.setScaleX(scale);
 	    			             pane.setScaleY(scale);
 	    			              			        
-	    			        	 LandUtils.scaleMap(scale);
+	    			             MyFactory.getLandDAO().scaleMap(scale);
 	    			        	 
 	    			        	 event.consume();
 	    			         }

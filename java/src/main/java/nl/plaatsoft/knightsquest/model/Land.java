@@ -26,8 +26,7 @@ import org.apache.log4j.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import nl.plaatsoft.knightsquest.utils.LandUtils;
-import nl.plaatsoft.knightsquest.utils.PlayerUtils;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 
 public class Land {
 
@@ -81,7 +80,7 @@ public class Land {
 		} 
 		
 		gc.setGlobalAlpha(1);
-		LandUtils.getTexture(gc, type);
+		MyFactory.getLandDAO().getTexture(gc, type);
 
 		gc.fillPolygon(
 			new double[]{(x*(size*4))+offset, size+(x*(size*4))+offset,	(size*2)+(x*(size*4))+offset, (size*3)+(x*(size*4))+offset, 
@@ -91,7 +90,7 @@ public class Land {
 				
 		if (player!=null) {
 			gc.setGlobalAlpha(0.6);
-			PlayerUtils.getTexture(gc, player.getId());
+			MyFactory.getPlayerDAO().getTexture(gc, player.getId());
 			
 			gc.fillPolygon(
 				new double[]{(x*(size*4))+offset, size+(x*(size*4))+offset,	(size*2)+(x*(size*4))+offset, (size*3)+(x*(size*4))+offset, 

@@ -30,7 +30,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyMusic;
-import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class Main extends Application {
 

@@ -23,7 +23,7 @@ package nl.plaatsoft.knightsquest.model;
 
 import org.apache.log4j.Logger;
 
-import nl.plaatsoft.knightsquest.utils.SoldierUtils;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 
 public class Soldier {
 
@@ -66,7 +66,7 @@ public class Soldier {
 		if (!player.isBot()) {
 			red = enabled;
 		}
-		land.getGc().drawImage(SoldierUtils.get(type, red), posX, posY);
+		land.getGc().drawImage(MyFactory.getSoldierDAO().get(type, red), posX, posY);
 	}
 		
 	public SoldierEnum getType() {

@@ -23,7 +23,6 @@ package nl.plaatsoft.knightsquest.tools;
 
 import javafx.geometry.Orientation;
 import javafx.scene.control.ScrollBar;
-import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class MyScrollBar extends ScrollBar {
 

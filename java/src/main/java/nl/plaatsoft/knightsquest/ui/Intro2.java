@@ -18,7 +18,6 @@ import javafx.scene.paint.Color;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
-import nl.plaatsoft.knightsquest.utils.Constants;
 
 public class Intro2 extends MyPanel {
 

@@ -65,7 +65,7 @@ public class HighScore1 extends MyPanel {
 		y+=20;
 				
 		lines=1;
-    	Iterator<Score> iter = ScoreDAO.getLocal().iterator();    	
+    	Iterator<Score> iter = MyFactory.getScoreDAO().getLocal().iterator();    	
 		while (iter.hasNext()) {
 			y+=18;
 			Score score = (Score) iter.next();	

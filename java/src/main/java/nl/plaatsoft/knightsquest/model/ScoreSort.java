@@ -19,13 +19,13 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package nl.plaatsoft.knightsquest.utils;
+package nl.plaatsoft.knightsquest.model;
 
 import java.util.Comparator;
 
 import nl.plaatsoft.knightsquest.model.Score;
 
-public class ScoreUtils implements Comparator<Score> {
+public class ScoreSort implements Comparator<Score> {
 
 	public int compare(Score score1, Score score2) {
 

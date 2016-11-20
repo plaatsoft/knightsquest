@@ -42,7 +42,6 @@ import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
-import nl.plaatsoft.knightsquest.utils.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
@@ -60,7 +59,7 @@ public class HighScore2 extends MyPanel {
 		y=120;
 				
 		lines=1;
-    	Iterator<Score> iter = ScoreDAO.getGlobal().iterator();    	
+    	Iterator<Score> iter = MyFactory.getScoreDAO().getGlobal().iterator();    	
 		while (iter.hasNext()) {
 			y+=18;
 			
@@ -86,7 +85,7 @@ public class HighScore2 extends MyPanel {
 	
 	public void draw() {
 		
-		ScoreDAO.clearGlobal();
+		MyFactory.getScoreDAO().clearGlobal();
 		
 		Image image1 = new Image("images/background4.jpg");
     	BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);

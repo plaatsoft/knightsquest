@@ -39,8 +39,6 @@ import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
-import nl.plaatsoft.knightsquest.utils.Constants;
-import nl.plaatsoft.knightsquest.utils.LandUtils;
 
 public class MapSelector extends MyPanel {
 
@@ -52,8 +50,8 @@ public class MapSelector extends MyPanel {
 	private void createMap(GraphicsContext gc, int seek, int size) {
 		
 		MyRandom.setSeek(seek);
-		LandUtils.createMap(gc, size);
-		LandUtils.drawMap();
+		MyFactory.getLandDAO().createMap(gc, size);
+		MyFactory.getLandDAO().drawMap();
 	}
 
 	private void createCanvas(int id, int x, int y, int size, final int seek) {

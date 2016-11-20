@@ -19,7 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package nl.plaatsoft.knightsquest.utils;
+package nl.plaatsoft.knightsquest.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,15 +34,17 @@ import nl.plaatsoft.knightsquest.model.LandEnum;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
+import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
+import nl.plaatsoft.knightsquest.ui.Constants;
 
-public class RegionUtils {
+public class RegionDAO {
 
-	final private static Logger log = Logger.getLogger(RegionUtils.class);
+	final private static Logger log = Logger.getLogger(RegionDAO.class);
 
-	public static Region getRegion(Land newLand) {
+	public Region getRegion(Land newLand) {
 		
-		Iterator<Player> iter1 = PlayerUtils.getPlayers().iterator();  	
+		Iterator<Player> iter1 = MyFactory.getPlayerDAO().getPlayers().iterator();  	
 		while (iter1.hasNext()) {
 			Player player = (Player) iter1.next();			
 			
@@ -63,7 +65,7 @@ public class RegionUtils {
 		return null;
 	}
 	
-	public static Region createStartRegion(int regionId, Player player, Pane pane) {
+	public Region createStartRegion(int regionId, Player player, Pane pane) {
 
 		Region region = null;
 
@@ -76,7 +78,7 @@ public class RegionUtils {
 			int y = MyRandom.nextInt(Constants.SEGMENT_Y);
 
 			// Each start region must have two lands between each other)
-			List<Land> list1 = LandUtils.getNeigbors2(LandUtils.getLands()[x][y]);
+			List<Land> list1 = MyFactory.getLandDAO().getNeigbors2(MyFactory.getLandDAO().getLands()[x][y]);
 			Iterator<Land> iter1 = list1.iterator();
 			while (iter1.hasNext()) {
 				Land land2 = (Land) iter1.next();
@@ -87,7 +89,7 @@ public class RegionUtils {
 
 			if (!bad) {
 
-				Land land3 = LandUtils.getLands()[x][y];
+				Land land3 = MyFactory.getLandDAO().getLands()[x][y];
 				if (land3.getType() == LandEnum.GRASS) {
 
 					// Clain land
@@ -109,7 +111,7 @@ public class RegionUtils {
 					player.getRegion().add(region);
 
 					// Add some more lands to region
-					List<Land> list4 = LandUtils.getBotNewLand(land3);
+					List<Land> list4 = MyFactory.getLandDAO().getBotNewLand(land3);
 					Land land4 = MyRandom.nextLand(list4);
 					if (land4 != null) {
 						land4.setPlayer(player);
@@ -131,7 +133,7 @@ public class RegionUtils {
 		return region;
 	}
 
-	public static Land getTowerPosition(Region region) {
+	public Land getTowerPosition(Region region) {
 
 		Iterator<Land> iter = region.getLands().iterator();
 		while (iter.hasNext()) {
@@ -146,11 +148,11 @@ public class RegionUtils {
 	}
 
 	/* recursion land search */
-	private static void search(Land land2, int regionId) {
+	private void search(Land land2, int regionId) {
 
 		land2.setRegion(regionId);
 
-		List<Land> list = LandUtils.getBotRegionLand(land2);
+		List<Land> list = MyFactory.getLandDAO().getBotRegionLand(land2);
 		Iterator<Land> iter = list.iterator();
 		while (iter.hasNext()) {
 			Land land = (Land) iter.next();
@@ -158,12 +160,12 @@ public class RegionUtils {
 		}
 	}
 
-	public static int detectedRegions() {
+	public int detectedRegions() {
 
 		int regionId = 0;
 
 		// Reset all castles
-		Land lands[][] = LandUtils.getLands();
+		Land lands[][] = MyFactory.getLandDAO().getLands();
 		for (int x = 0; x < Constants.SEGMENT_X; x++) {
 			for (int y = 0; y < Constants.SEGMENT_Y; y++) {
 				lands[x][y].setRegion(regionId);
@@ -186,10 +188,10 @@ public class RegionUtils {
 		return regionId;
 	}
 
-	public static void rebuildRegions(int amountOfRegions) {
+	public void rebuildRegions(int amountOfRegions) {
 
 		// Remove all region
-		Iterator<Player> iter1 = PlayerUtils.getPlayers().iterator();
+		Iterator<Player> iter1 = MyFactory.getPlayerDAO().getPlayers().iterator();
 		while (iter1.hasNext()) {
 			Player player = (Player) iter1.next();
 
@@ -202,7 +204,7 @@ public class RegionUtils {
 			}
 		}
 
-		Land lands[][] = LandUtils.getLands();
+		Land lands[][] = MyFactory.getLandDAO().getLands();
 
 		// Detect new regions with castle and assign them to player again
 		for (int regionId = 1; regionId <= amountOfRegions; regionId++) {
@@ -221,7 +223,7 @@ public class RegionUtils {
 
 						if (lands[x][y].getSoldier() != null) {
 
-							foodNeeded += SoldierUtils.food(lands[x][y].getSoldier().getType());
+							foodNeeded += MyFactory.getSoldierDAO().food(lands[x][y].getSoldier().getType());
 							//log.info("FoodNeeded="+foodNeeded+" ["+x+","+y+"]");
 							if (lands[x][y].getSoldier().getType() == SoldierEnum.TOWER) {
 								if (++castleCount > 1) {

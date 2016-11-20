@@ -27,18 +27,20 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
-import nl.plaatsoft.knightsquest.utils.Constants;
-import nl.plaatsoft.knightsquest.utils.SoldierUtils;
 
 public class Help extends MyPanel {
 
 	public void draw() {
+		
+		MyFactory.getSoldierDAO().init(20);
+				
 		Image image1 = new Image("images/background4.jpg");
     	BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
     	BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);   
@@ -55,49 +57,65 @@ public class Help extends MyPanel {
     	getChildren().add( new MyLabel(0, y, "the whole world you have won!", 20));
     	y+=50;  
     	
-    	getChildren().add( new MyLabel(45, y, "Icon", 20, "white", "-fx-font-weight: bold;"));
-    	getChildren().add( new MyLabel(130, y, "Type", 20, "white", "-fx-font-weight: bold;"));
-    	getChildren().add( new MyLabel(250, y, "Strength", 20, "white", "-fx-font-weight: bold;"));
-    	getChildren().add( new MyLabel(400, y, "Food Demand", 20, "white", "-fx-font-weight: bold;"));
+    	int x1=50;
+    	int x2=110;
+    	int x3=210;
+    	int x4=320;
+    	int x5=500;
+    	
+    	getChildren().add( new MyLabel(x1, y, "Icon", 20, "white", "-fx-font-weight: bold;"));
+    	getChildren().add( new MyLabel(x2, y, "Type", 20, "white", "-fx-font-weight: bold;"));
+    	getChildren().add( new MyLabel(x3, y, "Strength", 20, "white", "-fx-font-weight: bold;"));
+    	getChildren().add( new MyLabel(x4, y, "Food Demand", 20, "white", "-fx-font-weight: bold;"));
+    	getChildren().add( new MyLabel(x5, y, "Step", 20, "white", "-fx-font-weight: bold;"));
     	
     	boolean enabled = false;
     	
-    	double scale = 20 / SoldierUtils.get(SoldierEnum.TOWER, enabled).getHeight();
-    	y+=30;    	
-    	getChildren().add( new MyImageView(50, y, SoldierUtils.get(SoldierEnum.TOWER, enabled), scale, true));
-    	getChildren().add( new MyLabel(130, y, "Castle", 20, "white"));
-    	getChildren().add( new MyLabel(250, y, "unlimit", 20, "white"));
-    	getChildren().add( new MyLabel(400, y, "n.a.", 20, "white"));
+    	
+    	double scale = 20 / MyFactory.getSoldierDAO().get(SoldierEnum.TOWER, enabled).getHeight();
+    	
+    	y+=30;
+    	getChildren().add( new MyImageView(x1, y, MyFactory.getSoldierDAO().get(SoldierEnum.PAWN, enabled), scale, true));
+    	getChildren().add( new MyLabel(x2, y, "Pawn", 20, "white"));
+    	getChildren().add( new MyLabel(x3, y, ""+SoldierEnum.PAWN.getValue(), 20, "white"));
+    	getChildren().add( new MyLabel(x4, y, ""+MyFactory.getSoldierDAO().food(SoldierEnum.PAWN), 20, "white"));
+    	getChildren().add( new MyLabel(x5, y, "2", 20, "white"));
     	y+=25;
-    	getChildren().add( new MyImageView(50, y, SoldierUtils.get(SoldierEnum.PAWN, enabled), scale, true));
-    	getChildren().add( new MyLabel(130, y, "Pawn", 20, "white"));
-    	getChildren().add( new MyLabel(250, y, ""+SoldierEnum.PAWN.getValue(), 20, "white"));
-    	getChildren().add( new MyLabel(400, y, ""+SoldierUtils.food(SoldierEnum.PAWN), 20, "white"));
+    	getChildren().add( new MyImageView(x1, y, MyFactory.getSoldierDAO().get(SoldierEnum.BISHOP, enabled), scale, true));
+    	getChildren().add( new MyLabel(x2, y, "Bishop", 20, "white"));
+    	getChildren().add( new MyLabel(x3, y, ""+SoldierEnum.BISHOP.getValue(), 20, "white"));
+    	getChildren().add( new MyLabel(x4, y, ""+MyFactory.getSoldierDAO().food(SoldierEnum.BISHOP), 20, "white"));
+    	getChildren().add( new MyLabel(x5, y, "1", 20, "white"));
     	y+=25;
-    	getChildren().add( new MyImageView(50, y, SoldierUtils.get(SoldierEnum.BISHOP, enabled), scale, true));
-    	getChildren().add( new MyLabel(130, y, "Bishop", 20, "white"));
-    	getChildren().add( new MyLabel(250, y, ""+SoldierEnum.BISHOP.getValue(), 20, "white"));
-    	getChildren().add( new MyLabel(400, y, ""+SoldierUtils.food(SoldierEnum.BISHOP), 20, "white"));
+    	getChildren().add( new MyImageView(x1, y, MyFactory.getSoldierDAO().get(SoldierEnum.HORSE, enabled), scale, true));
+    	getChildren().add( new MyLabel(x2, y, "Horse", 20, "white"));
+    	getChildren().add( new MyLabel(x3, y, ""+SoldierEnum.HORSE.getValue(), 20, "white"));
+    	getChildren().add( new MyLabel(x4, y, ""+MyFactory.getSoldierDAO().food(SoldierEnum.HORSE), 20, "white"));
+    	getChildren().add( new MyLabel(x5, y, "1", 20, "white"));
     	y+=25;
-    	getChildren().add( new MyImageView(50, y, SoldierUtils.get(SoldierEnum.HORSE, enabled), scale, true));
-    	getChildren().add( new MyLabel(130, y, "Horse", 20, "white"));
-    	getChildren().add( new MyLabel(250, y, ""+SoldierEnum.HORSE.getValue(), 20, "white"));
-    	getChildren().add( new MyLabel(400, y, ""+SoldierUtils.food(SoldierEnum.HORSE), 20, "white"));
+    	getChildren().add( new MyImageView(x1, y, MyFactory.getSoldierDAO().get(SoldierEnum.QUEEN, enabled), scale, true));
+    	getChildren().add( new MyLabel(x2, y, "Queen", 20, "white"));
+    	getChildren().add( new MyLabel(x3, y, ""+SoldierEnum.QUEEN.getValue(), 20, "white"));
+    	getChildren().add( new MyLabel(x4, y, ""+MyFactory.getSoldierDAO().food(SoldierEnum.QUEEN), 20, "white"));
+    	getChildren().add( new MyLabel(x5, y, "1", 20, "white"));
     	y+=25;
-    	getChildren().add( new MyImageView(50, y, SoldierUtils.get(SoldierEnum.QUEEN, enabled), scale, true));
-    	getChildren().add( new MyLabel(130, y, "Queen", 20, "white"));
-    	getChildren().add( new MyLabel(250, y, ""+SoldierEnum.QUEEN.getValue(), 20, "white"));
-    	getChildren().add( new MyLabel(400, y, ""+SoldierUtils.food(SoldierEnum.QUEEN), 20, "white"));
+    	getChildren().add( new MyImageView(x1, y, MyFactory.getSoldierDAO().get(SoldierEnum.KING, enabled), scale, true));
+    	getChildren().add( new MyLabel(x2, y, "King", 20, "white"));
+    	getChildren().add( new MyLabel(x3, y, ""+SoldierEnum.KING.getValue(), 20, "white"));
+    	getChildren().add( new MyLabel(x4, y, ""+MyFactory.getSoldierDAO().food(SoldierEnum.KING), 20, "white"));
+    	getChildren().add( new MyLabel(x5, y, "1", 20, "white"));
+    	y+=25;    	
+    	getChildren().add( new MyImageView(x1, y, MyFactory.getSoldierDAO().get(SoldierEnum.TOWER, enabled), scale, true));
+    	getChildren().add( new MyLabel(x2, y, "Tower", 20, "white"));
+    	getChildren().add( new MyLabel(x3, y, ""+SoldierEnum.TOWER.getValue(), 20, "white"));
+    	getChildren().add( new MyLabel(x4, y, "0", 20, "white"));
+    	getChildren().add( new MyLabel(x5, y, "0", 20, "white"));
     	y+=25;
-    	getChildren().add( new MyImageView(50, y, SoldierUtils.get(SoldierEnum.KING, enabled), scale, true));
-    	getChildren().add( new MyLabel(130, y, "King", 20, "white"));
-    	getChildren().add( new MyLabel(250, y, ""+SoldierEnum.KING.getValue(), 20, "white"));
-    	getChildren().add( new MyLabel(400, y, ""+SoldierUtils.food(SoldierEnum.KING), 20, "white"));
-    	y+=25;
-    	getChildren().add( new MyImageView(50, y, SoldierUtils.get(SoldierEnum.CROSS, enabled), scale, true));
-    	getChildren().add( new MyLabel(130, y, "Cross", 20, "white"));
-    	getChildren().add( new MyLabel(250, y, "0", 20, "white"));
-    	getChildren().add( new MyLabel(400, y, "0 (Dead soldier)", 20, "white"));
+    	getChildren().add( new MyImageView(50, y, MyFactory.getSoldierDAO().get(SoldierEnum.CROSS, enabled), scale, true));
+    	getChildren().add( new MyLabel(x2, y, "Cross", 20, "white"));
+    	getChildren().add( new MyLabel(x3, y, "0", 20, "white"));
+    	getChildren().add( new MyLabel(x4, y, "0 (Dead soldier)", 20, "white"));
+    	getChildren().add( new MyLabel(x5, y, "0", 20, "white"));
     	       		
     	getChildren().add( new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));		
 	}

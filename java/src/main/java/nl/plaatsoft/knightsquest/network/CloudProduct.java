@@ -24,7 +24,7 @@ package nl.plaatsoft.knightsquest.network;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-import nl.plaatsoft.knightsquest.utils.Constants;
+import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class CloudProduct {
 

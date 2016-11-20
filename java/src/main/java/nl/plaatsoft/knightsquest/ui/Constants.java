@@ -19,20 +19,20 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package nl.plaatsoft.knightsquest.utils;
+package nl.plaatsoft.knightsquest.ui;
 
 public class Constants {
 
 	public final static String APP_NAME = "KnightsQuest";
 	public final static String APP_VERSION = "0.3";
-	public final static String APP_BUILD = "Build (18-11-2016)";
+	public final static String APP_BUILD = "Build (20-11-2016)";
 	
 	public final static String APP_WS_NAME = "Java-KnightsQuest";
 	public final static String APP_WS_URL = "service.plaatsoft.nl";
 	public final static String APP_DONATE_URL = "http://www.plaatsoft.nl/donate";
 		
-	public final static int WIDTH = 1024; 
-	public final static int HEIGHT = 768;	
+	public final static int WIDTH = 640; 
+	public final static int HEIGHT = 480;	
 	
 	public final static double SCALE = 1; 
 	

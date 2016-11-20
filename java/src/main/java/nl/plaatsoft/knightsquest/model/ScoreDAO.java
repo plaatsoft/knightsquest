@@ -25,14 +25,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import nl.plaatsoft.knightsquest.utils.ScoreUtils;
-
 public class ScoreDAO {
 
-	private static ArrayList<Score> local = new ArrayList<Score>();
-	private static ArrayList<Score> global = new ArrayList<Score>();
+	private ArrayList<Score> local = new ArrayList<Score>();
+	private ArrayList<Score> global = new ArrayList<Score>();
 		
-	public static int addLocal(Score score) {
+	public int addLocal(Score score) {
 		local.add(score);
 		
 		sort(local);
@@ -50,26 +48,26 @@ public class ScoreDAO {
 		return count;		
 	}
 	
-	private static void sort(ArrayList <Score> list) {
-        ScoreUtils comparator = new ScoreUtils();
+	private void sort(ArrayList <Score> list) {
+        ScoreSort comparator = new ScoreSort();
         Collections.sort(list, comparator);
 	}
 	
-	public static void addGlobal(Score score) {
+	public void addGlobal(Score score) {
 		global.add(score);
 	}
 		
-	public static ArrayList<Score> getLocal() {
+	public ArrayList<Score> getLocal() {
 		
 		return local;
 	}
 	
-	public static ArrayList<Score> getGlobal() {
+	public ArrayList<Score> getGlobal() {
 		
 		return global;
 	}
 	
-	public static void clearGlobal() {
+	public void clearGlobal() {
 		
 		Iterator<Score> iter = global.iterator();    	
 		while (iter.hasNext()) {
