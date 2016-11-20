@@ -87,7 +87,6 @@ public class MyFactory {
 	public static void clearFactory() {
 		
 		playerDAO = null;
-		scoreDAO = null;
 		landDAO = null;
 		soldierDAO = null;
 		regionDAO = null;
