@@ -40,19 +40,19 @@ public class  SoldierDAO {
 	
 	final private static Logger log = Logger.getLogger(SoldierDAO.class);
 		
-	private static Image tower;
-	private static Image tower2;
-	private static Image pawn;
-	private static Image pawn2;
-	private static Image horse;
-	private static Image horse2;
-	private static Image bishop;
-	private static Image bishop2;
-	private static Image queen;
-	private static Image queen2;
-	private static Image king;
-	private static Image king2;
-	private static Image cross;
+	private Image tower;
+	private Image tower2;
+	private Image pawn;
+	private Image pawn2;
+	private Image horse;
+	private Image horse2;
+	private Image bishop;
+	private Image bishop2;
+	private Image queen;
+	private Image queen2;
+	private Image king;
+	private Image king2;
+	private Image cross;
 			
 	public void init(int size) {
 		tower = new Image("images/tower.png", size+4, size+4, false, false);
@@ -67,9 +67,9 @@ public class  SoldierDAO {
 		queen2 = new Image("images/queen2.png", size+4, size+4, false, false);
 		king = new Image("images/king.png", size+4, size+4, false, false);
 		king2 = new Image("images/king2.png", size+4, size+4, false, false);
-		cross = new Image("images/cross.png", size+4, size+4, false, false);		
+		cross = new Image("images/cross.png", size+4, size+4, false, false);
 	}
-	
+
 	public void createBotSoldier(Region region) {
 						
 		/* Create new Soldier if there is enough food */  
@@ -101,7 +101,7 @@ public class  SoldierDAO {
 			Land land = MyFactory.getRegionDAO().getTowerPosition(region);
 			if (land!=null) {
 				
-				/* Enable castle. So player know new soldier is possible */  
+				/* Enable tower, so player know that new soldier is available */  
 				land.getSoldier().setEnabled(true);
 			}							
 		}
@@ -159,7 +159,7 @@ public class  SoldierDAO {
 						// Only upgrade if there is enough food
 						SoldierEnum nextType = upgrade(land1.getSoldier().getType());	
 						
-						if (region.foodAvailable()>MyFactory.getSoldierDAO().food(nextType)) {
+						if ((nextType!=null) && (region.foodAvailable()>MyFactory.getSoldierDAO().food(nextType))) {
 																																																				
 							MyFactory.getLandDAO().moveSoldier(land1, land5);			
 							return;
@@ -182,13 +182,23 @@ public class  SoldierDAO {
 						int defendStrength = land2.getSoldier().getType().getValue();
 						
 						if (attackStrength>defendStrength) {
-								
-							MyFactory.getLandDAO().moveSoldier(land1, land2);
+							
+							if ((land2.getBuilding()!=null) && (land2.getBuilding().getType()==BuildingEnum.HABOR)) {
+								land2 = MyFactory.getBuildingDAO().getFreeHabor(land2);
+							}
+							
+							MyFactory.getLandDAO().moveSoldier(land1, land2);							
 							return;
 						} 
 							
 					} else {
+						
 						/* Enemy land is unprotected */
+						
+						if ((land2.getBuilding()!=null) && (land2.getBuilding().getType()==BuildingEnum.HABOR)) {
+							land2 = MyFactory.getBuildingDAO().getFreeHabor(land2);
+						}
+						
 						MyFactory.getLandDAO().moveSoldier(land1, land2);
 						return;				
 					}
@@ -200,7 +210,12 @@ public class  SoldierDAO {
 				
 				List <Land> list4 = MyFactory.getLandDAO().getBotNewLand(land1);					
 				Land land4 = MyRandom.nextLand(list4);
-				if (land4!=null) {											
+				if (land4!=null) {			
+					
+					if ((land4.getBuilding()!=null) && (land4.getBuilding().getType()==BuildingEnum.HABOR)) {
+						land4 = MyFactory.getBuildingDAO().getFreeHabor(land4);
+					}
+					
 					MyFactory.getLandDAO().moveSoldier(land1, land4);											
 					return;
 				}
@@ -212,6 +227,11 @@ public class  SoldierDAO {
 				List <Land> list6 = MyFactory.getLandDAO().getBotOwnLand(land1);	
 				Land land6 = MyRandom.nextLand(list6);
 				if (land6!=null) {
+					
+					if ((land6.getBuilding()!=null) && (land6.getBuilding().getType()==BuildingEnum.HABOR)) {
+						land6 = MyFactory.getBuildingDAO().getFreeHabor(land6);
+					}
+					
 					MyFactory.getLandDAO().moveSoldier(land1, land6);
 					return;
 				}		
@@ -336,6 +356,8 @@ public class  SoldierDAO {
 						
 		}		
 		return value;
-	}		
+	}
 }
+
+
 

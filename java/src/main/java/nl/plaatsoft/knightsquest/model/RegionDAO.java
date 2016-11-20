@@ -246,7 +246,7 @@ public class RegionDAO {
 				Iterator<Land> iter = list.iterator();
 				while (iter.hasNext()) {
 					Land land = (Land) iter.next();
-					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierEnum.TOWER)) {
+					if ((land.getSoldier()!=null) && (land.getSoldier().getType()!=SoldierEnum.TOWER) && (land.getBuilding()==null)) {
 
 						// No food, soldiers die
 						land.getSoldier().setType(SoldierEnum.CROSS);
@@ -255,14 +255,20 @@ public class RegionDAO {
 				}
 			}
 
-			if ((castleCount == 0) && (list.size() > 1)) {
+			// Create castle if land is bigger then 2 
+			if ((castleCount == 0) && (list.size() > 2)) {
 
+				boolean created=false;
 				// Create new castle.
-				Land land = MyRandom.nextLand(list);
-				if (land != null) {
-					// log.info("Castle created");
-					Soldier soldier = new Soldier(SoldierEnum.TOWER, land.getPlayer(), land);
-					land.setSoldier(soldier);
+				while (!created) {
+					Land land = MyRandom.nextLand(list);
+					if ((land!=null) && (land.getSoldier()==null) && (land.getBuilding()==null)) {
+					
+						// log.info("Castle created");
+						Soldier soldier = new Soldier(SoldierEnum.TOWER, land.getPlayer(), land);
+						land.setSoldier(soldier);
+						created=true;
+					}
 				}
 			}
 

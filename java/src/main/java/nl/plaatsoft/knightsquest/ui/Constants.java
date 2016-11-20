@@ -52,5 +52,6 @@ public class Constants {
 	public final static int SEGMENT_Y = 45;
 	 	
 	public final static int MAX_PLAYERS = 6;
-	public final static int START_TOWERS = 3;	
+	public final static int MAX_HABORS = 10;
+	public final static int START_TOWERS = 2;	
 }

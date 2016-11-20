@@ -45,13 +45,13 @@ public class MapSelector extends MyPanel {
 	final static Logger log = Logger.getLogger(MapSelector.class);
 			
 	private static GraphicsContext[] gc = new GraphicsContext[6];
-	private static int seek[] = { 1, 3, 6, 8, 11, 10};
+	private static int seek[] = { 2, 3, 4, 6, 7, 8};
 
 	private void createMap(GraphicsContext gc, int seek, int size) {
 		
 		MyRandom.setSeek(seek);
 		MyFactory.getLandDAO().createMap(gc, size);
-		MyFactory.getLandDAO().drawMap();
+		MyFactory.getLandDAO().draw();
 	}
 
 	private void createCanvas(int id, int x, int y, int size, final int seek) {

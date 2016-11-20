@@ -22,6 +22,7 @@
 package nl.plaatsoft.knightsquest.model;
 
 public enum SoldierEnum {
+	
 	CROSS(0),	
 	PAWN(1),
 	BISHOP(2),

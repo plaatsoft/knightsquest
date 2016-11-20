@@ -75,7 +75,7 @@ public class Game extends StackPane {
 		
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
-		MyFactory.getLandDAO().drawMap();
+		MyFactory.getLandDAO().draw();
 		
 		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
 			players[i].draw();
@@ -181,6 +181,7 @@ public class Game extends StackPane {
 					
 			size = Constants.SEGMENT_SIZE_640;
 			MyFactory.getSoldierDAO().init(size);
+			MyFactory.getBuildingDAO().init(size);
 			
 			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
 			canvas.setLayoutX(Constants.OFFSET_X_640);
@@ -190,6 +191,7 @@ public class Game extends StackPane {
 			
 			size = Constants.SEGMENT_SIZE_800;
 			MyFactory.getSoldierDAO().init(size);
+			MyFactory.getBuildingDAO().init(size);
 			
 			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
 			canvas.setLayoutX(Constants.OFFSET_X_800);
@@ -199,15 +201,16 @@ public class Game extends StackPane {
 			
 			size = Constants.SEGMENT_SIZE_1024;
 			MyFactory.getSoldierDAO().init(size);
+			MyFactory.getBuildingDAO().init(size);
 			
 			canvas = new Canvas((size * 4 * (Constants.SEGMENT_X+1)), (size * 2 * Constants.SEGMENT_Y));
 			canvas.setLayoutX(Constants.OFFSET_X_1024);
 			canvas.setLayoutY(Constants.OFFSET_Y_768);
 		}
 	
-		log.info("size="+size);
 		gc = canvas.getGraphicsContext2D();
 		
+		/* create land */
 		MyFactory.getLandDAO().createMap(gc, size);
 		
 		pane2.getChildren().add(canvas);
@@ -225,7 +228,7 @@ public class Game extends StackPane {
 		label1 = new MyLabel(0, (MyFactory.getConfig().getHeight()/2)-120, "", 80, "white", "-fx-font-weight: bold;");
 		label2 = new MyLabel(0, (MyFactory.getConfig().getHeight()/2)-20, "", 60, "white", "-fx-font-weight: bold;");
 				
-		MyButton btn = new MyButton(MyFactory.getConfig().getWidth()-160,MyFactory.getConfig().getHeight()-60, "Turn ["+turn+"]", 18, Navigator.NONE);
+		MyButton btn = new MyButton(20,MyFactory.getConfig().getHeight()-60, "Turn ["+turn+"]", 18, Navigator.NONE);
 		btn.setPrefWidth(140);
 		pane3.getChildren().add(label1);
 		pane3.getChildren().add(label2);
@@ -263,6 +266,9 @@ public class Game extends StackPane {
 		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
 			players[i] =MyFactory.getPlayerDAO().createPlayer(gc, i, pane2);
 		}
+		
+		/* Create Habors */
+		MyFactory.getBuildingDAO().createHabors();
 		
 		redraw();
 		drawPlayerScore();

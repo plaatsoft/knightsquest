@@ -21,6 +21,7 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
+import nl.plaatsoft.knightsquest.model.BuildingDAO;
 import nl.plaatsoft.knightsquest.model.LandDAO;
 import nl.plaatsoft.knightsquest.model.PlayerDAO;
 import nl.plaatsoft.knightsquest.model.RegionDAO;
@@ -30,11 +31,14 @@ import nl.plaatsoft.knightsquest.model.SoldierDAO;
 public class MyFactory {
 
 	static MyConfig config;
-	static PlayerDAO playerDAO;
+	
 	static ScoreDAO scoreDAO;
-	static LandDAO landDAO;
-	static SoldierDAO soldierDAO;
+	
+	static PlayerDAO playerDAO;
+	static LandDAO landDAO;	
 	static RegionDAO regionDAO;
+	static SoldierDAO soldierDAO;
+	static BuildingDAO buildingDAO;
 				
 	public static MyConfig getConfig() {
 		
@@ -60,6 +64,14 @@ public class MyFactory {
 		return scoreDAO;
 	}
 	
+	public static RegionDAO getRegionDAO() {
+		
+		if (regionDAO==null) {
+			regionDAO = new RegionDAO();
+		}
+		return regionDAO;
+	}
+
 	public static LandDAO getLandDAO() {
 		
 		if (landDAO==null) {
@@ -67,7 +79,7 @@ public class MyFactory {
 		}
 		return landDAO;
 	}
-	
+
 	public static SoldierDAO getSoldierDAO() {
 		
 		if (soldierDAO==null) {
@@ -76,19 +88,20 @@ public class MyFactory {
 		return soldierDAO;
 	}
 	
-	public static RegionDAO getRegionDAO() {
+	public static BuildingDAO getBuildingDAO() {
 		
-		if (regionDAO==null) {
-			regionDAO = new RegionDAO();
+		if (buildingDAO==null) {
+			buildingDAO = new BuildingDAO();
 		}
-		return regionDAO;
+		return buildingDAO;
 	}
-	
+		
 	public static void clearFactory() {
 		
 		playerDAO = null;
-		landDAO = null;
-		soldierDAO = null;
+		landDAO = null;		
 		regionDAO = null;
+		soldierDAO = null;
+		buildingDAO = null;
 	}
 }

@@ -44,9 +44,10 @@ public class Land {
 	private boolean source = false;
 	private boolean destination = false;
 
-	private Soldier soldier;
 	private Player player;
 	private int region;
+	private Soldier soldier;
+	private Building building;
 	
 	public Land(GraphicsContext gc, int x, int y, int size, LandEnum type) {
 		this.gc = gc;
@@ -117,12 +118,17 @@ public class Land {
 				new double[]{size+(y*size), (y*size), (y*size),	size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7
 		);	
 		
+				
 		if (size>=20) {
 			gc.setFill(Color.WHITE);
 			gc.fillText("["+x+","+y+"]",(x*(size*4))+offset+15,size+(y*size));
 			gc.fillText(""+region,(x*(size*4))+offset+25,size+(y*size)+15);
 		}
 	
+		if (building!=null) {			
+			getBuilding().draw();
+		}
+		
 		if (soldier!=null) {			
 			getSoldier().draw();
 		}
@@ -224,5 +230,13 @@ public class Land {
 		this.scale = scale;
 		polygon.setScaleX(scale);
 		polygon.setScaleY(scale);
+	}
+
+	public Building getBuilding() {
+		return building;
+	}
+
+	public void setBuilding(Building building) {
+		this.building = building;
 	}
 }

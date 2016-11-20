@@ -1,3 +1,24 @@
+/**
+ *  @file
+ *  @brief 
+ *  @author wplaat
+ *
+ *  Copyright (C) 2008-2016 PlaatSoft
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, version 3.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package nl.plaatsoft.knightsquest.model;
 
 import java.util.ArrayList;
@@ -192,7 +213,7 @@ public class LandDAO {
 			}
 			
 			SoldierEnum nextType = MyFactory.getSoldierDAO().upgrade(source.getSoldier().getType());				
-			if (srcRegion.foodAvailable()<=MyFactory.getSoldierDAO().food(nextType)) {
+			if ((nextType!=null) && srcRegion.foodAvailable()<=MyFactory.getSoldierDAO().food(nextType)) {
 				//log.info("Not food enough, upgrade skipped");
 				// Not enough food, so skip upgrade.
 				return;
@@ -216,7 +237,7 @@ public class LandDAO {
 		srcRegion.getLands().add(destination);		
 	}
 	
-	public void createSoldier(Land source, Land destination) {
+	private void createSoldier(Land source, Land destination) {
 		
 		Region srcRegion = MyFactory.getRegionDAO().getRegion(source);
 		Region dstRegion = MyFactory.getRegionDAO().getRegion(destination);
@@ -315,7 +336,7 @@ public class LandDAO {
 				 Region region = MyFactory.getRegionDAO().getRegion(land);
 				 SoldierEnum nextType = MyFactory.getSoldierDAO().upgrade(land.getSoldier().getType());	
 				 
-				 if ((land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer()) && 
+				 if ((nextType!=null) && (land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer()) && 
 					 (land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.PAWN) &&
 					 (region.foodAvailable()>MyFactory.getSoldierDAO().food(nextType))) {
 					 land1.setDestination(true);
@@ -373,6 +394,10 @@ public class LandDAO {
 						
 					} else {
 					
+						if ((land3.getBuilding()!=null) && (land3.getBuilding().getType()==BuildingEnum.HABOR)) {
+							land3 = MyFactory.getBuildingDAO().getFreeHabor(land3);
+						}
+						
 						moveSoldier(land2, land3);
 					}
 					
@@ -574,10 +599,8 @@ public class LandDAO {
 	public void scaleMap(double scale) {
 		
 		//log.info("scale="+scale);
-		for (int x=0; x<Constants.SEGMENT_X; x++) {
-			
-			for (int y=0; y<Constants.SEGMENT_Y; y++) {
-			
+		for (int x=0; x<Constants.SEGMENT_X; x++) {			
+			for (int y=0; y<Constants.SEGMENT_Y; y++) {			
 				lands[x][y].setScale(scale);	
 			}
 		}		
@@ -607,7 +630,7 @@ public class LandDAO {
 			}
 		}		
 	}
-
+		
 	private void createForestMountain() {
 				
 		for (int x=0; x<Constants.SEGMENT_X; x++) {
@@ -670,7 +693,7 @@ public class LandDAO {
 	
 	private void createGrass() {
 						
-		for (int i=0; i<(Constants.SEGMENT_X*0.70); i++) {
+		for (int i=0; i<(Constants.SEGMENT_X*0.25); i++) {
 			
 			int x = MyRandom.nextInt(Constants.SEGMENT_X);
 			int y = MyRandom.nextInt(Constants.SEGMENT_Y);
@@ -715,7 +738,7 @@ public class LandDAO {
 		optimizeMap();			
 	}		
 		
-	public void drawMap() {
+	public void draw() {
 		for (int x=0; x<Constants.SEGMENT_X; x++) {					
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {				
 				lands[x][y].draw();				
@@ -726,4 +749,6 @@ public class LandDAO {
 	public Land[][] getLands() {
 		return lands;
 	}	
+	
+
 }

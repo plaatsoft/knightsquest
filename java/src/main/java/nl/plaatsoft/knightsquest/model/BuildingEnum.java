@@ -21,22 +21,18 @@
 
 package nl.plaatsoft.knightsquest.model;
 
-public enum LandEnum {	
-	
-	MOUNTAIN(1),
-	FOREST(2),
-	GRASS(3),
-	COAST(4),
-	WATER(5),
-	OCEAN(6);
+public enum BuildingEnum {
+
+	HABOR(1);
 	
 	private final int value;
 	
-    private LandEnum(int value) {
+    private BuildingEnum(int value) {
         this.value = value;
     }
 
     public int getValue() {
         return value;
     }
+    
 }
