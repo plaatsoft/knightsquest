@@ -338,7 +338,7 @@ public class Game extends StackPane {
 						log.info("game over, player dead");
 						gameOver=true;
 					
-						storeScore(turn, MyRandom.getSeek());
+						storeScore(turn, MyRandom.getSeed());
 						
 						// player dead, fight on with the remaining bots
 						timer.start();

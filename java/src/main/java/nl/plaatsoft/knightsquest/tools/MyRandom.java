@@ -28,7 +28,7 @@ import nl.plaatsoft.knightsquest.model.Land;
 
 public class MyRandom {
 	
-	private static int seek;	
+	private static int seed;	
 	private static Random rnd;
 	
 	public static int nextInt(int value) {
@@ -45,12 +45,12 @@ public class MyRandom {
 		return land;
 	}
 
-	public static int getSeek() {
-		return seek;
+	public static int getSeed() {
+		return seed;
 	}
 
-	public static void setSeek(int seek1) {
-		seek = seek1;
-		rnd = new Random(seek);
+	public static void setSeed(int seed1) {
+		seed = seed1;
+		rnd = new Random(seed1);
 	}
 }

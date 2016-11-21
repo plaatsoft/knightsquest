@@ -41,14 +41,27 @@ public class LandDAO {
 	
 	private Land[][] lands = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y];
 	
-	private Image water = new Image("images/water.png");
-	//private static Image ocean = new Image("images/ocean.png");
-	private Image forest = new Image("images/forest.png");
-	private Image coast = new Image("images/coast.png");
-	private Image rock = new Image("images/rock.png");
-	private Image grass = new Image("images/grass.png");
+	private Image water;
+	private Image ocean;
+	private Image forest;
+	private Image coast;
+	private Image rock;
+	private Image grass;
 			
+	public void init() {
+		water = new Image("images/water.png");
+		ocean = new Image("images/ocean.png");
+		forest = new Image("images/forest.png");
+		coast = new Image("images/coast.png");
+		rock = new Image("images/rock.png");
+		grass = new Image("images/grass.png");
+	}
+	
 	public void getTexture(GraphicsContext gc, LandEnum type) {
+		
+		if (water==null) {
+			init();
+		}
 		
 		switch(type) {
 		
@@ -377,6 +390,7 @@ public class LandDAO {
 			if ( (land1.getType()!=LandEnum.WATER) && 
 				 (land1.getType()!=LandEnum.OCEAN)) {
 			
+				// Pawn can not move two tills if no friendly land is connected
 				if (land.getSoldier().getType()==SoldierEnum.PAWN) {
 					if (!getPlayerLandHasFriendlyNeigbor(land1, land.getPlayer())) {
 						continue;
@@ -400,6 +414,13 @@ public class LandDAO {
 					 land1.setDestination(true);
 					 continue;
 				 }
+				 
+				 // Target land is own by weaker enemy
+				 if ((land1.getSoldier()!=null) && (land.getSoldier().getType().getValue()>land1.getSoldier().getType().getValue())) { 
+					 land1.setDestination(true);
+					 continue;
+				 }
+				 
 				 				 				 				 
 				 // Target land is owned, Pawn soldier available and there is food available for upgrade. 
 				 Region region = MyFactory.getRegionDAO().getRegion(land);

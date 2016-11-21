@@ -45,16 +45,16 @@ public class MapSelector extends MyPanel {
 	final static Logger log = Logger.getLogger(MapSelector.class);
 			
 	private static GraphicsContext[] gc = new GraphicsContext[6];
-	private static int seek[] = { 17, 3, 4, 9, 7, 18};
+	private static int seed[] = { 17, 3, 4, 9, 7, 18};
 
-	private void createMap(GraphicsContext gc, int seek, int size) {
+	private void createMap(GraphicsContext gc, int seed, int size) {
 		
-		MyRandom.setSeek(seek);
+		MyRandom.setSeed(seed);
 		MyFactory.getLandDAO().createMap(gc, size);
 		MyFactory.getLandDAO().draw();
 	}
 
-	private void createCanvas(int id, int x, int y, int size, final int seek) {
+	private void createCanvas(int id, int x, int y, int size, final int seed) {
 
 		Canvas canvas = new Canvas((Constants.SEGMENT_X * size * 4.5),(Constants.SEGMENT_Y * size * 2));
 		canvas.setLayoutX(x);
@@ -66,7 +66,7 @@ public class MapSelector extends MyPanel {
 		canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
 
-				MyRandom.setSeek(seek);
+				MyRandom.setSeed(seed);
 				Navigator.go(Navigator.GAME);
 			}
 		});
@@ -105,23 +105,23 @@ public class MapSelector extends MyPanel {
 		y += 90;
 		
 		x = 25;
-		createCanvas(0, x, y, size, seek[0]);
+		createCanvas(0, x, y, size, seed[0]);
 		x += offsetX;
-		createCanvas(1, x, y, size, seek[1]);
+		createCanvas(1, x, y, size, seed[1]);
 		x += offsetX;
-		createCanvas(2, x, y, size, seek[2]);
+		createCanvas(2, x, y, size, seed[2]);
 		
 		y += offsetY;
 
 		x = 25;
-		createCanvas(3, x, y, size, seek[3]);
+		createCanvas(3, x, y, size, seed[3]);
 		x += offsetX;
-		createCanvas(4, x, y, size, seek[4]);
+		createCanvas(4, x, y, size, seed[4]);
 		x += offsetX;
-		createCanvas(5, x, y, size, seek[5]);
+		createCanvas(5, x, y, size, seed[5]);
 
 		for (int i = 0; i < 6; i++) {
-			createMap(gc[i], seek[i], size);						
+			createMap(gc[i], seed[i], size);						
 		}
 
 		getChildren().add(new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME));
