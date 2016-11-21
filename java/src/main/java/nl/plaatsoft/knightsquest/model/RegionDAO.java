@@ -165,7 +165,9 @@ public class RegionDAO {
 	public int detectedRegions() {
 
 		int regionId = 0;
-
+		
+		log.debug("enter");
+		
 		// Reset all castles
 		Land lands[][] = MyFactory.getLandDAO().getLands();
 		for (int x = 0; x < Constants.SEGMENT_X; x++) {
@@ -187,12 +189,16 @@ public class RegionDAO {
 			}
 		}
 
+		log.debug("leave");
 		return regionId;
 	}
 
 	public void rebuildRegions(int amountOfRegions) {
 
-		// Remove all region
+		log.debug("enter");
+		
+		// Remove all region		
+		log.debug("step1");
 		Iterator<Player> iter1 = MyFactory.getPlayerDAO().getPlayers().iterator();
 		while (iter1.hasNext()) {
 			Player player = (Player) iter1.next();
@@ -209,6 +215,7 @@ public class RegionDAO {
 		Land lands[][] = MyFactory.getLandDAO().getLands();
 
 		// Detect new regions with castle and assign them to player again
+		log.debug("step2");
 		for (int regionId = 1; regionId <= amountOfRegions; regionId++) {
 
 			List<Land> list = new ArrayList<Land>();
@@ -243,7 +250,7 @@ public class RegionDAO {
 			}
 
 			//log.info("check food [regionId="+regionId+" foodAvailable=" + foodAvailable + " foodNeeded="+foodNeeded+"]");
-			
+			log.debug("step3");
 			if (foodAvailable < foodNeeded) {
 				Iterator<Land> iter = list.iterator();
 				while (iter.hasNext()) {
@@ -258,23 +265,26 @@ public class RegionDAO {
 			}
 
 			// Create castle if land is bigger then 2 
+			log.debug("step4");
 			if ((castleCount == 0) && (list.size() > 2)) {
 
 				boolean created=false;
 				// Create new castle.
 				while (!created) {
 					Land land = MyRandom.nextLand(list);
-					if ((land!=null) && (land.getSoldier()==null) && (land.getBuilding()==null)) {
-					
-						// log.info("Castle created");
-						Soldier soldier = new Soldier(SoldierEnum.TOWER, land.getPlayer(), land);
-						land.setSoldier(soldier);
-						created=true;
+					if ((land!=null) && (land.getBuilding()==null)) {
+						if ((land.getSoldier()==null) || (land.getSoldier().getType()==SoldierEnum.CROSS)) {					
+							//log.info("Castle created");
+							Soldier soldier = new Soldier(SoldierEnum.TOWER, land.getPlayer(), land);
+							land.setSoldier(soldier);
+							created=true;
+						}
 					}
 				}
 			}
 
 			// Castle is destroyed when region size is one.
+			log.debug("step5");
 			if (list.size() == 1) {
 				Iterator<Land> iter = list.iterator();
 				while (iter.hasNext()) {
@@ -287,6 +297,7 @@ public class RegionDAO {
 			}
 
 			// Create new region and add it to player
+			log.debug("step6");
 			Iterator<Land> iter = list.iterator();
 			if (iter.hasNext()) {
 				Land land = (Land) iter.next();
@@ -296,5 +307,6 @@ public class RegionDAO {
 				player.getRegion().add(region);
 			}
 		}
+		log.debug("leave");
 	}
 }

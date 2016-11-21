@@ -45,7 +45,7 @@ public class MapSelector extends MyPanel {
 	final static Logger log = Logger.getLogger(MapSelector.class);
 			
 	private static GraphicsContext[] gc = new GraphicsContext[6];
-	private static int seek[] = { 2, 3, 4, 6, 7, 8};
+	private static int seek[] = { 15, 3, 4, 9, 7, 16};
 
 	private void createMap(GraphicsContext gc, int seek, int size) {
 		

@@ -133,7 +133,7 @@ public class  SoldierDAO {
 	// Move bots
 	public void moveBotSoldier(Region region) {
 		
-		//log.info("soldier move start");
+		log.debug("enter");
 		
 		Iterator<Land> iter1 = region.getLands().iterator();  
 		while (iter1.hasNext()) {
@@ -162,6 +162,7 @@ public class  SoldierDAO {
 						if ((nextType!=null) && (region.foodAvailable()>MyFactory.getSoldierDAO().food(nextType))) {
 																																																				
 							MyFactory.getLandDAO().moveSoldier(land1, land5);			
+							log.debug("leave1");
 							return;
 						}
 					}
@@ -182,9 +183,9 @@ public class  SoldierDAO {
 						int defendStrength = land2.getSoldier().getType().getValue();
 						
 						if (attackStrength>defendStrength) {
-							
-							
-							MyFactory.getLandDAO().moveSoldier(land1, land2);							
+														
+							MyFactory.getLandDAO().moveSoldier(land1, land2);
+							log.debug("leave2");
 							return;
 						} 
 							
@@ -192,6 +193,7 @@ public class  SoldierDAO {
 						
 						/* Enemy land is unprotected */						
 						MyFactory.getLandDAO().moveSoldier(land1, land2);
+						log.debug("leave3");
 						return;				
 					}
 				}
@@ -203,7 +205,8 @@ public class  SoldierDAO {
 				List <Land> list4 = MyFactory.getLandDAO().getBotNewLand(land1);					
 				Land land4 = MyRandom.nextLand(list4);
 				if (land4!=null) {							
-					MyFactory.getLandDAO().moveSoldier(land1, land4);											
+					MyFactory.getLandDAO().moveSoldier(land1, land4);
+					log.debug("leave4");
 					return;
 				}
 				
@@ -215,15 +218,17 @@ public class  SoldierDAO {
 				Land land6 = MyRandom.nextLand(list6);
 				if (land6!=null) {					
 					MyFactory.getLandDAO().moveSoldier(land1, land6);
+					log.debug("leave5");
 					return;
 				}		
 			}
 		}	
+		log.debug("leave");
 	}
 
-	public Image get(SoldierEnum army, boolean enabled) {
+	public Image get(SoldierEnum soldier, boolean enabled) {
 	
-		switch(army) {
+		switch(soldier) {
 	
 			case TOWER: 
 				if (enabled) {

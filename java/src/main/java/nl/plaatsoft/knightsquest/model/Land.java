@@ -117,8 +117,7 @@ public class Land {
 						(size*2)+(x*(size*4))+offset, size+(x*(size*4))+offset,	0+(x*(size*4))+offset}, 
 				new double[]{size+(y*size), (y*size), (y*size),	size+(y*size), (size*2)+(y*size), (size*2)+(y*size), size+(y*size)}, 7
 		);	
-		
-				
+						
 		if (size>=20) {
 			gc.setFill(Color.WHITE);
 			gc.fillText("["+x+","+y+"]",(x*(size*4))+offset+15,size+(y*size));

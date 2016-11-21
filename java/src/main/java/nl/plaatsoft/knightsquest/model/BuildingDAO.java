@@ -100,7 +100,6 @@ public class BuildingDAO {
 				list2.add(land1);
 			}
 		}
-			
 		return list2;
 	}
 			
