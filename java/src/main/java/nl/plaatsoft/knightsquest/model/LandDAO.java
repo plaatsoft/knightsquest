@@ -48,7 +48,7 @@ public class LandDAO {
 	private Image rock;
 	private Image grass;
 			
-	public void init() {
+	private void init() {
 		water = new Image("images/water.png");
 		ocean = new Image("images/ocean.png");
 		forest = new Image("images/forest.png");
