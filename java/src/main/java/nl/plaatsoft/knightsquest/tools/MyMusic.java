@@ -44,7 +44,7 @@ public class MyMusic {
 		if (mp==null) {
 			init();
 		}
-        if (MyFactory.getConfig().isMusicEnabled()) {
+        if (MyFactory.getSettingDAO().getSettings().isMusicOn()) {
         	mp.play();
         }
 	}

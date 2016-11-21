@@ -25,6 +25,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -75,7 +76,7 @@ public class Navigator {
 		case INTRO1:
 			intro1 = new Intro1();
 			intro1.draw();
-			scene = new Scene(intro1, MyFactory.getConfig().getWidth(), MyFactory.getConfig().getHeight());	
+			scene = new Scene(intro1, MyFactory.getSettingDAO().getSettings().getWidth(), MyFactory.getSettingDAO().getSettings().getHeight());	
 			break;
 						
 		case INTRO2:
@@ -143,10 +144,11 @@ public class Navigator {
 			help = new Help();
 			help.draw();
 			scene.setRoot(help);			
-			break;	
+			break;
 								
 		case EXIT:
-			System.exit(0);
+			Platform.exit();
+            
 			break;
 		}
 	}

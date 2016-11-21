@@ -57,7 +57,7 @@ public class Help extends MyPanel {
     	getChildren().add( new MyLabel(0, y, "the whole world you have won!", 20));
     	y+=50;  
     	
-    	int offset = ((MyFactory.getConfig().getWidth()-640)/2);
+    	int offset = ((MyFactory.getSettingDAO().getSettings().getWidth()-640)/2);
     	int x1=50+offset;
     	int x2=110+offset;
     	int x3=210+offset;
@@ -118,6 +118,6 @@ public class Help extends MyPanel {
     	getChildren().add( new MyLabel(x4, y, "0 (Dead soldier)", 20, "white"));
     	getChildren().add( new MyLabel(x5, y, "0", 20, "white"));
     	       		
-    	getChildren().add( new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));		
+    	getChildren().add( new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME));		
 	}
 }

@@ -23,29 +23,28 @@ package nl.plaatsoft.knightsquest.tools;
 
 import nl.plaatsoft.knightsquest.model.BuildingDAO;
 import nl.plaatsoft.knightsquest.model.LandDAO;
+import nl.plaatsoft.knightsquest.model.SettingDAO;
 import nl.plaatsoft.knightsquest.model.PlayerDAO;
 import nl.plaatsoft.knightsquest.model.RegionDAO;
 import nl.plaatsoft.knightsquest.model.ScoreDAO;
 import nl.plaatsoft.knightsquest.model.SoldierDAO;
 
 public class MyFactory {
-
-	static MyConfig config;
-	
-	static ScoreDAO scoreDAO;
-	
-	static PlayerDAO playerDAO;
-	static LandDAO landDAO;	
-	static RegionDAO regionDAO;
-	static SoldierDAO soldierDAO;
-	static BuildingDAO buildingDAO;
-				
-	public static MyConfig getConfig() {
+    
+    private static ScoreDAO scoreDAO; 	
+    private static PlayerDAO playerDAO;
+    private static LandDAO landDAO;	
+    private static RegionDAO regionDAO;
+    private static SoldierDAO soldierDAO;
+    private static BuildingDAO buildingDAO;
+    private static SettingDAO settingDAO;
+					
+	public static SettingDAO getSettingDAO() {
 		
-		if (config==null) {
-			config = new MyConfig();
+		if (settingDAO==null) {
+			settingDAO = new SettingDAO();
 		}
-		return config;
+		return settingDAO;
 	}
 	
 	public static PlayerDAO getPlayerDAO() {

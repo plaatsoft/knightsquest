@@ -77,7 +77,7 @@ public class Game extends StackPane {
 		
 		MyFactory.getLandDAO().draw();
 		
-		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
+		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {
 			players[i].draw();
 		}
 	}
@@ -114,7 +114,7 @@ public class Game extends StackPane {
 
 		int count=0;
 
-		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
+		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {
 			
 			if (players[i].getRegion().size()>0) {
 				count++;
@@ -135,7 +135,7 @@ public class Game extends StackPane {
 		
 	public static void drawPlayerScore() {
 
-		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
+		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {
 			
 			int amount = 0; 
 			Iterator<Region> iter2 = players[i].getRegion().iterator();  
@@ -177,7 +177,7 @@ public class Game extends StackPane {
 		pane2.setId("map");
 				
 		int size=0;
-		if (MyFactory.getConfig().getWidth()==640) {
+		if (MyFactory.getSettingDAO().getSettings().getWidth()==640) {
 					
 			size = Constants.SEGMENT_SIZE_640;
 			MyFactory.getSoldierDAO().init(size);
@@ -187,7 +187,7 @@ public class Game extends StackPane {
 			canvas.setLayoutX(Constants.OFFSET_X_640);
 			canvas.setLayoutY(Constants.OFFSET_Y_480);
 			
-		} else if (MyFactory.getConfig().getWidth()==800) {
+		} else if (MyFactory.getSettingDAO().getSettings().getWidth()==800) {
 			
 			size = Constants.SEGMENT_SIZE_800;
 			MyFactory.getSoldierDAO().init(size);
@@ -225,10 +225,10 @@ public class Game extends StackPane {
 		pane3.setScaleY(Constants.SCALE);
 		pane3.setId("control");
 						
-		label1 = new MyLabel(0, (MyFactory.getConfig().getHeight()/2)-120, "", 80, "white", "-fx-font-weight: bold;");
-		label2 = new MyLabel(0, (MyFactory.getConfig().getHeight()/2)-20, "", 60, "white", "-fx-font-weight: bold;");
+		label1 = new MyLabel(0, (MyFactory.getSettingDAO().getSettings().getHeight()/2)-120, "", 80, "white", "-fx-font-weight: bold;");
+		label2 = new MyLabel(0, (MyFactory.getSettingDAO().getSettings().getHeight()/2)-20, "", 60, "white", "-fx-font-weight: bold;");
 				
-		MyButton btn = new MyButton(20,MyFactory.getConfig().getHeight()-60, "Turn ["+turn+"]", 18, Navigator.NONE);
+		MyButton btn = new MyButton(20,MyFactory.getSettingDAO().getSettings().getHeight()-60, "Turn ["+turn+"]", 18, Navigator.NONE);
 		btn.setPrefWidth(140);
 		pane3.getChildren().add(label1);
 		pane3.getChildren().add(label2);
@@ -238,22 +238,22 @@ public class Game extends StackPane {
 		// ------------------------------------------------------
 			
 		Rectangle r = new Rectangle();
-		r.setX(MyFactory.getConfig().getWidth()-135);
+		r.setX(MyFactory.getSettingDAO().getSettings().getWidth()-135);
 		r.setY(10);
 		r.setWidth(115);		
-		r.setHeight(MyFactory.getConfig().getAmountOfPlayers()*20);
+		r.setHeight(MyFactory.getSettingDAO().getSettings().getAmountOfPlayers()*20);
 		r.setArcWidth(20);
 		r.setArcHeight(20);
 		r.setFill(Color.rgb(0, 0, 0, 0.7));		
 		pane3.getChildren().add(r);
 		
 		int y=15;
-		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {			
-			label3[i] = new MyLabel(MyFactory.getConfig().getWidth()-125, y, "", 15, MyFactory.getPlayerDAO().getColor(i), "-fx-font-weight: bold;");
+		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {			
+			label3[i] = new MyLabel(MyFactory.getSettingDAO().getSettings().getWidth()-125, y, "", 15, MyFactory.getPlayerDAO().getColor(i), "-fx-font-weight: bold;");
 			y+=18;
 		}
 		
-		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {		
+		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {		
 			pane3.getChildren().add(label3[i]);
 		}		
 		pane3.getChildren().add(btn);
@@ -263,7 +263,7 @@ public class Game extends StackPane {
 		// Create players
 		// ------------------------------------------------------
 		
-		for (int i = 1; i <= MyFactory.getConfig().getAmountOfPlayers(); i++) {
+		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {
 			players[i] =MyFactory.getPlayerDAO().createPlayer(gc, i, pane2);
 		}
 		

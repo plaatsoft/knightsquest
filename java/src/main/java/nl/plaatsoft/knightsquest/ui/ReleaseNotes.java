@@ -45,6 +45,7 @@ public class ReleaseNotes extends MyPanel {
 					+ "- Added pawn can now move two land tills per turn.\n"
 					+ "- Added setting to select amount of players.\n"
 					+ "- Added harbors to soldier can travel faster.\n"
+					+ "- Store settings to disk.\n"
 					+ "- Bugfix: Now second game initialization is working fine.\n"
 					+ "- Bugfix: Now next turn detection is working fine\n",
 			
@@ -89,7 +90,7 @@ public class ReleaseNotes extends MyPanel {
 		getChildren().add(new MyLabel(0, 20, "Release Notes", 50, "white", "-fx-font-weight: bold;"));
 		text = new MyLabel(30, 120, version[0], 20, "white");
 		getChildren().add(text);
-		getChildren().add(new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));
+		getChildren().add(new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME));
 	}
 
 	@Override

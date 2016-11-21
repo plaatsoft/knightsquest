@@ -45,7 +45,7 @@ public class MapSelector extends MyPanel {
 	final static Logger log = Logger.getLogger(MapSelector.class);
 			
 	private static GraphicsContext[] gc = new GraphicsContext[6];
-	private static int seek[] = { 15, 3, 4, 9, 7, 16};
+	private static int seek[] = { 17, 3, 4, 9, 7, 18};
 
 	private void createMap(GraphicsContext gc, int seek, int size) {
 		
@@ -79,13 +79,13 @@ public class MapSelector extends MyPanel {
 		int offsetX = 200;
 		int offsetY = 150;
 		
-		if (MyFactory.getConfig().getWidth()==800) {
+		if (MyFactory.getSettingDAO().getSettings().getWidth()==800) {
 			
 			size=4;
 			offsetX = 250;
 			offsetY = 200;
 			
-		} else if (MyFactory.getConfig().getWidth()==1024) {
+		} else if (MyFactory.getSettingDAO().getSettings().getWidth()==1024) {
 			
 			size=5;
 			offsetX = 325;
@@ -124,6 +124,6 @@ public class MapSelector extends MyPanel {
 			createMap(gc[i], seek[i], size);						
 		}
 
-		getChildren().add(new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));
+		getChildren().add(new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME));
 	}
 }

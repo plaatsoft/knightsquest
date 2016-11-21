@@ -31,9 +31,6 @@ public class Constants {
 	public final static String APP_WS_URL = "service.plaatsoft.nl";
 	public final static String APP_DONATE_URL = "http://www.plaatsoft.nl/donate";
 		
-	public final static int WIDTH = 640; 
-	public final static int HEIGHT = 480;	
-	
 	public final static double SCALE = 1; 
 	
 	public final static int SEGMENT_SIZE_640 = 10;		
@@ -53,6 +50,6 @@ public class Constants {
 	 	
 	public final static int MAX_PLAYERS = 6;
 	public final static int MAX_HABORS = 10;
-	public final static int START_TOWERS = 2;	
+	public final static int START_TOWERS = 1;	
 	public final static int START_LANDS = 3;
 }

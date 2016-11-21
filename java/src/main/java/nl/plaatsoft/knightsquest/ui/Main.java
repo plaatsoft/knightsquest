@@ -26,8 +26,11 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyMusic;
 
@@ -37,7 +40,9 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-						
+
+		MyFactory.getSettingDAO().load();  
+		
 		setUserAgentStylesheet(STYLESHEET_MODENA);
 
 		Navigator.setStage(primaryStage);
@@ -45,22 +50,32 @@ public class Main extends Application {
 
 		primaryStage.setTitle(Constants.APP_NAME + " v" + Constants.APP_VERSION);
 		primaryStage.setScene(Navigator.getScene());
-		primaryStage.setWidth(Constants.WIDTH);
-		primaryStage.setHeight(Constants.HEIGHT+20);       	
+		primaryStage.setWidth(MyFactory.getSettingDAO().getSettings().getWidth());
+		primaryStage.setHeight(MyFactory.getSettingDAO().getSettings().getHeight()+20);       	
 		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("images/logo3.png"));
-		primaryStage.show();
+				
 		
-		 MyMusic.play();        
+        if (MyFactory.getSettingDAO().getSettings().getX()!=0) {
+               primaryStage.setX(MyFactory.getSettingDAO().getSettings().getX());
+               primaryStage.setY(MyFactory.getSettingDAO().getSettings().getY());
+        }
+        
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+               MyFactory.getSettingDAO().getSettings().setX(primaryStage.getX());
+               MyFactory.getSettingDAO().getSettings().setY(primaryStage.getY());          
+               MyFactory.getSettingDAO().save();               
+            }
+        });
+        
+        primaryStage.show();
+        
+		MyMusic.play();        
 	}
 
 	public static void main(String[] args) {
 
-		MyFactory.getConfig().setWidth(Constants.WIDTH);
-		MyFactory.getConfig().setHeight(Constants.HEIGHT);
-		MyFactory.getConfig().setMusicEnabled(true);
-		MyFactory.getConfig().setAmountOfPlayers(Constants.MAX_PLAYERS);
-		
 		log.info(Constants.APP_NAME + " v" + Constants.APP_VERSION+" start");
 		
 		String version = System.getProperty("java.version");

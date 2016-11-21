@@ -120,13 +120,13 @@ public class Settings extends MyPanel {
     	
     	y+=60;   
     	    	
-    	int offset = ((MyFactory.getConfig().getWidth()-640)/2);    	
+    	int offset = ((MyFactory.getSettingDAO().getSettings().getWidth()-640)/2);    	
     	int x1 = 100 + offset;
     	int x2 = 250 + offset;
     	int x3 = 480 + offset;
 		
 		
-		int x=(MyFactory.getConfig().getWidth()-(MAX*70))/2;
+		int x=(MyFactory.getSettingDAO().getSettings().getWidth()-(MAX*70))/2;
 		
 		for (int i=0; i<MAX ;i++) {
 			getChildren().add(buttonSpecial(i, x+25, y-20, "+", true));	
@@ -135,7 +135,7 @@ public class Settings extends MyPanel {
 			x+=70;
 		}			
 		
-		MyButton button = new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME);		
+		MyButton button = new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME);		
 		getChildren().add(button);	
 		
 		y+=150;		
@@ -154,65 +154,52 @@ public class Settings extends MyPanel {
 		y+=30;
 		
 		String[] options1 = {"3", "4", "5", "6"};		
-		MyComboBox comboBox2 = new MyComboBox(x2+40,y, ""+MyFactory.getConfig().getAmountOfPlayers(), options1);		
+		MyComboBox comboBox2 = new MyComboBox(x2+40,y, ""+MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(), options1);		
         getChildren().add(comboBox2);
         
         comboBox2.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event) {
         		String value =  comboBox2.getSelectionModel().getSelectedItem().toString();
         		int amount = Integer.parseInt(value);
-        		MyFactory.getConfig().setAmountOfPlayers(amount);
+        		MyFactory.getSettingDAO().getSettings().setAmountOfPlayers(amount);
+        		MyFactory.getSettingDAO().save();
         	}
         });
         
         /* --------------------------------------- */
         
-        y-=30;
+        y-=30;     
         
 		getChildren().add (new MyLabel(x3, y, "Size", 20 ));
 		
-		y+=30;
+		y+=30;	
 		
         String[] options2 = {"640x480", "800x600", "1024x768"};
-        
-        String value = "640x480";
-        if (MyFactory.getConfig().getWidth()==800) {
-        	value = "800x600";
-        } else if (MyFactory.getConfig().getWidth()==1024) {
-        	value = "1024x768";
-        }
-        MyComboBox comboBox1 = new MyComboBox(x3-20, y, value, options2);
+        MyComboBox comboBox1 = new MyComboBox(x3-20, y, MyFactory.getSettingDAO().getSettings().getResolution(), options2);
         comboBox1.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event) {
-        		String value =  comboBox1.getSelectionModel().getSelectedItem().toString();    
-      	        if (value=="640x480") {
-      	        	MyFactory.getConfig().setWidth(640);
-       	        	MyFactory.getConfig().setHeight(480);
-       	        	Navigator.getStage().setWidth(640);
+        		String value =  comboBox1.getSelectionModel().getSelectedItem().toString();
+        		MyFactory.getSettingDAO().getSettings().setResolution(value);
+        		MyFactory.getSettingDAO().save();
+        		
+      	        if (value.equals("640x480")) {
+      	        	Navigator.getStage().setWidth(640);
        	        	Navigator.getStage().setHeight(480+20);
-       	        	setMinWidth(640);
-       	        	setMinHeight(480);       
        	        	
-       	        } else if (value=="800x600") {
-       	        	MyFactory.getConfig().setWidth(800);
-       	        	MyFactory.getConfig().setHeight(600);
+       	        } else if (value.equals("800x600")) {
        	        	Navigator.getStage().setWidth(800);
        	        	Navigator.getStage().setHeight(600+20);
        	        	
        	        } else {
-       	        	MyFactory.getConfig().setWidth(1024);
-       	        	MyFactory.getConfig().setHeight(768);  
        	        	Navigator.getStage().setWidth(1024);
-       	        	Navigator.getStage().setHeight(768+20);
-       	        	
+       	        	Navigator.getStage().setHeight(768+20);       	        	
        	        }
-      	        Navigator.go(Navigator.HOME);
+      	        Navigator.go(Navigator.HOME);      	        
             }            	
         });
         
         getChildren().add(comboBox1);
-        
-        
+                
         /* --------------------------------------- */
         
 		task = new Task<Void>() {

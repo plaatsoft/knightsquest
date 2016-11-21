@@ -62,7 +62,7 @@ public class Credits extends MyPanel {
 	    y+=35;
 	    getChildren().add( new MyLabel(0, y, "wplaat, lplaat, splaat, bplaat", 18, "white"));
 	    	     
-	    getChildren().add( new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));		
+	    getChildren().add( new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME));		
 	}
 
 	@Override

@@ -59,7 +59,7 @@ public class Donate extends MyPanel {
     	y+=60;  	
      	
     	// Force focus on button
-    	getChildren().add(new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME));		
+    	getChildren().add(new MyButton(0,MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME));		
     	
     	getChildren().add(new MyLabel(0, y, "Click on below link and follow the instructions", 20, "white"));    	
     	y+=25;

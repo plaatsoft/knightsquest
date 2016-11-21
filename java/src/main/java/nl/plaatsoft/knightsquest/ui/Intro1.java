@@ -54,10 +54,10 @@ public class Intro1 extends MyPanel {
 		getChildren().add( new MyLabel(0,30,"Created by PlaatSoft",26));
 		getChildren().add( new MyLabel(0,70,"www.plaatsoft.nl",26));
 				
-		imageView1 = new MyImageView((MyFactory.getConfig().getWidth()/2)-(376/2), (MyFactory.getConfig().getHeight()/2)-(80/2), "images/logo1.png",1);		
+		imageView1 = new MyImageView((MyFactory.getSettingDAO().getSettings().getWidth()/2)-(376/2), (MyFactory.getSettingDAO().getSettings().getHeight()/2)-(80/2), "images/logo1.png",1);		
 		getChildren().add(imageView1);
-		getChildren().add( new MyLabel(0,(MyFactory.getConfig().getHeight()-70),"This software is open source and may be copied, distributed or modified",16));
-		getChildren().add( new MyLabel(0,(MyFactory.getConfig().getHeight()-50),"under the terms of the GNU General Public License (GPL) version 3",16));
+		getChildren().add( new MyLabel(0,(MyFactory.getSettingDAO().getSettings().getHeight()-70),"This software is open source and may be copied, distributed or modified",16));
+		getChildren().add( new MyLabel(0,(MyFactory.getSettingDAO().getSettings().getHeight()-50),"under the terms of the GNU General Public License (GPL) version 3",16));
 		
 		setOnMousePressed(new EventHandler<MouseEvent>() {
 	        public void handle(MouseEvent t) {

@@ -33,7 +33,7 @@ public class MyButton extends Button {
 				
 		int width = 180;
 		if (x==0) {
-			x= (MyFactory.getConfig().getWidth()/2)-(width/2);
+			x= (MyFactory.getSettingDAO().getSettings().getWidth()/2)-(width/2);
 		}				
 		setText(value);
 	    setPrefWidth(180);

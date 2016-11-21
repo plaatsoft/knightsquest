@@ -40,7 +40,7 @@ public class MyHyperlink extends Hyperlink {
 		setLayoutY(y);
 			
 		if (x==0) {
-			setMinWidth(MyFactory.getConfig().getWidth());
+			setMinWidth(MyFactory.getSettingDAO().getSettings().getWidth());
 			setAlignment(Pos.CENTER);
 			setTextAlignment(TextAlignment.CENTER);
 			

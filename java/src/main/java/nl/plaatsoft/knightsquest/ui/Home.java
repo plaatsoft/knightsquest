@@ -56,29 +56,29 @@ public class Home extends MyPanel {
 		getChildren().add(label3);
 				
 		int y = 30;
-		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Play", 18, Navigator.MAP_SELECTOR));
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "Play", 18, Navigator.MAP_SELECTOR));
 		y += 45;
-		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
 		y += 45;	
-		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Settings", 18, Navigator.SETTINGS));
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "Settings", 18, Navigator.SETTINGS));
 		y += 45;
-		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Help", 18, Navigator.HELP));
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "Help", 18, Navigator.HELP));
 		y += 45;
-		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Credits", 18, Navigator.CREDITS));
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "Credits", 18, Navigator.CREDITS));
 		y += 45;
-		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Release Notes", 18, Navigator.RELEASE_NOTES));
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "Release Notes", 18, Navigator.RELEASE_NOTES));
 		y += 45;
-		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, y, "Donate", 18, Navigator.DONATE));
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "Donate", 18, Navigator.DONATE));
 		
-		getChildren().add( new MyButton(MyFactory.getConfig().getWidth()-210, MyFactory.getConfig().getHeight()-70, "Exit", 18, Navigator.EXIT));	
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, MyFactory.getSettingDAO().getSettings().getHeight()-70, "Exit", 18, Navigator.EXIT));	
 			
 		int x =0;
 		double scale = 1;
-		if (MyFactory.getConfig().getWidth()==640) {
+		if (MyFactory.getSettingDAO().getSettings().getWidth()==640) {
 			x = -10;
 			y = 60;
 			scale = 0.75;
-		} else if (MyFactory.getConfig().getWidth()==800) {
+		} else if (MyFactory.getSettingDAO().getSettings().getWidth()==800) {
 			x = 10;
 			y = 130;
 			scale = 1;

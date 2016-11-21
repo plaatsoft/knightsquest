@@ -33,8 +33,8 @@ public class Intro2 extends MyPanel {
 			mediaPlayer.setAutoPlay(true);
 			
 			MediaView mediaView = new MediaView(mediaPlayer);	    
-			mediaView.setFitWidth(MyFactory.getConfig().getWidth());
-			mediaView.setFitHeight(MyFactory.getConfig().getHeight());
+			mediaView.setFitWidth(MyFactory.getSettingDAO().getSettings().getWidth());
+			mediaView.setFitHeight(MyFactory.getSettingDAO().getSettings().getHeight());
 			
 			getChildren().add(mediaView);
 				

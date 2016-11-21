@@ -56,7 +56,7 @@ public class HighScore2 extends MyPanel {
 			
 	private void showTable() {
 		
-		int offset = ((MyFactory.getConfig().getWidth()-640)/2);
+		int offset = ((MyFactory.getSettingDAO().getSettings().getWidth()-640)/2);
 		int x1 = 30 + offset;
 		int x2 = 80 + offset;
 		int x3 = 300 + offset;
@@ -100,7 +100,7 @@ public class HighScore2 extends MyPanel {
     	Background background = new Background(backgroundImage);
 		setBackground(background);
 		
-		int offset = ((MyFactory.getConfig().getWidth()-640)/2);
+		int offset = ((MyFactory.getSettingDAO().getSettings().getWidth()-640)/2);
 		int x1 = 30 + offset;
 		int x2 = 80 + offset;
 		int x3 = 300 + offset;
@@ -115,7 +115,7 @@ public class HighScore2 extends MyPanel {
 		getChildren().add(new MyLabel(x3, y, "Score", 25));	
 		getChildren().add(new MyLabel(x4, y, "Nickname", 25));
 				
-		MyButton button1 = new MyButton(0, MyFactory.getConfig().getHeight()-60, "Close", 18, Navigator.HOME);
+		MyButton button1 = new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME);
 		
 		getChildren().add(button1);	
 				

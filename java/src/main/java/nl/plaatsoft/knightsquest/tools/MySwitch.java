@@ -19,7 +19,7 @@ public class MySwitch extends HBox {
 
 	private void init() {
 		
-		switchedOn = new SimpleBooleanProperty(MyFactory.getConfig().isMusicEnabled());
+		switchedOn = new SimpleBooleanProperty(MyFactory.getSettingDAO().getSettings().isMusicOn());
 		
 		if (switchedOn.get()) {
 			label.setText("ON");
@@ -67,12 +67,19 @@ public class MySwitch extends HBox {
 			if (!c) {
 				label.setText("OFF");
 				label.toFront();
-				MyFactory.getConfig().setMusicEnabled(false);
+				
+				MyFactory.getSettingDAO().getSettings().setMusicOn(false);
+				MyFactory.getSettingDAO().save();
+				
 				MyMusic.stop();
+				
 			} else {
-				MyFactory.getConfig().setMusicEnabled(true);
 				label.setText("ON");
 				button.toFront();
+								
+				MyFactory.getSettingDAO().getSettings().setMusicOn(true);
+				MyFactory.getSettingDAO().save();
+				
 				MyMusic.play();
 			}
 		});

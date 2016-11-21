@@ -53,7 +53,7 @@ public class HighScore1 extends MyPanel {
     	Background background = new Background(backgroundImage);
 		setBackground(background);
 		
-		int offset = ((MyFactory.getConfig().getWidth()-640)/2);
+		int offset = ((MyFactory.getSettingDAO().getSettings().getWidth()-640)/2);
 		int x1 = 30 + offset;
 		int x2 = 80 + offset;
 		int x3 = 300 + offset;
@@ -92,6 +92,6 @@ public class HighScore1 extends MyPanel {
 			}
 		}
 		
-		getChildren().add( new MyButton(0, MyFactory.getConfig().getHeight()-60, "Next", 18, Navigator.GLOBAL_HIGHSCORE));				
+		getChildren().add( new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Next", 18, Navigator.GLOBAL_HIGHSCORE));				
 	}
 }
