@@ -45,7 +45,7 @@ public class MyMusic {
 			init();
 		}
         if (MyFactory.getConfig().isMusicEnabled()) {
-        	//mp.play();
+        	mp.play();
         }
 	}
 		

@@ -112,20 +112,22 @@ public class RegionDAO {
 
 					// Add some more lands to region
 					List<Land> list4 = MyFactory.getLandDAO().getBotNewLand(land3);
-					Land land4 = MyRandom.nextLand(list4);
-					if (land4 != null) {
-						land4.setPlayer(player);
-						region.getLands().add(land4);
-						
-						Soldier soldier4 = new Soldier(SoldierEnum.PAWN, player, land4);
-						if (!player.isBot()) {
-							soldier4.setEnabled(true);
+					for (int i=0; i<(Constants.START_LANDS-1); i++) {					
+						Land land4 = MyRandom.nextLand(list4);
+						if (land4 != null) {
+							land4.setPlayer(player);
+							region.getLands().add(land4);
+							
+							if (i==1) {
+								Soldier soldier4 = new Soldier(SoldierEnum.PAWN, player, land4);
+								if (!player.isBot()) {
+									soldier4.setEnabled(true);
+								}								
+								land4.setSoldier(soldier4);
+								//log.info("New "+soldier4.getType()+" [x="+land4.getX()+"|y="+land4.getY()+"|regionId="+region.getId()+"] created!");
+							}							
 						}
-						land4.setSoldier(soldier4);
-						
-						//log.info("New "+soldier4.getType()+" [x="+land4.getX()+"|y="+land4.getY()+"|regionId="+region.getId()+"] created!");
 					}
-
 					done = true;
 				}
 			}

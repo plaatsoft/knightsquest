@@ -183,9 +183,6 @@ public class  SoldierDAO {
 						
 						if (attackStrength>defendStrength) {
 							
-							if ((land2.getBuilding()!=null) && (land2.getBuilding().getType()==BuildingEnum.HABOR)) {
-								land2 = MyFactory.getBuildingDAO().getFreeHabor(land2);
-							}
 							
 							MyFactory.getLandDAO().moveSoldier(land1, land2);							
 							return;
@@ -193,12 +190,7 @@ public class  SoldierDAO {
 							
 					} else {
 						
-						/* Enemy land is unprotected */
-						
-						if ((land2.getBuilding()!=null) && (land2.getBuilding().getType()==BuildingEnum.HABOR)) {
-							land2 = MyFactory.getBuildingDAO().getFreeHabor(land2);
-						}
-						
+						/* Enemy land is unprotected */						
 						MyFactory.getLandDAO().moveSoldier(land1, land2);
 						return;				
 					}
@@ -210,12 +202,7 @@ public class  SoldierDAO {
 				
 				List <Land> list4 = MyFactory.getLandDAO().getBotNewLand(land1);					
 				Land land4 = MyRandom.nextLand(list4);
-				if (land4!=null) {			
-					
-					if ((land4.getBuilding()!=null) && (land4.getBuilding().getType()==BuildingEnum.HABOR)) {
-						land4 = MyFactory.getBuildingDAO().getFreeHabor(land4);
-					}
-					
+				if (land4!=null) {							
 					MyFactory.getLandDAO().moveSoldier(land1, land4);											
 					return;
 				}
@@ -226,12 +213,7 @@ public class  SoldierDAO {
 				
 				List <Land> list6 = MyFactory.getLandDAO().getBotOwnLand(land1);	
 				Land land6 = MyRandom.nextLand(list6);
-				if (land6!=null) {
-					
-					if ((land6.getBuilding()!=null) && (land6.getBuilding().getType()==BuildingEnum.HABOR)) {
-						land6 = MyFactory.getBuildingDAO().getFreeHabor(land6);
-					}
-					
+				if (land6!=null) {					
 					MyFactory.getLandDAO().moveSoldier(land1, land6);
 					return;
 				}		

@@ -54,4 +54,5 @@ public class Constants {
 	public final static int MAX_PLAYERS = 6;
 	public final static int MAX_HABORS = 10;
 	public final static int START_TOWERS = 2;	
+	public final static int START_LANDS = 3;
 }

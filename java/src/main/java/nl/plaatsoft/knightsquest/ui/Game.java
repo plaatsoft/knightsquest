@@ -268,7 +268,7 @@ public class Game extends StackPane {
 		}
 		
 		/* Create Habors */
-		MyFactory.getBuildingDAO().createHabors();
+		MyFactory.getBuildingDAO().createHarbors();
 		
 		redraw();
 		drawPlayerScore();

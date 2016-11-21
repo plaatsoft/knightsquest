@@ -23,7 +23,7 @@ package nl.plaatsoft.knightsquest.model;
 
 public enum BuildingEnum {
 
-	HABOR(1);
+	HARBOR(1);
 	
 	private final int value;
 	

@@ -26,7 +26,7 @@ public class BuildingDAO {
 		
 		switch(type) {
 	
-			case HABOR: 
+			case HARBOR: 
 				return habor;
 				
 			default:
@@ -34,8 +34,28 @@ public class BuildingDAO {
 		}
 	}
 	
+	private boolean checkHarborDistance(Land land) {
+		
+		/* Check if distance between two habors is at least to land segments */
+		
+		if ((land.getBuilding()!=null) && (land.getBuilding().getType()==BuildingEnum.HARBOR)) {				
+		 	 return false;
+		}
+				
+		List <Land> list1 = MyFactory.getLandDAO().getNeigbors2(land);
+		
+		Iterator<Land> iter1 = list1.iterator();
+						
+		while (iter1.hasNext()) {				
+			Land land1 = (Land) iter1.next();
+			if ((land1.getBuilding()!=null) && (land1.getBuilding().getType()==BuildingEnum.HARBOR)) {				
+			 	 return false;
+			}
+		}	
+		return true;
+	}
 	
-	public void createHabors() {
+	public void createHarbors() {
 				
 		List <Land> list2 = new ArrayList<Land>();
 		
@@ -55,11 +75,11 @@ public class BuildingDAO {
 			
 			while (!created) {
 				Land land = MyRandom.nextLand(list2);
-				if (land.getBuilding()==null) {
-					
-					Building building = new Building(BuildingEnum.HABOR, land);
+				if (checkHarborDistance(land)) {
+										
+					Building building = new Building(BuildingEnum.HARBOR, land);
 					land.setBuilding(building);
-					log.info("create ["+land.getX()+","+land.getY()+"]");
+					//log.info("create ["+land.getX()+","+land.getY()+"]");
 					
 					buildings.add(land);		
 					
@@ -69,23 +89,19 @@ public class BuildingDAO {
 		}			
 	}
 	
-	public Land getFreeHabor(Land land) {
+	public List<Land> getFreeHarbor(Land land) {
 				
 		List <Land> list2 = new ArrayList<Land>();
 		
 		Iterator<Land> iter1 = buildings.iterator();			
 		while (iter1.hasNext()) {				
 			Land land1 = (Land) iter1.next();
-			if (land1.getSoldier()==null) {
+			if ((land1.getSoldier()==null) || (land.getSoldier().getType().getValue()>land1.getSoldier().getType().getValue())) {
 				list2.add(land1);
 			}
 		}
-		
-		if (list2.size()>0) {
-			land = MyRandom.nextLand(list2);
-		}
-		
-		return land;
+			
+		return list2;
 	}
 			
 

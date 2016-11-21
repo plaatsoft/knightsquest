@@ -199,11 +199,11 @@ public class LandDAO {
 	
 	public void moveSoldier(Land source, Land destination) {
 		
+		log.info("Move soldier ["+source.getX()+","+source.getY()+"]->["+destination.getX()+","+destination.getY()+"]");
+		
 		Region srcRegion = MyFactory.getRegionDAO().getRegion(source);
 		Region dstRegion = MyFactory.getRegionDAO().getRegion(destination);
-		
-		//log.info("Move soldier ["+source.getX()+","+source.getY()+"]->["+destination.getX()+","+destination.getY()+"]");
-		
+				
 		if ( (destination.getSoldier()!=null) && (destination.getPlayer()!=null) && destination.getPlayer().equals(source.getPlayer())) {
 			
 			// Soldier upgrade			
@@ -287,6 +287,12 @@ public class LandDAO {
 				
 		List <Land> list1;
 		
+		// Target land is owner by bot but soldier is less strong
+		if ((land.getPlayer()!=null) && (!land.getPlayer().equals(land.getPlayer())) && (land.getSoldier()!=null) && 
+	    		 (land.getSoldier().getType().getValue()<land.getSoldier().getType().getValue())) {
+			 land.setDestination(true);
+		}
+		 		 
 		if (land.getSoldier().getType()==SoldierEnum.PAWN) {
 			// Pawn can move to two land tills per turn
 			list1 = getNeigbors2(land);
@@ -306,7 +312,7 @@ public class LandDAO {
 						continue;
 					}
 				}
-				
+							 
 				// Target land is free
 				if (land1.getPlayer()==null) {
 					 land1.setDestination(true);
@@ -324,14 +330,17 @@ public class LandDAO {
 					 land1.setDestination(true);
 					 continue;
 				 }
-				 
-				 // Target land is owner by bot but soldier is less strong
-				 if ((land1.getPlayer()!=null) && (!land1.getPlayer().equals(land.getPlayer())) && (land1.getSoldier()!=null) && 
-			    		 (land1.getSoldier().getType().getValue()<land.getSoldier().getType().getValue())) {
-					 land1.setDestination(true);
-					 continue;
-				 }
 				 				 
+				 /* If source land is harbor get all free ports */
+				 if ((land.getBuilding()!=null) && (land.getBuilding().getType()==BuildingEnum.HARBOR)) {
+					 
+					 Iterator<Land> iter2 = MyFactory.getBuildingDAO().getFreeHarbor(land).iterator();
+					 while (iter2.hasNext()) {				
+						 Land land2 = (Land) iter2.next();
+						 land2.setDestination(true);						
+					 }						
+				 }
+									 				 
 				 // Target land is owned, Pawn soldier available and there is food available for upgrade. 
 				 Region region = MyFactory.getRegionDAO().getRegion(land);
 				 SoldierEnum nextType = MyFactory.getSoldierDAO().upgrade(land.getSoldier().getType());	
@@ -377,49 +386,52 @@ public class LandDAO {
 		}	
 	}
 	
-	public void doPlayerActions(Land land3, Player player) {
+	private Land getSourceLand() {
+		
+		/* Return selected source land. Total map scan needed else harbors will not work */
+		for (int x=0; x<Constants.SEGMENT_X; x++) {
+			for (int y=0; y<Constants.SEGMENT_Y; y++) {			
+				if (lands[x][y].isSource()){
+					return lands[x][y];
+				}
+			}
+		}
+		return null;			
+	}
+				
+	public void doPlayerActions(Land land, Player player) {
 	
-		if (land3.isDestination()) {
+		if (land.isDestination()) {
 						
 			// Search source land
-			List <Land> list1 = getNeigbors2(land3);
-			Iterator<Land> iter1 = list1.iterator();						
-			while (iter1.hasNext()) {			
-				Land land2 = (Land) iter1.next();	
-				if (land2.isSource()) {
-				
-					if (land2.getSoldier().getType()==SoldierEnum.TOWER) { 
+			Land source = getSourceLand();
+			if (source!=null) {				
+				if (source.getSoldier().getType()==SoldierEnum.TOWER) { 
 													
-						createSoldier(land2, land3);
+					createSoldier(source, land);
 						
-					} else {
-					
-						if ((land3.getBuilding()!=null) && (land3.getBuilding().getType()==BuildingEnum.HABOR)) {
-							land3 = MyFactory.getBuildingDAO().getFreeHabor(land3);
-						}
-						
-						moveSoldier(land2, land3);
-					}
-					
-					/* Rebuild all regions */
-					int regions = MyFactory.getRegionDAO().detectedRegions();		
-					MyFactory.getRegionDAO().rebuildRegions(regions);	
-					break;
+				} else {
+										
+					moveSoldier(source, land);
 				}
+					
+				/* Rebuild all regions */
+				int regions = MyFactory.getRegionDAO().detectedRegions();		
+				MyFactory.getRegionDAO().rebuildRegions(regions);	
 			}	
 			
 			resetSelected();
 			
 		} else {
 						
-			if ( (land3.getPlayer()!=null) && 
-			     (land3.getPlayer().equals(player)) && 
-				 (land3.getSoldier()!=null) && 
-				 land3.getSoldier().isEnabled() &&			     
-				 (land3.getSoldier().getType()!=SoldierEnum.CROSS))
+			if ( (land.getPlayer()!=null) && 
+			     (land.getPlayer().equals(player)) && 
+				 (land.getSoldier()!=null) && 
+				  land.getSoldier().isEnabled() &&			     
+				 (land.getSoldier().getType()!=SoldierEnum.CROSS))
 			{		
 				
-				if (land3.isSource()) {
+				if (land.isSource()) {
 				
 					// Deselect soldier
 					resetSelected();
@@ -430,13 +442,13 @@ public class LandDAO {
 					resetSelected();
 					
 					/* Select source */
-					land3.setSource(true);
+					land.setSource(true);
 					
 					/* Select destination */				
-					if (land3.getSoldier().getType()==SoldierEnum.TOWER) {
-						setPlayerNewSoldierDestinations(land3);
+					if (land.getSoldier().getType()==SoldierEnum.TOWER) {
+						setPlayerNewSoldierDestinations(land);
 					} else {
-						setPlayerSoldierMoveDestinations(land3);
+						setPlayerSoldierMoveDestinations(land);
 					}
 				}
 			}

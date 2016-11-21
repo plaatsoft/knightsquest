@@ -105,6 +105,7 @@ public class PlayerDAO {
 	
 	public Player createPlayer(GraphicsContext gc, int id, Pane pane) {
 			
+		/* Create player, with region / land and one soldier */
 		Boolean bot = true;
 		if (id==1) {
 			bot = false;
@@ -120,10 +121,10 @@ public class PlayerDAO {
 		return player;
 	}
 	
+	
 	public boolean hasPlayerNoMoves(Player player) {
 	
-		int amount=0;
-		
+		/* Check if human player has moves lefts in this turn */
 		Iterator<Region> iter2 = player.getRegion().iterator();  
 		while (iter2.hasNext()) {
 			Region region = (Region) iter2.next();
@@ -133,16 +134,12 @@ public class PlayerDAO {
 				Land land = (Land) iter3.next();
 					
 				if ((land.getSoldier()!=null) && land.getSoldier().isEnabled()) {
-					amount++;
+					return false;
 				}
 			}
 		}
 		
-		log.info("amount="+amount);
-		if (amount==0) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 	
 	public void nextTurn() {
@@ -162,13 +159,8 @@ public class PlayerDAO {
 			while (iter2.hasNext()) {					
 				Region region = (Region) iter2.next();
 				
-				if (!player.isBot()) {
-					
-					// Human Player
-					MyFactory.getSoldierDAO().newSoldierArrive(region);
-				
-				} else {
-					
+				if (player.isBot()) {
+										
 					// Bot player
 					for (int i=0; i<amount; i++) {
 												
@@ -178,7 +170,12 @@ public class PlayerDAO {
 					
 					/* Create bot soldier, if possible */
 					MyFactory.getSoldierDAO().createBotSoldier(region);
-				}
+					
+				} else {
+				
+					// Human Player
+					MyFactory.getSoldierDAO().newSoldierArrive(region);
+				}			
 			}			
 		}
 		
