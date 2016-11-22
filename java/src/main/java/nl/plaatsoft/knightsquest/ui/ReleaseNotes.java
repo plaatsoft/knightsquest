@@ -40,16 +40,17 @@ public class ReleaseNotes extends MyPanel {
 
 	private static String[] version = {
 
-			"20-11-2016 (Version 0.3)\n" 
+			"22-11-2016 (Version 0.3)\n" 
 					+ "- Added 3 screen resolutions.\n"
+					+ "- Increase amount of maps to 60.\n"
+					+ "- Improve game play. Now maps must be unlocked.\n"
 					+ "- Added pawn can now move two land tills per turn.\n"
-					+ "- Added setting to select amount of players.\n"
-					+ "- Added harbors to soldier can travel faster.\n"
-					+ "- Store settings to disk.\n"
+					+ "- Added harbors to soldiers can travel faster.\n"
+					+ "- Game settings and progress are now stored on disk.\n"
 					+ "- Bugfix: Now second game initialization is working fine.\n"
 					+ "- Bugfix: Now next turn detection is working fine\n",
 			
-			"18-11-2016 (Version 0.2 Beta)\n" 					
+			"18-11-2016 (Version 0.2)\n" 					
 					+ "- Add information boxes on game screen\n"
 					+ "- Improve bots behalvior\n"
 					+ "- Added new background.\n" 
@@ -58,7 +59,7 @@ public class ReleaseNotes extends MyPanel {
 					+ "- Improve network detection.\n"
 					+ "- Add setting option to switch off the music.\n",
 
-			"12-11-2016 (Version 0.1 Beta)\n" 
+			"12-11-2016 (Version 0.1)\n" 
 					+ "- Added basic game engine (only bot mode for now).\n" 
 					+ "- Added six maps.\n"
 					+ "- Added intro background music.\n" 

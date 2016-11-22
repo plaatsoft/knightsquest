@@ -28,10 +28,17 @@ import nl.plaatsoft.knightsquest.model.Land;
 
 public class MyRandom {
 	
-	private static int seed;	
 	private static Random rnd;
 	
+	public static void clear() {
+		rnd=null;
+	}
+	
 	public static int nextInt(int value) {
+		
+		if (rnd==null) {
+			rnd = new Random(MyData.getSeed());
+		}
 		return rnd.nextInt(value);
 	}
 	
@@ -43,14 +50,5 @@ public class MyRandom {
 			land = list.get(rnd.nextInt(list.size()));
 		}
 		return land;
-	}
-
-	public static int getSeed() {
-		return seed;
-	}
-
-	public static void setSeed(int seed1) {
-		seed = seed1;
-		rnd = new Random(seed1);
 	}
 }

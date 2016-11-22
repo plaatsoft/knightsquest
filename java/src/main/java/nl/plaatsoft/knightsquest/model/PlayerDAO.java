@@ -19,6 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 package nl.plaatsoft.knightsquest.model;
 
 import java.util.ArrayList;
@@ -30,9 +31,8 @@ import org.apache.log4j.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-
+import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
-import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class PlayerDAO {
 
@@ -52,27 +52,27 @@ public class PlayerDAO {
 		
 		switch(player) {
 		
-			case 1: // Player 1
+			case 0: // Player 1
 					gc.setFill(Color.YELLOW);
 					break;
 				
-			case 2: // Player 2
+			case 1: // Player 2
 					gc.setFill(Color.RED);
 					break;
 			
-			case 3: // Player 3
+			case 2: // Player 3
 					gc.setFill(Color.CYAN);
 					break;
 		
-			case 4: // Player 4
+			case 3: // Player 4
 					gc.setFill(Color.MAGENTA);
 					break;
 					
-			case 5: // Player 5
+			case 4: // Player 5
 					gc.setFill(Color.BROWN);
 					break;
 					
-			case 6: // Player 6
+			case 5: // Player 6
 					gc.setFill(Color.LIGHTBLUE);
 					break;
 		}		
@@ -82,22 +82,22 @@ public class PlayerDAO {
 		
 		switch(player) {
 		
-			case 1: // Player 1
+			case 0: // Player 1
 					return "yellow";
 
-			case 2: // Player 2
+			case 1: // Player 2
 					return "red";
 			
-			case 3: // Player 3
+			case 2: // Player 3
 					return "cyan";
 		
-			case 4: // Player 4
+			case 3: // Player 4
 					return "magenta";
 					
-			case 5: // Player 5
+			case 4: // Player 5
 					return "brown";
 					
-			case 6: // Player 6
+			case 5: // Player 6
 					return "lightblue";
 		}		
 		return "";
@@ -107,16 +107,16 @@ public class PlayerDAO {
 			
 		/* Create player, with region / land and one soldier */
 		Boolean bot = true;
-		if (id==1) {
+		if (id==0) {
 			bot = false;
 		}
 		
 		Player player = new Player(id, bot);
 		MyFactory.getPlayerDAO().getPlayers().add(player);
 		
-		for (int i=1; i<=Constants.START_TOWERS; i++) {
+		for (int i=0; i<MyData.getTowers(); i++) {
 						
-			MyFactory.getRegionDAO().createStartRegion(i, player, pane);		
+			MyFactory.getRegionDAO().createStartRegion(i+1, player, pane);		
 		}				
 		return player;
 	}

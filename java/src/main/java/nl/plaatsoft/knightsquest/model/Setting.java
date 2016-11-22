@@ -29,11 +29,28 @@ public class Setting implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private double x = 0;
-	private double y = 0;
-	private boolean musicOn = true;
-	private String resolution = "640x480";
-	private int amountOfPlayers = Constants.MAX_PLAYERS;
+	private double x;
+	private double y;
+	private boolean musicOn;
+	private String resolution;
+	private Boolean mapUnlocked[] = new Boolean[Constants.MAX_LEVELS*10];
+	private int[] score = new int[Constants.MAX_LEVELS*10];
+		
+	public Setting() {		
+		x = 0;
+		y = 0;		
+		musicOn = true;		
+		resolution = "640x480";
+					
+		for(int i=0; i<(Constants.MAX_LEVELS*10); i++) {
+			mapUnlocked[i]=new Boolean(false);
+		}
+		mapUnlocked[1]= new Boolean(true);		
+		
+		for(int i=0; i<(Constants.MAX_LEVELS*10); i++) {
+			score[i]=new Integer(0);
+		}
+	}
 
 	public int getWidth() {
 				
@@ -81,14 +98,6 @@ public class Setting implements Serializable {
 		this.y = y;
 	}
 
-	public int getAmountOfPlayers() {
-		return amountOfPlayers;
-	}
-
-	public void setAmountOfPlayers(int amountOfPlayers) {
-		this.amountOfPlayers = amountOfPlayers;
-	}
-
 	public String getResolution() {
 		return resolution;
 	}
@@ -103,5 +112,21 @@ public class Setting implements Serializable {
 
 	public void setMusicOn(boolean musicOn) {
 		this.musicOn = musicOn;
+	}
+
+	public Boolean getMapUnlocked(int map) {
+		return mapUnlocked[map];
+	}
+
+	public void setMapUnlocked(int map, Boolean value) {
+		mapUnlocked[map] = value;
+	}
+	
+	public Integer getScore(int map) {
+		return score[map];
+	}
+	
+	public void setScore(int map, int value) {
+		score[map] = value;
 	}
 }

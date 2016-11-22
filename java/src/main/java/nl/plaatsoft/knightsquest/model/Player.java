@@ -26,11 +26,18 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Player {
-	
+
+	// Player Generic 
 	private int id;				
 	private boolean bot = false;
 	private List <Region> region = new ArrayList<Region>();
 
+	// Player Statistics
+	private int conquer=0;
+	private int upgrades=0;
+	private int moves=0;
+	private int creates=0;
+		
 	public Player(int id, boolean bot) {
 		this.bot = bot;
 		this.id = id;
@@ -70,5 +77,37 @@ public class Player {
 
 	public void setBot(boolean bot) {
 		this.bot = bot;
+	}	
+	
+	public int getUpgrades() {
+		return upgrades;
+	}
+
+	public void setUpgrades(int upgrades) {
+		this.upgrades = upgrades;
+	}
+
+	public int getMoves() {
+		return moves;
+	}
+
+	public void setMoves(int moves) {
+		this.moves = moves;
+	}
+
+	public int getCreates() {
+		return creates;
+	}
+
+	public void setCreates(int creates) {
+		this.creates = creates;
+	}
+
+	public int getConquer() {
+		return conquer;
+	}
+
+	public void setConquer(int conquer) {
+		this.conquer = conquer;
 	}	
 }

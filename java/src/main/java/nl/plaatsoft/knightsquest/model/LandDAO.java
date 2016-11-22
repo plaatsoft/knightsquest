@@ -297,8 +297,12 @@ public class LandDAO {
 				// Not enough food, so skip upgrade.
 				return;
 			}
+			
+			source.getPlayer().setUpgrades(source.getPlayer().getUpgrades()+1);
 			source.getSoldier().setType(nextType);
 		}
+		
+		source.getPlayer().setMoves(source.getPlayer().getMoves()+1);
 		
 		destination.setSoldier(source.getSoldier());
 		destination.setPlayer(source.getPlayer());		
@@ -309,6 +313,7 @@ public class LandDAO {
 				
 		// Remove land from old region		
 		if (dstRegion!=null) {
+			source.getPlayer().setConquer(source.getPlayer().getConquer()+1);
 			dstRegion.getLands().remove(destination);
 		}
 		
@@ -322,7 +327,7 @@ public class LandDAO {
 		Region dstRegion = MyFactory.getRegionDAO().getRegion(destination);
 		
 		Soldier soldier = new Soldier(SoldierEnum.PAWN, source.getPlayer(), destination);
-		
+		source.getPlayer().setCreates(source.getPlayer().getCreates()+1);
 		source.getSoldier().setEnabled(false);
 		
 		destination.setSoldier(soldier);
@@ -784,9 +789,9 @@ public class LandDAO {
 	}
 	
 	
-	private void createGrass() {
+	private void createGrass(int level) {
 						
-		for (int i=0; i<(Constants.SEGMENT_X/5); i++) {
+		for (int i=0; i<level; i++) {
 			
 			int x = MyRandom.nextInt(Constants.SEGMENT_X);
 			int y = MyRandom.nextInt(Constants.SEGMENT_Y);
@@ -816,7 +821,7 @@ public class LandDAO {
 		}
 	}
 	
-	public void createMap(GraphicsContext gc, int size) {
+	public void createMap(GraphicsContext gc, int size, int level) {
 					
 		for (int x=0; x<Constants.SEGMENT_X; x++) {	
 			for (int y=0; y<Constants.SEGMENT_Y; y++) {
@@ -824,7 +829,7 @@ public class LandDAO {
 			}
 		}
 		
-		createGrass();
+		createGrass(level);
 		createCoast();	
 		createWater();
 		createForestMountain();
@@ -842,6 +847,4 @@ public class LandDAO {
 	public Land[][] getLands() {
 		return lands;
 	}	
-	
-
 }

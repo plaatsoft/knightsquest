@@ -19,6 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 package nl.plaatsoft.knightsquest.ui;
 
 import javafx.concurrent.Task;
@@ -144,28 +145,7 @@ public class Settings extends MyPanel {
 		
 		y+=30;
 		getChildren().add(new MySwitch(x1-10,y));	
-		
-		 /* --------------------------------------- */
-		
-		y-=30;
-		
-		getChildren().add (new MyLabel(x2, y, "AmountOfPlayers", 20));
-		
-		y+=30;
-		
-		String[] options1 = {"3", "4", "5", "6"};		
-		MyComboBox comboBox2 = new MyComboBox(x2+40,y, ""+MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(), options1);		
-        getChildren().add(comboBox2);
-        
-        comboBox2.setOnAction(new EventHandler<ActionEvent>() { 
-        	public void handle(ActionEvent event) {
-        		String value =  comboBox2.getSelectionModel().getSelectedItem().toString();
-        		int amount = Integer.parseInt(value);
-        		MyFactory.getSettingDAO().getSettings().setAmountOfPlayers(amount);
-        		MyFactory.getSettingDAO().save();
-        	}
-        });
-        
+		        
         /* --------------------------------------- */
         
         y-=30;     

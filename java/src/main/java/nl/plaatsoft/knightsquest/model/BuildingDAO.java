@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
 import org.apache.log4j.Logger;
 
 import javafx.scene.image.Image;
+import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 import nl.plaatsoft.knightsquest.ui.Constants;
@@ -69,7 +71,7 @@ public class BuildingDAO {
 			}			
 		}
 						
-		for (int i=0; i<Constants.MAX_HABORS; i++) {
+		for (int i=0; i<MyData.getHarbors(); i++) {
 					
 			boolean created = false;
 			

@@ -23,6 +23,7 @@ package nl.plaatsoft.knightsquest.ui;
 
 import org.apache.log4j.Logger;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -35,95 +36,174 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
+import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
-import nl.plaatsoft.knightsquest.tools.MyRandom;
 
 public class MapSelector extends MyPanel {
 
 	final static Logger log = Logger.getLogger(MapSelector.class);
-			
+	
+	private int level = 0;			
+	private static MyLabel[] label1 = new MyLabel[6];
+	private static MyLabel[] label2 = new MyLabel[6];	
+	private static MyImageView[] image = new MyImageView[6];	
 	private static GraphicsContext[] gc = new GraphicsContext[6];
-	private static int seed[] = { 17, 3, 4, 9, 7, 18};
-
-	private void createMap(GraphicsContext gc, int seed, int size) {
 		
-		MyRandom.setSeed(seed);
-		MyFactory.getLandDAO().createMap(gc, size);
+	private void createMap(GraphicsContext gc, int map) {
+				
+		int size=3;		
+		if (MyFactory.getSettingDAO().getSettings().getWidth()==800) {			
+			size=4;			
+		} else if (MyFactory.getSettingDAO().getSettings().getWidth()==1024) {			
+			size=5;
+		}
+		
+		MyData.setLevel(level);
+		MyData.setMap(map);
+		
+		MyFactory.getLandDAO().createMap(gc, size, level+1);
 		MyFactory.getLandDAO().draw();
+		
+		gc.getCanvas().setOnMousePressed(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent me) {
+				
+				if (MyFactory.getSettingDAO().getSettings().getMapUnlocked(map)) {
+					MyData.setLevel(level);
+					MyData.setMap(map);
+					Navigator.go(Navigator.GAME);
+				}
+			}
+		});
+	}
+	
+	private void createMaps(int page) {
+		for (int i=0; i<6; i++) {
+			
+			int map = (level*10)+i+1;
+			createMap(gc[i], map);	
+			label1[i].setText(""+map);
+						
+			if (MyFactory.getSettingDAO().getSettings().getMapUnlocked(map)) {
+				label2[i].setText("Score "+MyFactory.getSettingDAO().getSettings().getScore(map));
+				image[i].setVisible(false);				
+			} else {				
+				
+				image[i].setVisible(true);
+			}
+		}
 	}
 
-	private void createCanvas(int id, int x, int y, int size, final int seed) {
+	private void createCanvas(int id, int x, int y, int size) {
 
-		Canvas canvas = new Canvas((Constants.SEGMENT_X * size * 4.5),(Constants.SEGMENT_Y * size * 2));
+		Canvas canvas = new Canvas((Constants.SEGMENT_X * size * 4),(Constants.SEGMENT_Y * size));
 		canvas.setLayoutX(x);
 		canvas.setLayoutY(y);
+		
+		int height = Constants.SEGMENT_Y * size;
 
 		gc[id] = canvas.getGraphicsContext2D();
 		getChildren().add(canvas);
-
-		canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent me) {
-
-				MyRandom.setSeed(seed);
-				Navigator.go(Navigator.GAME);
-			}
-		});
-
+		
+		label1[id] = new MyLabel(x+10,y+5,"", 36);
+		getChildren().add(label1[id]);		
+		
+		label2[id] = new MyLabel(x+10,y+height-30,"", 20);
+		getChildren().add(label2[id]);		
+		
+		image[id] = new MyImageView(x+30,y+15,"images/unlock.png", canvas.getWidth()-30, canvas.getHeight()-30);
+		getChildren().add(image[id]);	
 	}
 
-	public void draw() {
-
+	private void drawCanvas() {
+				
 		int size=3;
 		int offsetX = 200;
 		int offsetY = 150;
+		int startY = 100;
 		
 		if (MyFactory.getSettingDAO().getSettings().getWidth()==800) {
 			
 			size=4;
+			startY = 120;
 			offsetX = 250;
 			offsetY = 200;
 			
 		} else if (MyFactory.getSettingDAO().getSettings().getWidth()==1024) {
 			
 			size=5;
+			startY = 140;
 			offsetX = 325;
 			offsetY = 250;	
 		}
+		
+		int y = startY;		
+		int x = 30;		
+		
+		createCanvas(0, x, y, size);
+		
+		x += offsetX;
+		createCanvas(1, x, y, size);
 				
+		x += offsetX;
+		createCanvas(2, x, y, size);
+		
+		y += offsetY+10;
+
+		x = 30;
+		createCanvas(3, x, y, size);
+		
+		x += offsetX;
+		createCanvas(4, x, y, size);
+		
+		x += offsetX;
+		createCanvas(5, x, y, size);		
+	}
+	
+	@SuppressWarnings("unused")
+	public void draw() {
+		
 		Image image1 = new Image("images/background4.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
-		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT,
-				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+		BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
 		setBackground(new Background(backgroundImage));
 
-		int y = 20;
-		int x;
-		getChildren().add(new MyLabel(0, y, "Map Selector", 50, "white", "-fx-font-weight: bold;"));
-
-		y += 90;
+		getChildren().add(new MyLabel(0, 20, "Map Selector", 50, "white", "-fx-font-weight: bold;"));
+		drawCanvas();
+		createMaps(level);
+				
+		MyButton close = new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME);
+		getChildren().add(close);
 		
-		x = 25;
-		createCanvas(0, x, y, size, seed[0]);
-		x += offsetX;
-		createCanvas(1, x, y, size, seed[1]);
-		x += offsetX;
-		createCanvas(2, x, y, size, seed[2]);
+		if (Constants.MAX_LEVELS>1) {
+			MyButton prev= new MyButton(close.getLayoutX()-70, close.getLayoutY(), "<", 18, Navigator.NONE);
+			prev.setPrefWidth(50);
+			prev.setOnAction(new EventHandler<ActionEvent>() { 
+				public void handle(ActionEvent event) {
+					if (level>0) {
+						level--;
+					}
+					createMaps(level);
+				}
+			});
 		
-		y += offsetY;
-
-		x = 25;
-		createCanvas(3, x, y, size, seed[3]);
-		x += offsetX;
-		createCanvas(4, x, y, size, seed[4]);
-		x += offsetX;
-		createCanvas(5, x, y, size, seed[5]);
-
-		for (int i = 0; i < 6; i++) {
-			createMap(gc[i], seed[i], size);						
+			getChildren().add(prev);
 		}
-
-		getChildren().add(new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME));
+		
+		if (Constants.MAX_LEVELS>1) {
+			MyButton next= new MyButton(close.getLayoutX()+200, close.getLayoutY(), ">", 18, Navigator.NONE);
+			next.setPrefWidth(50);
+			next.setOnAction(new EventHandler<ActionEvent>() { 
+				public void handle(ActionEvent event) {
+					if (level<(Constants.MAX_LEVELS-1)) {
+						level++;
+					}
+					createMaps(level);
+				}
+			});
+			getChildren().add(next);
+		}
 	}
 }

@@ -31,7 +31,7 @@ public class MyLabel extends Label {
 
 	final static Logger log = Logger.getLogger( MyLabel.class);
 	
-	public MyLabel(int x, int y, String value, int fontSize, String color, String options) {
+	public MyLabel(double x, double y, String value, int fontSize, String color, String options) {
         
 		setText(value);		
 		setWrapText(true);
@@ -49,7 +49,7 @@ public class MyLabel extends Label {
 		setLayoutY(y);
 	}	
 	
-	public MyLabel(int x, int y, String value, int fontSize, String color) {
+	public MyLabel(double x, double y, String value, int fontSize, String color) {
 		        
 		setText(value);		
 		setWrapText(true);
@@ -67,7 +67,7 @@ public class MyLabel extends Label {
 		setLayoutY(y);
 	}	
 	
-	public MyLabel(int x, int y, String value, int fontSize) {
+	public MyLabel(double x, double y, String value, int fontSize) {
         
 		setText(value);		
 		setWrapText(true);

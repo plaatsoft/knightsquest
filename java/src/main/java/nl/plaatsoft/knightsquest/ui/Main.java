@@ -19,6 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 package nl.plaatsoft.knightsquest.ui;
 
 import javax.swing.JOptionPane;
@@ -54,8 +55,7 @@ public class Main extends Application {
 		primaryStage.setHeight(MyFactory.getSettingDAO().getSettings().getHeight()+20);       	
 		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("images/logo3.png"));
-				
-		
+						
         if (MyFactory.getSettingDAO().getSettings().getX()!=0) {
                primaryStage.setX(MyFactory.getSettingDAO().getSettings().getX());
                primaryStage.setY(MyFactory.getSettingDAO().getSettings().getY());

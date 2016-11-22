@@ -34,11 +34,11 @@ public class SettingDAO {
 	private final static Logger log = Logger.getLogger(SettingDAO.class.getName());
 
 	private static Setting settings = new Setting();
-	private static String filename = "KnightsQuest.dat";
+	private static String filename = System.getProperty("user.home")+"/KnightsQuest.dat";
 
 	public void save() {
 
-		log.info("save current window position");
+		log.info("save settings "+filename);
 
 		FileOutputStream fos;
 		try {
@@ -53,7 +53,7 @@ public class SettingDAO {
 
 	public void load() {
 
-		log.info("load previous window position");
+		log.info("load settings "+filename);
 
 		try {
 			FileInputStream fis = new FileInputStream(filename);

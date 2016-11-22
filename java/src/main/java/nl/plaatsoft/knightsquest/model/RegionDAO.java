@@ -19,6 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 package nl.plaatsoft.knightsquest.model;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import nl.plaatsoft.knightsquest.model.LandEnum;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
+import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 import nl.plaatsoft.knightsquest.ui.Constants;
@@ -97,22 +99,19 @@ public class RegionDAO {
 
 					// Place Tower
 					Soldier soldier3 = new Soldier(SoldierEnum.TOWER, player, land3);		
-					land3.setSoldier(soldier3);
-					
+					land3.setSoldier(soldier3);					
 					//log.info("New "+soldier3.getType()+" [x="+land3.getX()+"|y="+land3.getY()+"] created!");
 
 					// Create new region
 					region = new Region(player.getId(), player);
 					region.getLands().add(land3);
-					// log.info("New Region
-					// [id="+region.getId()+"|playerId="+player.getId()+"]
-					// created!");
+					// log.info("New Region [id="+region.getId()+"|playerId="+player.getId()+"] created!");
 
 					player.getRegion().add(region);
 
 					// Add some more lands to region
 					List<Land> list4 = MyFactory.getLandDAO().getBotNewLand(land3);
-					for (int i=0; i<(Constants.START_LANDS-1); i++) {					
+					for (int i=0; i<(MyData.getLands()-1); i++) {					
 						Land land4 = MyRandom.nextLand(list4);
 						if (land4 != null) {
 							land4.setPlayer(player);

@@ -49,9 +49,9 @@ import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.model.Score;
 import nl.plaatsoft.knightsquest.tools.MyButton;
+import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
-import nl.plaatsoft.knightsquest.tools.MyRandom;
 
 public class Game extends StackPane {
 
@@ -59,7 +59,7 @@ public class Game extends StackPane {
 
 	private GraphicsContext gc;
 	private Canvas canvas;
-	private static Player[] players = new Player[Constants.MAX_PLAYERS+1];
+	private static Player[] players;
 	private Pane pane2; 
 	private double offsetX = 0;
 	private double offsetY = 0;
@@ -69,7 +69,9 @@ public class Game extends StackPane {
 	private Task<Void> task;	
 	private static MyLabel label1;
 	private static MyLabel label2;
-	private static MyLabel[] label3 = new MyLabel[Constants.MAX_PLAYERS+1];
+	private static MyLabel label3;
+	private static MyLabel label4;
+	private static MyLabel[] label5;
 	
 	public void redraw() {
 		
@@ -77,7 +79,7 @@ public class Game extends StackPane {
 		
 		MyFactory.getLandDAO().draw();
 		
-		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {
+		for (int i=0; i <MyData.getPlayers(); i++) {
 			players[i].draw();
 		}
 	}
@@ -98,23 +100,58 @@ public class Game extends StackPane {
 		   
 		return rank;
 	}
-	
-	public static boolean checkGameOver1() {
 		
-		if (players[1].getRegion().size()>0) {
-			return false;
+	public int calculateScore(Player player, boolean won) {
+		
+		int score = 0;
+				
+		if (won) {
+			score += 1000;
+		}
+		
+		int tmp = (100-turn) * 5;
+		if (tmp>0) {
+			score+=tmp;
+		}
+		
+		log.info("turn="+turn);
+		log.info("moves="+player.getMoves());
+		log.info("creates="+player.getCreates());
+		log.info("conquer="+player.getConquer());
+		log.info("upgrade="+player.getUpgrades());
+		
+		score += player.getMoves();
+		score += player.getCreates()*2;		
+		score += player.getConquer()*5;
+		score += player.getUpgrades()*10;
+		
+		log.info("score="+score);
+		
+		storeScore(score, MyData.getMap());
+		
+		return score;		
+	}
+	
+	public boolean checkGameOver1() {
+		
+		for (int i=0; i<MyData.getPlayers(); i++) {
+			
+			Player player = players[i];
+			if (!player.isBot() && (player.getRegion().size()>0)) {
+				return false;
+			}
 		}
 		
 		label1.setText("Game Over");
-		label2.setText("Bots won!");
+		label2.setText("Computer won");
 		return true;		
 	}
 
-	public static boolean checkGameOver2() {
+	public boolean checkGameOver2() {
 
 		int count=0;
 
-		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {
+		for (int i=0; i<MyData.getPlayers(); i++) {
 			
 			if (players[i].getRegion().size()>0) {
 				count++;
@@ -123,19 +160,40 @@ public class Game extends StackPane {
 				}
 			}
 		}
-						
+		
+		int score=0;
+		
 		label1.setText("Game Over");
-		if (players[1].getRegion().size()>0) {			
-			label2.setText("Player wins!");
+				
+		if (players[0].getRegion().size()>0) {
+			
+			label2.setText("Player won");			
+			score = calculateScore(players[0],true);
+			
+			// Next map is unlocked!
+			int nextMap = MyData.getNextMap(MyData.getMap());
+			if ((nextMap>0) && (!MyFactory.getSettingDAO().getSettings().getMapUnlocked(nextMap))) {
+				label3.setText("Map "+nextMap+" is now unlocked!");		
+				MyFactory.getSettingDAO().getSettings().setMapUnlocked(MyData.getNextMap(MyData.getMap()), true);
+				
+			}			
+			
 		} else {
-			label2.setText("Bots won!");
+			
+			label2.setText("Computer won");
+			score = calculateScore(players[0],false);			
 		}
+		
+		label4.setText("Total score = "+score);	
+		MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
+		MyFactory.getSettingDAO().save();
+		
 		return true;		
 	}
 		
-	public static void drawPlayerScore() {
+	public void drawPlayerScore() {
 
-		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {
+		for (int i=0; i<MyData.getPlayers(); i++) {
 			
 			int amount = 0; 
 			Iterator<Region> iter2 = players[i].getRegion().iterator();  
@@ -145,14 +203,17 @@ public class Game extends StackPane {
 				amount += region.getLands().size();  
 			}
 			
-			label3[i].setText("Player "+i+" - "+amount);
+			label5[i].setText("Player "+(i+1)+": "+amount);
 		}
 	}
 		
 	public void start() {
-
+		
 		// Clear previous game 
 		MyFactory.clearFactory();
+
+		players = new Player[MyData.getPlayers()];
+		label5 = new MyLabel[MyData.getPlayers()];
 		
 		gameOver = false;
 		turn = 1;
@@ -211,13 +272,13 @@ public class Game extends StackPane {
 		gc = canvas.getGraphicsContext2D();
 		
 		/* create land */
-		MyFactory.getLandDAO().createMap(gc, size);
+		MyFactory.getLandDAO().createMap(gc, size, MyData.getLevel()+1);
 		
 		pane2.getChildren().add(canvas);
 		getChildren().add(pane2);
 		
 		// ------------------------------------------------------ 
-		// CONTROL LAYER 3
+		// Control LAYER 3
 		// ------------------------------------------------------
 			
 		Pane pane3 = new Pane();
@@ -225,13 +286,17 @@ public class Game extends StackPane {
 		pane3.setScaleY(Constants.SCALE);
 		pane3.setId("control");
 						
-		label1 = new MyLabel(0, (MyFactory.getSettingDAO().getSettings().getHeight()/2)-120, "", 80, "white", "-fx-font-weight: bold;");
-		label2 = new MyLabel(0, (MyFactory.getSettingDAO().getSettings().getHeight()/2)-20, "", 60, "white", "-fx-font-weight: bold;");
-				
-		MyButton btn = new MyButton(20,MyFactory.getSettingDAO().getSettings().getHeight()-60, "Turn ["+turn+"]", 18, Navigator.NONE);
+		label1 = new MyLabel(0, (MyFactory.getSettingDAO().getSettings().getHeight()/2)-160, "", 80, "white", "-fx-font-weight: bold;");
+		label2 = new MyLabel(0, (MyFactory.getSettingDAO().getSettings().getHeight()/2)-60, "", 40, "white", "-fx-font-weight: bold;");
+		label3 = new MyLabel(0, (MyFactory.getSettingDAO().getSettings().getHeight()/2), "", 40, "white", "-fx-font-weight: bold;");
+		label4 = new MyLabel(0, (MyFactory.getSettingDAO().getSettings().getHeight()/2)+60, "", 40, "white", "-fx-font-weight: bold;");
+								
+		MyButton btn = new MyButton(10,10, "Exit", 18, Navigator.NONE);
 		btn.setPrefWidth(140);
 		pane3.getChildren().add(label1);
 		pane3.getChildren().add(label2);
+		pane3.getChildren().add(label3);
+		pane3.getChildren().add(label4);
 		
 		// ------------------------------------------------------ 
 		// Player score board
@@ -241,20 +306,20 @@ public class Game extends StackPane {
 		r.setX(MyFactory.getSettingDAO().getSettings().getWidth()-135);
 		r.setY(10);
 		r.setWidth(115);		
-		r.setHeight(MyFactory.getSettingDAO().getSettings().getAmountOfPlayers()*20);
+		r.setHeight(MyData.getPlayers()*20);
 		r.setArcWidth(20);
 		r.setArcHeight(20);
 		r.setFill(Color.rgb(0, 0, 0, 0.7));		
 		pane3.getChildren().add(r);
 		
-		int y=15;
-		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {			
-			label3[i] = new MyLabel(MyFactory.getSettingDAO().getSettings().getWidth()-125, y, "", 15, MyFactory.getPlayerDAO().getColor(i), "-fx-font-weight: bold;");
+		int y=10;
+		for (int i=0; i<MyData.getPlayers(); i++) {			
+			label5[i] = new MyLabel(MyFactory.getSettingDAO().getSettings().getWidth()-125, y, "", 15, MyFactory.getPlayerDAO().getColor(i), "-fx-font-weight: bold;");
 			y+=18;
 		}
 		
-		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {		
-			pane3.getChildren().add(label3[i]);
+		for (int i=0; i<MyData.getPlayers(); i++) {		
+			pane3.getChildren().add(label5[i]);
 		}		
 		pane3.getChildren().add(btn);
 		getChildren().add(pane3);
@@ -263,14 +328,17 @@ public class Game extends StackPane {
 		// Create players
 		// ------------------------------------------------------
 		
-		for (int i = 1; i <= MyFactory.getSettingDAO().getSettings().getAmountOfPlayers(); i++) {
-			players[i] =MyFactory.getPlayerDAO().createPlayer(gc, i, pane2);
+		for (int i=0; i<MyData.getPlayers(); i++) {
+			players[i] = MyFactory.getPlayerDAO().createPlayer(gc, i, pane2);
 		}
 		
-		/* Create Habors */
+		/* Create Harbors */
 		MyFactory.getBuildingDAO().createHarbors();
 		
+		/* Draw everything (map, player, buildings,etc..) */		
 		redraw();
+		
+		/* Draw score board */
 		drawPlayerScore();
 		
 		// ------------------------------------------------------ 
@@ -284,9 +352,9 @@ public class Game extends StackPane {
 				Land land = MyFactory.getLandDAO().getPlayerSelectedLand(offsetX,offsetY);				
 				if (land!=null) {
 					//log.info("land ["+land.getX()+","+land.getY()+" scale="+land.getScale()+"] selected");
-					MyFactory.getLandDAO().doPlayerActions(land, players[1]);
+					MyFactory.getLandDAO().doPlayerActions(land, players[0]);
 										
-					if (MyFactory.getPlayerDAO().hasPlayerNoMoves(players[1])) {
+					if (MyFactory.getPlayerDAO().hasPlayerNoMoves(players[0])) {
 						turn++;
 						btn.setText("Turn ["+turn+"]");
 						MyFactory.getPlayerDAO().nextTurn();
@@ -322,12 +390,15 @@ public class Game extends StackPane {
 		btn.setOnAction(new EventHandler<ActionEvent>() { 
 			public void handle(ActionEvent event) {
 				
+				if (turn==1) {
+					Navigator.go(Navigator.MAP_SELECTOR);
+				}
 				turn++;
 				btn.setText("Turn ["+turn+"]");
 				
 				if (gameOver) {
 					timer.stop();
-					Navigator.go(Navigator.HOME);
+					Navigator.go(Navigator.MAP_SELECTOR);
 					
 				} else {
 					
@@ -335,12 +406,10 @@ public class Game extends StackPane {
 					
 					if (checkGameOver1() || checkGameOver2()) {
 															
-						log.info("game over, player dead");
 						gameOver=true;
-					
-						storeScore(turn, MyRandom.getSeed());
 						
-						// player dead, fight on with the remaining bots
+						
+						// human player dead, fight on with the remaining bots
 						timer.start();
 					}
 				}

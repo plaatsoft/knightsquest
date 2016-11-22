@@ -23,7 +23,6 @@ package nl.plaatsoft.knightquest.model;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import nl.plaatsoft.knightsquest.model.Land;
@@ -32,18 +31,17 @@ import nl.plaatsoft.knightsquest.model.LandEnum;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.SoldierDAO;
-import nl.plaatsoft.knightsquest.tools.MyRandom;
+import nl.plaatsoft.knightsquest.tools.MyData;
 
 public class SoldierDAOTest {
-
-	final private static Logger log = Logger.getLogger(SoldierDAOTest.class);
 		
 	@Test
 	public void test1() {
 		
 		int size = 10;				
 							
-		MyRandom.setSeed(1);
+		MyData.setLevel(1);
+		MyData.setMap(1);
 		
 		LandDAO landDAO = new LandDAO();				
 		Land[][] lands = landDAO.getLands();

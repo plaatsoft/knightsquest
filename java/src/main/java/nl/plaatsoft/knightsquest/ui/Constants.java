@@ -25,13 +25,13 @@ public class Constants {
 
 	public final static String APP_NAME = "KnightsQuest";
 	public final static String APP_VERSION = "0.3";
-	public final static String APP_BUILD = "Build (20-11-2016)";
+	public final static String APP_BUILD = "Build (22-11-2016)";
 	
 	public final static String APP_WS_NAME = "Java-KnightsQuest";
 	public final static String APP_WS_URL = "service.plaatsoft.nl";
 	public final static String APP_DONATE_URL = "http://www.plaatsoft.nl/donate";
 		
-	public final static double SCALE = 1; 
+	public final static int MAX_LEVELS = 10; 	
 	
 	public final static int SEGMENT_SIZE_640 = 10;		
 	public final static double OFFSET_X_640 = 15; 
@@ -47,9 +47,6 @@ public class Constants {
 			
 	public final static int SEGMENT_X = 15;
 	public final static int SEGMENT_Y = 45;
-	 	
-	public final static int MAX_PLAYERS = 6;
-	public final static int MAX_HABORS = 10;
-	public final static int START_TOWERS = 1;	
-	public final static int START_LANDS = 3;
+	
+	public final static double SCALE = 1; 
 }

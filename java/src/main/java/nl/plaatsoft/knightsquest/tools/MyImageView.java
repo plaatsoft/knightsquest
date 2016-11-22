@@ -19,6 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 package nl.plaatsoft.knightsquest.tools;
 
 import javafx.scene.CacheHint;
@@ -36,7 +37,7 @@ public class MyImageView extends ImageView {
 		setScaleX(scale);
 		setScaleY(scale);
 	}
-	
+		
 	public MyImageView(double x, double y, Image image, double scale, boolean invert) {
 
 		ColorAdjust blackout = new ColorAdjust();
@@ -44,7 +45,7 @@ public class MyImageView extends ImageView {
 
 		setImage(image);
 		setLayoutX(x);
-		setLayoutY(y);
+		setLayoutY(y);		
 		setScaleX(scale);
 		setScaleY(scale);
 
@@ -57,9 +58,21 @@ public class MyImageView extends ImageView {
 
 		Image image = new Image(resource);
 		setImage(image);
+		
 		setLayoutX(x);
 		setLayoutY(y);
 		setScaleX(scale);
 		setScaleY(scale);
+	}
+	
+	public MyImageView(double x, double y,String resource, double width, double heigth) {
+
+		Image image = new Image(resource);	
+		setImage(image);		
+		setLayoutX(x);
+		setLayoutY(y);
+		setFitWidth(width);
+		setFitHeight(heigth);
+		setPreserveRatio(true);
 	}
 }

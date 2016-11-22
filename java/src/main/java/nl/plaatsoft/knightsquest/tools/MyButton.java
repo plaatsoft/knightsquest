@@ -19,6 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 package nl.plaatsoft.knightsquest.tools;
 
 import javafx.event.ActionEvent;
@@ -29,14 +30,14 @@ import nl.plaatsoft.knightsquest.ui.Navigator;
 
 public class MyButton extends Button {
 
-	public MyButton(int x, int y, String value, int fontSize, final int page) {
+	public MyButton(double x, double y, String value, int fontSize, final int page) {
 				
 		int width = 180;
 		if (x==0) {
 			x= (MyFactory.getSettingDAO().getSettings().getWidth()/2)-(width/2);
 		}				
 		setText(value);
-	    setPrefWidth(180);
+	    setPrefWidth(width);
 	    setStyle("-fx-font-size:"+fontSize+"px;");	     
 	    	  
 		setLayoutX(x);
