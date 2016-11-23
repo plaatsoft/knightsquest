@@ -116,11 +116,11 @@ public class Game extends StackPane {
 			score+=tmp;
 		}
 		
-		log.info("turn="+turn);
-		log.info("moves="+player.getMoves());
-		log.info("creates="+player.getCreates());
-		log.info("conquer="+player.getConquer());
-		log.info("upgrade="+player.getUpgrades());
+		//log.info("turn="+turn);
+		//log.info("moves="+player.getMoves());
+		//log.info("creates="+player.getCreates());
+		//log.info("conquer="+player.getConquer());
+		//log.info("upgrade="+player.getUpgrades());
 		
 		score += player.getMoves();
 		score += player.getCreates()*2;		
@@ -133,51 +133,58 @@ public class Game extends StackPane {
 		
 	public void playerWin(Player player) {
 		
-		label1.setText("Game Over");
-		label2.setText("You win");			
-		
-		int score = calculateScore(player,true);
+		if (!gameOver) {
+			label1.setText("Game Over");
+			label2.setText("You win");			
 			
-		// Next map unlocked!
-		int nextMap = MyData.getNextMap(MyData.getMap());
-		if ((nextMap>0) && (!MyFactory.getSettingDAO().getSettings().getMapUnlocked(nextMap))) {
-			label3.setText("Map "+nextMap+" is now unlocked!");		
-			MyFactory.getSettingDAO().getSettings().setMapUnlocked(MyData.getNextMap(MyData.getMap()), true);			
-		}	
-		
-		label4.setText("Total score = "+score);	
-		if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
-			MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
-		}
-		MyFactory.getSettingDAO().save();
-		
-		btn.setText("End ["+turn+"]");		
-		storeScore(score, MyData.getMap());
+			int score = calculateScore(player,true);
+			
+			/* Next map unlocked! */
+			int nextMap = MyData.getNextMap(MyData.getMap());
+			if ((nextMap>0) && (!MyFactory.getSettingDAO().getSettings().getMapUnlocked(nextMap))) {
+				label3.setText("Map "+nextMap+" is now unlocked!");		
+				MyFactory.getSettingDAO().getSettings().setMapUnlocked(MyData.getNextMap(MyData.getMap()), true);			
+			}	
+			
+			label4.setText("Total score = "+score);	
+			if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
+				MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
+			}
+			MyFactory.getSettingDAO().save();
+			
+			btn.setText("End ["+turn+"]");		
+			storeScore(score, MyData.getMap());
+			
+			gameOver=true;
+		}		
 	}
 	
 	public void playerLose(Player player) {
 		
-		label1.setText("Game Over");
-		label2.setText("You lose");			
-		
-		int score = calculateScore(player, false);
-				
-		label4.setText("Total score = "+score);	
-		if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
-			MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
-			MyFactory.getSettingDAO().save();
+		if (!gameOver) {
+			label1.setText("Game Over");
+			label2.setText("You lose");			
+			
+			int score = calculateScore(player, false);
+					
+			label4.setText("Total score = "+score);	
+			if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
+				MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
+				MyFactory.getSettingDAO().save();
+			}
+			
+			btn.setText("End ["+turn+"]");		
+			storeScore(score, MyData.getMap());
+			
+			gameOver = true;
 		}
-		
-		btn.setText("End ["+turn+"]");		
-		storeScore(score, MyData.getMap());
 	}
 
-	public boolean checkGameOver() {
+	public void checkGameOver() {
 
 		int count=0;
 		Boolean humanAlive = true;
 		Player human = null;
-		boolean value = false;
 		
 		Iterator<Player> iter = MyFactory.getPlayerDAO().getPlayers().iterator();  
 		while (iter.hasNext()) {
@@ -200,32 +207,23 @@ public class Game extends StackPane {
 		if (count>1) { 
 
 			if (!humanAlive) {
-											
 				// Human dead,  Bots alive, continue game in auto mode.
-				if (!gameOver) {
-					playerLose(human);
-				}				
-				gameOver=true;				
+				playerLose(human);							
 				timer.start();
 			}
 					
 		} else {
 				
 			timer.stop();
-			gameOver=true;
-			
+						
 			if (humanAlive) {					
-				playerWin(human);
+				playerWin(human);				
 			} else {		
-				if (!gameOver) {
-					playerLose(human);
-				}
+				playerLose(human);
 			}
-			value = true;
 		}
 		
 		//log.info("count="+count+" humanAlive="+humanAlive+" value="+value);
-		return value;
 	}
 		
 	public void drawPlayerScore() {
