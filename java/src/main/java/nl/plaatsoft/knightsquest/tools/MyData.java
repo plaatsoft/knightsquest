@@ -75,6 +75,32 @@ public class MyData {
 		return value;
 	}
 
+	public static int getChanceNewSoldier() {
+		
+		int value=1;
+		
+		if (level==0) {
+			// 25%			
+			value = 4;
+		}
+		
+		if (level==1) {
+			// 33%		
+			value = 3;
+		}
+		
+		if (level==2) {
+			// 50%
+			value = 2;
+		}
+		
+		if (level>2) {
+			// 100%
+			value = 1;
+		}		
+		return value;
+	}
+	
 	public static int getHarbors() {
 		
 		int value = 0;

@@ -33,6 +33,7 @@ import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.Soldier;
 import nl.plaatsoft.knightsquest.model.SoldierEnum;
+import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 
@@ -75,7 +76,7 @@ public class  SoldierDAO {
 		/* Create new Soldier if there is enough food */  
 		if (region.foodAvailable()>=food(SoldierEnum.PAWN)) {
 						
-			if (MyRandom.nextInt(3)==1) {
+			if (MyRandom.nextInt(MyData.getChanceNewSoldier())==1) {
 				Land land1 = MyFactory.getRegionDAO().getTowerPosition(region);
 				if (land1!=null) {
 					
@@ -130,7 +131,7 @@ public class  SoldierDAO {
 		return count;
 	}
 		
-	// Move bots
+	/* Move bots smart */
 	public void moveBotSoldier(Region region) {
 		
 		log.debug("enter");
@@ -146,67 +147,53 @@ public class  SoldierDAO {
 					
 				//log.info(land1.getSoldier().getType()+" found [x="+land1.getX()+"|y="+land1.getY()+"]");	
 				
-				/* --------------------------- */
-				/* Upgrade soldier if possible */
-				/* --------------------------- */
+				/* -------------------------------------- */
+				/* Conquer enemy land with weaker soldier */
+				/* -------------------------------------- */
 				
-				if (land1.getSoldier().getType()!=SoldierEnum.KING) {
-					List <Land> list5 = MyFactory.getLandDAO().getUpgradeSoldiers(land1);
-					Iterator<Land> iter5 = list5.iterator();
-					while (iter5.hasNext()) {
-						Land land5 = (Land) iter5.next();
-
-						// Only upgrade if there is enough food
-						SoldierEnum nextType = upgrade(land1.getSoldier().getType());	
-						
-						if ((nextType!=null) && (region.foodAvailable()>MyFactory.getSoldierDAO().food(nextType))) {
-																																																				
-							MyFactory.getLandDAO().moveSoldier(land1, land5);			
-							log.debug("leave1");
-							return;
-						}
-					}
-				}
-				
-				/* ------------------------------------- */
-				/* Conquer enemy land or defend own land */
-				/* ------------------------------------- */
-				
-				List <Land> list2 = MyFactory.getLandDAO().getBotEnemyLand(land1);	
+				List <Land> list2 = MyFactory.getLandDAO().getBotEnemyLandWithSoldier(land1);	
 				Land land2 = MyRandom.nextLand(list2);
 				if (land2!=null) {
-									
-					if (land2.getSoldier()!=null) {
-						
-						/* Enemy land is protected with soldier */	
-						int attackStrength = land1.getSoldier().getType().getValue();
-						int defendStrength = land2.getSoldier().getType().getValue();
-						
-						if (attackStrength>defendStrength) {
-														
-							MyFactory.getLandDAO().moveSoldier(land1, land2);
-							log.debug("leave2");
-							return;
-						} 
-							
-					} else {
-						
-						/* Enemy land is unprotected */						
-						MyFactory.getLandDAO().moveSoldier(land1, land2);
-						log.debug("leave3");
-						return;				
-					}
+					log.info(land1.getPlayer()+" kill enemy land with soldier");				
+					MyFactory.getLandDAO().moveSoldier(land1, land2);
+					return; 
 				}
 				
+				/* -------------------------------------------- */
+				/* Conquer enemy land without soldier */
+				/* -------------------------------------------- */
+				
+				List <Land> list7 = MyFactory.getLandDAO().getBotEnemyLandWithoutSoldier(land1);	
+				Land land7 = MyRandom.nextLand(list7);
+				if (land7!=null) {
+					log.info(land1.getPlayer()+" Capture enemy land");				
+					MyFactory.getLandDAO().moveSoldier(land1, land7);
+					return; 
+				}
+								
+				/* ------------------- */
+				/* Upgrade bot soldier */
+				/* ------------------- */
+				
+				if (land1.getSoldier().getType()!=SoldierEnum.KING) {
+					List <Land> list5 = MyFactory.getLandDAO().getBotUpgradeSoldier(land1, region);
+					Land land5 = MyRandom.nextLand(list5);
+					if (land5!=null) {		
+						log.info(land1.getPlayer()+" Upgrade soldier");		
+						MyFactory.getLandDAO().moveSoldier(land1, land5);			
+						return;
+					}
+				}
+			
 				/* ------------------------ */
 				/* Move soldier to new land */		
 				/* ------------------------ */
 				
 				List <Land> list4 = MyFactory.getLandDAO().getBotNewLand(land1);					
 				Land land4 = MyRandom.nextLand(list4);
-				if (land4!=null) {							
+				if (land4!=null) {			
+					log.info(land1.getPlayer()+" Capture new land");	
 					MyFactory.getLandDAO().moveSoldier(land1, land4);
-					log.debug("leave4");
 					return;
 				}
 				
@@ -216,9 +203,9 @@ public class  SoldierDAO {
 				
 				List <Land> list6 = MyFactory.getLandDAO().getBotOwnLand(land1);	
 				Land land6 = MyRandom.nextLand(list6);
-				if (land6!=null) {					
+				if (land6!=null) {		
+					log.info(land1.getPlayer()+" Move on own land");	
 					MyFactory.getLandDAO().moveSoldier(land1, land6);
-					log.debug("leave5");
 					return;
 				}		
 			}

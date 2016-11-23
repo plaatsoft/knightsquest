@@ -182,12 +182,12 @@ public class Game extends StackPane {
 		Iterator<Player> iter = MyFactory.getPlayerDAO().getPlayers().iterator();  
 		while (iter.hasNext()) {
 			Player player = (Player) iter.next();			
-			log.info(player+" size="+player.getRegion().size());
+			//log.info(player+" size="+player.getRegion().size());
 			
 			if (!player.isBot()) {
 				human = player;
 				if (player.getRegion().size()==0) {
-					log.info(player+" is dead!");
+					//log.info(player+" is dead!");
 					humanAlive = false;
 				}
 			}			
@@ -224,7 +224,7 @@ public class Game extends StackPane {
 			value = true;
 		}
 		
-		log.info("count="+count+" humanAlive="+humanAlive+" value="+value);
+		//log.info("count="+count+" humanAlive="+humanAlive+" value="+value);
 		return value;
 	}
 		

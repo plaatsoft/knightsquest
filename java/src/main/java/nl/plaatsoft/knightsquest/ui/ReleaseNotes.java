@@ -40,15 +40,15 @@ public class ReleaseNotes extends MyPanel {
 
 	private static String[] version = {
 
-			"22-11-2016 (Version 0.3)\n" 
+			"23-11-2016 (Version 0.3)\n" 
 					+ "- Added 3 screen resolutions.\n"
 					+ "- Increase amount of maps to 60.\n"
 					+ "- Improve game play. Now maps must be unlocked.\n"
-					+ "- Added pawn can now move two land tills per turn.\n"
-					+ "- Added harbors to soldiers can travel faster.\n"
+					+ "- Pawn can now move two land tills per turn.\n"
+					+ "- Added harbors so soldiers can travel faster.\n"
 					+ "- Game settings and progress are now stored on disk.\n"
-					+ "- Bugfix: Now second game initialization is working fine.\n"
-					+ "- Bugfix: Now next turn detection is working fine\n",
+					+ "- Bugfix: Second game initialization is working fine.\n"
+					+ "- Bugfix: Now autmatic next turn detection is working fine\n",
 			
 			"18-11-2016 (Version 0.2)\n" 					
 					+ "- Add information boxes on game screen\n"

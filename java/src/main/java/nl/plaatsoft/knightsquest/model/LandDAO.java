@@ -99,55 +99,36 @@ public class LandDAO {
 		}
 	}
 	
-	public List <Land> getUpgradeSoldiers(Land land) {
+	public List <Land> getBotEnemyLandWithSoldier(Land land) {
 		
 		log.debug("enter");
 		
 		List <Land> list2 = new ArrayList<Land>();
 		
-		List <Land> list1 = getNeigbors(land);
-		Iterator<Land> iter1 = list1.iterator();
-						
-		while (iter1.hasNext()) {				
-			Land land1 = (Land) iter1.next();
-			if ((land1.getPlayer()!=null) &&
-				land1.getPlayer().equals(land.getPlayer()) &&
-				(land1.getSoldier()!=null) && 
-				(land1.getSoldier().getType()==SoldierEnum.PAWN)) 
-			{
-					list2.add(land1);
-			}
-		}	
-
-		log.debug("leave");
-		
-		return list2;
-	}
-
-	public List <Land> getBotEnemyLand(Land land) {
-		
-		log.debug("enter");
-		
-		List <Land> list2 = new ArrayList<Land>();
-		
-		 /* If source land is harbor get all free ports */
-		 if ((land.getBuilding()!=null) && (land.getBuilding().getType()==BuildingEnum.HARBOR)) {
-			 
-			 Iterator<Land> iter3 = MyFactory.getBuildingDAO().getFreeHarbor(land).iterator();
-			 while (iter3.hasNext()) {				
+		/* If source land is harbor get all free ports */
+		if ((land.getBuilding()!=null) && (land.getBuilding().getType()==BuildingEnum.HARBOR)) {			 
+			Iterator<Land> iter3 = MyFactory.getBuildingDAO().getFreeHarbor(land).iterator();
+			while (iter3.hasNext()) {				
 				 Land land3 = (Land) iter3.next();
 				 if ((land3.getPlayer()!=null) && !land3.getPlayer().equals(land.getPlayer())) {
-				 	if ((land3.getSoldier()!=null) && (land3.getSoldier().getType()==SoldierEnum.TOWER)) {
-				 		// no nothing
-				 	} else {
-				 		list2.add(land3);
+				 	if (land3.getSoldier()!=null) {
+				 		if ((land3.getSoldier().getType()!=SoldierEnum.TOWER) && (land3.getSoldier().getType()!=SoldierEnum.CROSS)) {
+				 			
+							int attackStrength = land.getSoldier().getType().getValue();
+							int defendStrength = land3.getSoldier().getType().getValue();
+							
+							if (attackStrength>defendStrength) {
+							
+								list2.add(land3);
+							}
+				 		}
 				 	}
 				 }				
 			 }						
 		}
 		 		 
 		 /* Get all enemy lands */
-		List <Land> list1 =getNeigbors(land);
+		List <Land> list1 = getNeigbors(land);
 		Iterator<Land> iter1 = list1.iterator();
 						
 		while (iter1.hasNext()) {				
@@ -155,9 +136,56 @@ public class LandDAO {
 			if ((land1.getType()!=LandEnum.WATER) && (land1.getType()!=LandEnum.OCEAN)) {
 				
 			 	 if ((land1.getPlayer()!=null) && !land1.getPlayer().equals(land.getPlayer())) {
-			 		if ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.TOWER)) {
-			 			// no nothing
-			 		} else {
+			 		if (land1.getSoldier()!=null) {			 			
+			 			if ((land1.getSoldier().getType()!=SoldierEnum.TOWER) && (land1.getSoldier().getType()!=SoldierEnum.TOWER)) {
+			 				
+			 				int attackStrength = land.getSoldier().getType().getValue();
+							int defendStrength = land1.getSoldier().getType().getValue();
+							
+							if (attackStrength>defendStrength) {
+							
+								list2.add(land1);
+							}
+			 			}
+			 		}
+				}
+			}
+		}	
+		
+		log.debug("leave");
+		return list2;
+	}
+	
+	public List <Land> getBotEnemyLandWithoutSoldier(Land land) {
+		
+		log.debug("enter");
+		
+		List <Land> list2 = new ArrayList<Land>();
+		
+		/* If source land is harbor get all free ports */
+		if ((land.getBuilding()!=null) && (land.getBuilding().getType()==BuildingEnum.HARBOR)) {			 
+			Iterator<Land> iter3 = MyFactory.getBuildingDAO().getFreeHarbor(land).iterator();
+			while (iter3.hasNext()) {				
+				 Land land3 = (Land) iter3.next();
+				 if ((land3.getPlayer()!=null) && !land3.getPlayer().equals(land.getPlayer())) {
+					if ((land3.getSoldier()==null) || ((land3.getSoldier()!=null) && (land3.getSoldier().getType()==SoldierEnum.CROSS))) {				
+						list2.add(land3);
+				 	}
+				 }				
+			 }						
+		}
+		 		 
+		 /* Get all enemy lands without soldiers */
+		List <Land> list1 = getNeigbors(land);
+		Iterator<Land> iter1 = list1.iterator();
+						
+		while (iter1.hasNext()) {				
+			Land land1 = (Land) iter1.next();
+			if ((land1.getType()!=LandEnum.WATER) && (land1.getType()!=LandEnum.OCEAN)) {
+				
+			 	 if ((land1.getPlayer()!=null) && !land1.getPlayer().equals(land.getPlayer())) {
+			 		if ((land1.getSoldier()==null) || ((land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.CROSS))) {					
+						
 			 			list2.add(land1);
 			 		}
 				}
@@ -167,7 +195,29 @@ public class LandDAO {
 		log.debug("leave");
 		return list2;
 	}
-
+		
+	public List <Land> getBotUpgradeSoldier(Land land, Region region) {
+				
+		List <Land> list2 = new ArrayList<Land>();
+		
+		List <Land> list1 = getNeigbors(land);
+		
+		Iterator<Land> iter1 = list1.iterator();						
+		while (iter1.hasNext()) {				
+			Land land1 = (Land) iter1.next();
+			if ((land1.getPlayer()!=null) && land1.getPlayer().equals(land.getPlayer()) &&
+				(land1.getSoldier()!=null) && (land1.getSoldier().getType()==SoldierEnum.PAWN)) 
+			{				
+				// Only upgrade if there is enough food
+				SoldierEnum nextType = MyFactory.getSoldierDAO().upgrade(land.getSoldier().getType());					
+				if ((nextType!=null) && (region.foodAvailable()>MyFactory.getSoldierDAO().food(nextType))) {
+					list2.add(land1);	
+				}				
+			}
+		}			
+		return list2;
+	}
+		
 	public List <Land> getBotOwnLand(Land land) {
 		
 		log.debug("enter");
