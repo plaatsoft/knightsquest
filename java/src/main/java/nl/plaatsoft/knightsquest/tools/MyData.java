@@ -111,7 +111,6 @@ public class MyData {
 
 	public static void setMap(int map) {
 		
-		log.info("map="+map);
 		MyRandom.clear();
 		MyData.map = map;
 	}

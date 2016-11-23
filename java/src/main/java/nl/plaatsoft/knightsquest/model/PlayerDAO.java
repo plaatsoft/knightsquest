@@ -39,14 +39,6 @@ public class PlayerDAO {
 	private static Logger log = Logger.getLogger( PlayerDAO.class);		
 	
 	private List <Player> players = new ArrayList<Player>();
-
-	public List <Player> getPlayers() {
-		return players;
-	}
-
-	public void setPlayers(List <Player> players) {
-		this.players = players;
-	}
 	
 	public void getTexture(GraphicsContext gc, int player) { 
 		
@@ -121,7 +113,18 @@ public class PlayerDAO {
 		return player;
 	}
 	
-	
+	public Player getHumanPlayer() {
+		
+		Iterator<Player> iter = players.iterator();  
+		while (iter.hasNext()) {
+			Player player = (Player) iter.next();
+			if (!player.isBot()) {
+				return player;
+			}
+		}
+		return null;
+	}
+		
 	public boolean hasPlayerNoMoves(Player player) {
 	
 		/* Check if human player has moves lefts in this turn */
@@ -182,5 +185,13 @@ public class PlayerDAO {
 		/* Rebuild all regions */
 		int regions = MyFactory.getRegionDAO().detectedRegions();		
 		MyFactory.getRegionDAO().rebuildRegions(regions);	
+	}
+	
+	public List <Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List <Player> players) {
+		this.players = players;
 	}
 }

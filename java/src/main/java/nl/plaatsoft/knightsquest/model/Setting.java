@@ -33,7 +33,7 @@ public class Setting implements Serializable {
 	private double y;
 	private boolean musicOn;
 	private String resolution;
-	private Boolean mapUnlocked[] = new Boolean[Constants.MAX_LEVELS*10];
+	private boolean[] mapUnlocked = new boolean[Constants.MAX_LEVELS*10];
 	private int[] score = new int[Constants.MAX_LEVELS*10];
 		
 	public Setting() {		
@@ -114,11 +114,11 @@ public class Setting implements Serializable {
 		this.musicOn = musicOn;
 	}
 
-	public Boolean getMapUnlocked(int map) {
+	public boolean getMapUnlocked(int map) {
 		return mapUnlocked[map];
 	}
 
-	public void setMapUnlocked(int map, Boolean value) {
+	public void setMapUnlocked(int map, boolean value) {
 		mapUnlocked[map] = value;
 	}
 	
@@ -129,4 +129,15 @@ public class Setting implements Serializable {
 	public void setScore(int map, int value) {
 		score[map] = value;
 	}
+	
+	public int getHighestMap() {
+		
+		for (int i=(Constants.MAX_LEVELS*10)-1; i>0; i--) {
+			if (mapUnlocked[i]==true) {
+				return i;
+			}
+		}
+		return 1;
+	}
+		
 }

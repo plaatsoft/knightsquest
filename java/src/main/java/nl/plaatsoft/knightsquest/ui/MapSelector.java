@@ -79,6 +79,7 @@ public class MapSelector extends MyPanel {
 		});
 	}
 	
+		
 	private void createMaps(int page) {
 		for (int i=0; i<6; i++) {
 			
@@ -88,10 +89,12 @@ public class MapSelector extends MyPanel {
 						
 			if (MyFactory.getSettingDAO().getSettings().getMapUnlocked(map)) {
 				label2[i].setText("Score "+MyFactory.getSettingDAO().getSettings().getScore(map));
+				label2[i].setVisible(true);
 				image[i].setVisible(false);				
 			} else {				
 				
 				image[i].setVisible(true);
+				label2[i].setVisible(false);	
 			}
 		}
 	}
@@ -164,6 +167,8 @@ public class MapSelector extends MyPanel {
 	
 	@SuppressWarnings("unused")
 	public void draw() {
+		
+		level = (MyFactory.getSettingDAO().getSettings().getHighestMap()/10);	
 		
 		Image image1 = new Image("images/background4.jpg");
 		BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
