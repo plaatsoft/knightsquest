@@ -116,7 +116,7 @@ public class MapSelector extends MyPanel {
 		label2[id] = new MyLabel(x+10,y+height-30,"", 20);
 		getChildren().add(label2[id]);		
 		
-		image[id] = new MyImageView(x+30,y+15,"images/unlock.png", canvas.getWidth()-30, canvas.getHeight()-30);
+		image[id] = new MyImageView(x+30 ,y+15, canvas.getWidth()-30, canvas.getHeight()-30, "images/unlock.png");
 		getChildren().add(image[id]);	
 	}
 
@@ -179,7 +179,7 @@ public class MapSelector extends MyPanel {
 		drawCanvas();
 		createMaps(level);
 				
-		MyButton close = new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.HOME);
+		MyButton close = new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.MODE_SELECTOR);
 		getChildren().add(close);
 		
 		if (Constants.MAX_LEVELS>1) {

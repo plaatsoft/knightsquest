@@ -41,7 +41,7 @@ public class Navigator {
 	private static Intro1 intro1;
 	private static Intro2 intro2;
 	private static Home home;	
-	private static MapSelector selector;	
+	private static MapSelector mapSelector;	
 	private static Game game;	
 	private static Donate donate;
 	private static HighScore1 highScore1;
@@ -49,7 +49,9 @@ public class Navigator {
 	private static Credits credits;	
 	private static ReleaseNotes releaseNotes;
 	private static Help help;
-	private static Settings settings;	
+	private static Settings settings;
+	private static ModeSelector modeSelector;
+	private static Communication communication;	
 	
 	private static Scene scene;	
 	private static Stage stage;
@@ -59,16 +61,18 @@ public class Navigator {
 	public static final int INTRO2 = 2;
 	public static final int HOME = 4;
 	public static final int GAME = 5;
-	public static final int MAP_SELECTOR = 6;
-	public static final int DONATE = 7;
-	public static final int LOCAL_HIGHSCORE = 8;
-	public static final int GLOBAL_HIGHSCORE = 9;
-	public static final int CREDITS = 10;
-	public static final int RELEASE_NOTES = 11;
-	public static final int HELP = 12;
-	public static final int SETTINGS = 13;
-	public static final int EXIT = 14;
-				
+	public static final int MODE_SELECTOR = 6;
+	public static final int MAP_SELECTOR = 7;
+	public static final int DONATE = 8;
+	public static final int LOCAL_HIGHSCORE = 9;
+	public static final int GLOBAL_HIGHSCORE = 10;
+	public static final int CREDITS = 11;
+	public static final int RELEASE_NOTES = 12;
+	public static final int HELP = 13;
+	public static final int SETTINGS = 14;
+	public static final int COMMUNICATION = 15;
+	public static final int EXIT = 16;
+			
 	public static void go(int page) {
 				
 	  switch (page ) {
@@ -91,10 +95,16 @@ public class Navigator {
 			scene.setRoot(home);	
 			break;		
 			
+		case MODE_SELECTOR:
+			modeSelector = new ModeSelector();				
+			modeSelector.draw();						
+			scene.setRoot(modeSelector);	
+			break;
+			
 		case MAP_SELECTOR:
-			selector = new MapSelector();				
-			selector.draw();						
-			scene.setRoot(selector);	
+			mapSelector = new MapSelector();				
+			mapSelector.draw();						
+			scene.setRoot(mapSelector);	
 			break;	
 			
 		case GAME:
@@ -145,10 +155,16 @@ public class Navigator {
 			help.draw();
 			scene.setRoot(help);			
 			break;
-								
+			
+		case COMMUNICATION:
+			communication = new Communication();
+			communication.draw();
+			scene.setRoot(communication);			
+			break;
+											
 		case EXIT:
 			Platform.exit();
-            
+			System.exit(0);
 			break;
 		}
 	}

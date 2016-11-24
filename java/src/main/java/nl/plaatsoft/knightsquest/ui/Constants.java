@@ -24,8 +24,8 @@ package nl.plaatsoft.knightsquest.ui;
 public class Constants {
 
 	public final static String APP_NAME = "KnightsQuest";
-	public final static String APP_VERSION = "0.3";
-	public final static String APP_BUILD = "Build (23-11-2016)";
+	public final static String APP_VERSION = "0.4";
+	public final static String APP_BUILD = "Build (24-11-2016)";
 	
 	public final static String APP_WS_NAME = "Java-KnightsQuest";
 	public final static String APP_WS_URL = "service.plaatsoft.nl";

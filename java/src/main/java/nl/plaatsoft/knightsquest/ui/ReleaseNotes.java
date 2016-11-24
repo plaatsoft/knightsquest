@@ -40,6 +40,10 @@ public class ReleaseNotes extends MyPanel {
 
 	private static String[] version = {
 
+			"24-11-2016 (Version 0.4)\n" 
+					+ "- Added Mode Selector page.\n"
+					+ "- Added Communication page.\n",
+					
 			"23-11-2016 (Version 0.3)\n" 
 					+ "- Added 3 screen resolutions.\n"
 					+ "- Increase amount of maps to 60.\n"

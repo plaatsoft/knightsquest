@@ -56,7 +56,7 @@ public class Home extends MyPanel {
 		getChildren().add(label3);
 				
 		int y = 30;
-		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "Play", 18, Navigator.MAP_SELECTOR));
+		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "Play", 18, Navigator.MODE_SELECTOR));
 		y += 45;
 		getChildren().add( new MyButton(MyFactory.getSettingDAO().getSettings().getWidth()-210, y, "High Score", 18, Navigator.LOCAL_HIGHSCORE));
 		y += 45;	

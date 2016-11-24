@@ -22,10 +22,13 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
+import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import nl.plaatsoft.knightsquest.ui.Navigator;
 
 public class MyImageView extends ImageView {
 
@@ -65,7 +68,7 @@ public class MyImageView extends ImageView {
 		setScaleY(scale);
 	}
 	
-	public MyImageView(double x, double y,String resource, double width, double heigth) {
+	public MyImageView(double x, double y, double width, double heigth, String resource) {
 
 		Image image = new Image(resource);	
 		setImage(image);		
@@ -74,5 +77,21 @@ public class MyImageView extends ImageView {
 		setFitWidth(width);
 		setFitHeight(heigth);
 		setPreserveRatio(true);
+	}
+	
+	public MyImageView(double x, double y, String resource, double scale, int page) {
+
+		Image image = new Image(resource);	
+		setImage(image);		
+		setLayoutX(x);
+		setLayoutY(y);
+		setScaleX(scale);
+		setScaleY(scale);
+		
+		setOnMousePressed(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent me) {
+	         	Navigator.go(page);
+	      }
+	   });
 	}
 }

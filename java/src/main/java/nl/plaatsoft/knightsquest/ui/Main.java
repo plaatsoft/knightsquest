@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -34,6 +35,8 @@ import javafx.stage.WindowEvent;
 
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyMusic;
+
+
 
 public class Main extends Application {
 
@@ -65,7 +68,10 @@ public class Main extends Application {
             public void handle(WindowEvent we) {
                MyFactory.getSettingDAO().getSettings().setX(primaryStage.getX());
                MyFactory.getSettingDAO().getSettings().setY(primaryStage.getY());          
-               MyFactory.getSettingDAO().save();               
+               MyFactory.getSettingDAO().save();   
+               
+               Platform.exit();
+               System.exit(0);               
             }
         });
         
