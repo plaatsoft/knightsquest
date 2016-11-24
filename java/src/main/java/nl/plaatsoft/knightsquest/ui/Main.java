@@ -19,7 +19,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 package nl.plaatsoft.knightsquest.ui;
 
 import javax.swing.JOptionPane;
@@ -35,8 +34,6 @@ import javafx.stage.WindowEvent;
 
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyMusic;
-
-
 
 public class Main extends Application {
 
