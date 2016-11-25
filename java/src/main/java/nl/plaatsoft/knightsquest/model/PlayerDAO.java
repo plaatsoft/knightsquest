@@ -19,7 +19,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 package nl.plaatsoft.knightsquest.model;
 
 import java.util.ArrayList;
@@ -44,27 +43,27 @@ public class PlayerDAO {
 		
 		switch(player) {
 		
-			case 0: // Player 1
+			case 1: // Player 1
 					gc.setFill(Color.YELLOW);
 					break;
 				
-			case 1: // Player 2
+			case 2: // Player 2
 					gc.setFill(Color.RED);
 					break;
 			
-			case 2: // Player 3
+			case 3: // Player 3
 					gc.setFill(Color.CYAN);
 					break;
 		
-			case 3: // Player 4
+			case 4: // Player 4
 					gc.setFill(Color.MAGENTA);
 					break;
 					
-			case 4: // Player 5
+			case 5: // Player 5
 					gc.setFill(Color.BROWN);
 					break;
 					
-			case 5: // Player 6
+			case 6: // Player 6
 					gc.setFill(Color.LIGHTBLUE);
 					break;
 		}		
@@ -74,36 +73,30 @@ public class PlayerDAO {
 		
 		switch(player) {
 		
-			case 0: // Player 1
+			case 1: // Player 1
 					return "yellow";
 
-			case 1: // Player 2
+			case 2: // Player 2
 					return "red";
 			
-			case 2: // Player 3
+			case 3: // Player 3
 					return "cyan";
 		
-			case 3: // Player 4
+			case 4: // Player 4
 					return "magenta";
 					
-			case 4: // Player 5
+			case 5: // Player 5
 					return "brown";
 					
-			case 5: // Player 6
+			case 6: // Player 6
 					return "lightblue";
 		}		
 		return "";
 	}	
 	
-	public Player createPlayer(GraphicsContext gc, int id, Pane pane) {
+	public Player createPlayer(GraphicsContext gc, int id, Pane pane, PlayerEnum type) {
 			
-		/* Create player, with region / land and one soldier */
-		Boolean bot = true;
-		if (id==0) {
-			bot = false;
-		}
-		
-		Player player = new Player(id, bot);
+		Player player = new Player(id, type);
 		MyFactory.getPlayerDAO().getPlayers().add(player);
 		
 		for (int i=0; i<MyData.getTowers(); i++) {
@@ -118,7 +111,7 @@ public class PlayerDAO {
 		Iterator<Player> iter = players.iterator();  
 		while (iter.hasNext()) {
 			Player player = (Player) iter.next();
-			if (!player.isBot()) {
+			if (player.getType()==PlayerEnum.HUMAN_LOCAL) {
 				return player;
 			}
 		}
@@ -144,49 +137,7 @@ public class PlayerDAO {
 		
 		return true;
 	}
-	
-	public void nextTurn() {
-	
-		log.info("-------");
 		
-		MyFactory.getLandDAO().resetSelected();
-		
-		Iterator<Player> iter1 = MyFactory.getPlayerDAO().getPlayers().iterator();  	
-		while (iter1.hasNext()) {
-			
-			Player player = (Player) iter1.next();		
-						
-			int amount = MyFactory.getSoldierDAO().enableSoldier(player);
-				
-			Iterator<Region> iter2 = player.getRegion().iterator();  
-			while (iter2.hasNext()) {					
-				Region region = (Region) iter2.next();
-				
-				if (player.isBot()) {
-										
-					// Bot player
-					for (int i=0; i<amount; i++) {
-												
-						/* Move bot soldiers */
-						MyFactory.getSoldierDAO().moveBotSoldier(region);						
-					}
-					
-					/* Create bot soldier, if possible */
-					MyFactory.getSoldierDAO().createBotSoldier(region);
-					
-				} else {
-				
-					// Human Player
-					MyFactory.getSoldierDAO().newSoldierArrive(region);
-				}			
-			}			
-		}
-		
-		/* Rebuild all regions */
-		int regions = MyFactory.getRegionDAO().detectedRegions();		
-		MyFactory.getRegionDAO().rebuildRegions(regions);	
-	}
-	
 	public List <Player> getPlayers() {
 		return players;
 	}

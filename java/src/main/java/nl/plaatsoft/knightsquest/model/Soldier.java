@@ -63,7 +63,7 @@ public class Soldier {
 		land.getGc().setGlobalAlpha(1.0);			
 		
 		boolean red = false;
-		if (!player.isBot()) {
+		if (player.getType()==PlayerEnum.HUMAN_LOCAL) {
 			red = enabled;
 		}
 		land.getGc().drawImage(MyFactory.getSoldierDAO().get(type, red), posX, posY);

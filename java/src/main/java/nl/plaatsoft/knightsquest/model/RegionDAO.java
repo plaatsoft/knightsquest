@@ -119,7 +119,7 @@ public class RegionDAO {
 							
 							if (i==1) {
 								Soldier soldier4 = new Soldier(SoldierEnum.PAWN, player, land4);
-								if (!player.isBot()) {
+								if (player.getType()==PlayerEnum.HUMAN_LOCAL) {
 									soldier4.setEnabled(true);
 								}								
 								land4.setSoldier(soldier4);

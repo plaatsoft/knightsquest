@@ -44,6 +44,7 @@ import javafx.scene.shape.Rectangle;
 
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
+import nl.plaatsoft.knightsquest.model.PlayerEnum;
 import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.network.CloudUser;
@@ -66,6 +67,7 @@ public class Game extends StackPane {
 	private boolean gameOver;
 	private int turn;
 	private Task<Void> task;	
+	private Pane pane3;
 	private static MyLabel label1;
 	private static MyLabel label2;
 	private static MyLabel label3;
@@ -159,13 +161,15 @@ public class Game extends StackPane {
 		}		
 	}
 	
-	public void playerLose(Player player) {
+	public void playerLose() {
+		
+		Player human = MyFactory.getPlayerDAO().getHumanPlayer();
 		
 		if (!gameOver) {
 			label1.setText("Game Over");
 			label2.setText("You lose");			
 			
-			int score = calculateScore(player, false);
+			int score = calculateScore(human, false);
 					
 			label4.setText("Total score = "+score);	
 			if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
@@ -184,22 +188,20 @@ public class Game extends StackPane {
 
 		int count=0;
 		Boolean humanAlive = true;
-		Player human = null;
+		Player winner = null;
 		
 		Iterator<Player> iter = MyFactory.getPlayerDAO().getPlayers().iterator();  
 		while (iter.hasNext()) {
 			Player player = (Player) iter.next();			
-			//log.info(player+" size="+player.getRegion().size());
 			
-			if (!player.isBot()) {
-				human = player;
+			if (player.getType()==PlayerEnum.HUMAN_LOCAL) {
 				if (player.getRegion().size()==0) {
-					//log.info(player+" is dead!");
 					humanAlive = false;
 				}
 			}			
 							
 			if (player.getRegion().size()>0) {
+				winner = player; 
 				count++;
 			}
 		}
@@ -207,8 +209,10 @@ public class Game extends StackPane {
 		if (count>1) { 
 
 			if (!humanAlive) {
-				// Human dead,  Bots alive, continue game in auto mode.
-				playerLose(human);							
+				// Human dead
+				playerLose();
+				
+				// Bots alive, continue game in auto mode.
 				timer.start();
 			}
 					
@@ -217,38 +221,81 @@ public class Game extends StackPane {
 			timer.stop();
 						
 			if (humanAlive) {					
-				playerWin(human);				
+				playerWin(winner);				
 			} else {		
-				playerLose(human);
+				playerLose();
 			}
 		}
-		
-		//log.info("count="+count+" humanAlive="+humanAlive+" value="+value);
 	}
 		
-	public void drawPlayerScore() {
+	public void drawPlayerScore(Player active) {
 		
 		Iterator<Player> iter1 = MyFactory.getPlayerDAO().getPlayers().iterator();
 		while (iter1.hasNext()) {
-			int amount = 0;
 			Player player = (Player) iter1.next();
 			
-			Iterator<Region> iter2 = player.getRegion().iterator();
-			while (iter2.hasNext()) {
-				Region region = (Region) iter2.next();				
-				amount += region.getLands().size();  
+			String label="";
+			if (player.equals(active)) {
+				label += ">";
+			} else {
+				label += " ";
 			}
-			
-			label5[player.getId()].setText("Player "+(player.getId()+1)+": "+amount);
+			label += "Player "+player.getId()+": "+player.getLandSize();
+			label5[player.getId()].setText(label);
 		}
 	}
 		
-	public void start() {
+	
+	public void nextTurn() {
 		
+		log.info("-------");
+		
+		MyFactory.getLandDAO().resetSelected();	
+		
+		Iterator<Player> iter1 = MyFactory.getPlayerDAO().getPlayers().iterator();  	
+		while (iter1.hasNext()) {
+			Player player = (Player) iter1.next();		
+						
+			int amount = MyFactory.getSoldierDAO().enableSoldier(player);
+				
+			Iterator<Region> iter2 = player.getRegion().iterator();  
+			while (iter2.hasNext()) {					
+				Region region = (Region) iter2.next();
+				
+				if (player.getType()==PlayerEnum.BOT) {
+
+					for (int i=0; i<amount; i++) {
+						MyFactory.getSoldierDAO().moveBotSoldier(region);						
+					}
+				
+					MyFactory.getSoldierDAO().createBotSoldier(region);
+					
+				} else {
+				
+					// Human Player
+					MyFactory.getSoldierDAO().newSoldierArrive(region);
+				}			
+			}
+			
+			/* Rebuild all regions */
+			int regions = MyFactory.getRegionDAO().detectedRegions();		
+			MyFactory.getRegionDAO().rebuildRegions(regions);
+			
+			redraw();
+			checkGameOver();
+			drawPlayerScore(player);
+		}
+		
+		/* Update player score cursus */
+		drawPlayerScore(MyFactory.getPlayerDAO().getHumanPlayer());
+	}
+	
+
+	public void init () {
 		// Clear previous game 
 		MyFactory.clearFactory();
 
-		label5 = new MyLabel[MyData.getPlayers()];
+		label5 = new MyLabel[MyData.getPlayers()+1];
 		
 		gameOver = false;
 		turn = 1;
@@ -316,7 +363,7 @@ public class Game extends StackPane {
 		// Control LAYER 3
 		// ------------------------------------------------------
 			
-		Pane pane3 = new Pane();
+		pane3 = new Pane();
 		pane3.setScaleX(Constants.SCALE);
 		pane3.setScaleY(Constants.SCALE);
 		pane3.setId("control");
@@ -348,14 +395,12 @@ public class Game extends StackPane {
 		pane3.getChildren().add(r);
 		
 		int y=10;
-		for (int i=0; i<MyData.getPlayers(); i++) {			
-			label5[i] = new MyLabel(MyFactory.getSettingDAO().getSettings().getWidth()-125, y, "", 15, MyFactory.getPlayerDAO().getColor(i), "-fx-font-weight: bold;");
+		for (int id=1; id<=MyData.getPlayers(); id++) {			
+			label5[id] = new MyLabel(MyFactory.getSettingDAO().getSettings().getWidth()-125, y, "", 15, MyFactory.getPlayerDAO().getColor(id), "-fx-font-weight: bold;");
+			pane3.getChildren().add(label5[id]);
 			y+=18;
 		}
-		
-		for (int i=0; i<MyData.getPlayers(); i++) {		
-			pane3.getChildren().add(label5[i]);
-		}		
+			
 		pane3.getChildren().add(btn);
 		getChildren().add(pane3);
 				
@@ -363,8 +408,15 @@ public class Game extends StackPane {
 		// Create players
 		// ------------------------------------------------------
 		
-		for (int i=0; i<MyData.getPlayers(); i++) {
-			MyFactory.getPlayerDAO().createPlayer(gc, i, pane2);
+		for (int id=1; id<=MyData.getPlayers(); id++) {
+			
+			PlayerEnum type;
+			if (id==1) {
+				type = PlayerEnum.HUMAN_LOCAL;
+			} else {
+				type= PlayerEnum.BOT;
+			}
+			MyFactory.getPlayerDAO().createPlayer(gc, id, pane2, type);
 		}
 		
 		/* Create Harbors */
@@ -374,11 +426,16 @@ public class Game extends StackPane {
 		redraw();
 		
 		/* Draw score board */
-		drawPlayerScore();
+		drawPlayerScore(MyFactory.getPlayerDAO().getHumanPlayer());
+	}
+	
+	public void start() {
+		
+		init();
 		
 		// ------------------------------------------------------ 
 		// Human Player Actions
-		// ------------------------------------------------------
+		// ------------------l------------------------------------
 				
 		// Mouse select land piece on map
 		pane3.setOnMouseReleased(new EventHandler<MouseEvent>() {
@@ -392,11 +449,11 @@ public class Game extends StackPane {
 					if (MyFactory.getPlayerDAO().hasPlayerNoMoves(MyFactory.getPlayerDAO().getHumanPlayer())) {
 						turn++;
 						btn.setText("Turn ["+turn+"]");
-						MyFactory.getPlayerDAO().nextTurn();
+						nextTurn();
 					}
 										
 					redraw();
-					drawPlayerScore();
+					drawPlayerScore(MyFactory.getPlayerDAO().getHumanPlayer());
 					checkGameOver();
 				}
 			}
@@ -433,10 +490,7 @@ public class Game extends StackPane {
 				turn++;
 				btn.setText("Turn ["+turn+"]");
 				
-				MyFactory.getPlayerDAO().nextTurn();
-				redraw();
-				drawPlayerScore();
-				checkGameOver();
+				nextTurn();
 			}
 		});
 		
@@ -447,10 +501,7 @@ public class Game extends StackPane {
 				turn++;
 				btn.setText("End ["+turn+"]");
 				
-				MyFactory.getPlayerDAO().nextTurn();								
-				redraw();	
-				drawPlayerScore();
-				checkGameOver();
+				nextTurn();								
 			}		
 		};		
 	}

@@ -28,19 +28,26 @@ import java.util.List;
 public class Player {
 
 	// Player Generic 
-	private int id;				
-	private boolean bot = false;
-	private List <Region> region = new ArrayList<Region>();
+	private int id;		
+	private PlayerEnum type;
+	private List <Region> region;
 
 	// Player Statistics
-	private int conquer=0;
-	private int upgrades=0;
-	private int moves=0;
-	private int creates=0;
+	private int conquer;
+	private int upgrades;
+	private int moves;
+	private int creates;
 		
-	public Player(int id, boolean bot) {
-		this.bot = bot;
+	public Player(int id, PlayerEnum type) {
+		this.type = type;
 		this.id = id;
+		
+		conquer=0;
+		upgrades=0;
+		moves=0;
+		creates=0;
+		
+		region = new ArrayList<Region>();
 	}
 	
 	public void draw() {		
@@ -54,7 +61,18 @@ public class Player {
 	public String toString() {
 		return "playerId="+id;
 	}
+	
+	public int getLandSize() {
 		
+		int amount = 0;
+		Iterator<Region> iter = getRegion().iterator();
+		while (iter.hasNext()) {
+			Region region = (Region) iter.next();				
+			amount += region.getLands().size();  
+		}
+		return amount;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -71,14 +89,6 @@ public class Player {
 		this.region = region;
 	}
 
-	public boolean isBot() {
-		return bot;
-	}
-
-	public void setBot(boolean bot) {
-		this.bot = bot;
-	}	
-	
 	public int getUpgrades() {
 		return upgrades;
 	}
@@ -109,5 +119,13 @@ public class Player {
 
 	public void setConquer(int conquer) {
 		this.conquer = conquer;
+	}
+
+	public PlayerEnum getType() {
+		return type;
+	}
+
+	public void setType(PlayerEnum type) {
+		this.type = type;
 	}	
 }

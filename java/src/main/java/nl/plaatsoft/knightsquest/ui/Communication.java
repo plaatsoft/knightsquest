@@ -1,8 +1,5 @@
 package nl.plaatsoft.knightsquest.ui;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

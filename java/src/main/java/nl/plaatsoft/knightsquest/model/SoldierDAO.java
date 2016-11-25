@@ -76,7 +76,7 @@ public class  SoldierDAO {
 		/* Create new Soldier if there is enough food */  
 		if (region.foodAvailable()>=food(SoldierEnum.PAWN)) {
 						
-			if (MyRandom.nextInt(MyData.getChanceNewSoldier())==1) {
+			if (MyRandom.nextInt(MyData.getChanceNewSoldier())==0) {
 				Land land1 = MyFactory.getRegionDAO().getTowerPosition(region);
 				if (land1!=null) {
 					
@@ -154,7 +154,7 @@ public class  SoldierDAO {
 				List <Land> list2 = MyFactory.getLandDAO().getBotEnemyLandWithSoldier(land1);	
 				Land land2 = MyRandom.nextLand(list2);
 				if (land2!=null) {
-					log.info(land1.getPlayer()+" kill enemy land with soldier");				
+					//log.info(land1.getPlayer()+" kill enemy land with soldier");				
 					MyFactory.getLandDAO().moveSoldier(land1, land2);
 					return; 
 				}
@@ -166,7 +166,7 @@ public class  SoldierDAO {
 				List <Land> list7 = MyFactory.getLandDAO().getBotEnemyLandWithoutSoldier(land1);	
 				Land land7 = MyRandom.nextLand(list7);
 				if (land7!=null) {
-					log.info(land1.getPlayer()+" Capture enemy land");				
+					//log.info(land1.getPlayer()+" Capture enemy land");				
 					MyFactory.getLandDAO().moveSoldier(land1, land7);
 					return; 
 				}
@@ -179,7 +179,7 @@ public class  SoldierDAO {
 					List <Land> list5 = MyFactory.getLandDAO().getBotUpgradeSoldier(land1, region);
 					Land land5 = MyRandom.nextLand(list5);
 					if (land5!=null) {		
-						log.info(land1.getPlayer()+" Upgrade soldier");		
+						//log.info(land1.getPlayer()+" Upgrade soldier");		
 						MyFactory.getLandDAO().moveSoldier(land1, land5);			
 						return;
 					}
@@ -192,7 +192,7 @@ public class  SoldierDAO {
 				List <Land> list4 = MyFactory.getLandDAO().getBotNewLand(land1);					
 				Land land4 = MyRandom.nextLand(list4);
 				if (land4!=null) {			
-					log.info(land1.getPlayer()+" Capture new land");	
+					//log.info(land1.getPlayer()+" Capture new land");	
 					MyFactory.getLandDAO().moveSoldier(land1, land4);
 					return;
 				}
@@ -204,7 +204,7 @@ public class  SoldierDAO {
 				List <Land> list6 = MyFactory.getLandDAO().getBotOwnLand(land1);	
 				Land land6 = MyRandom.nextLand(list6);
 				if (land6!=null) {		
-					log.info(land1.getPlayer()+" Move on own land");	
+					//log.info(land1.getPlayer()+" Move on own land");	
 					MyFactory.getLandDAO().moveSoldier(land1, land6);
 					return;
 				}		
