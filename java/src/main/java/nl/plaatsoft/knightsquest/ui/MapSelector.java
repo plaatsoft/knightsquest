@@ -70,7 +70,7 @@ public class MapSelector extends MyPanel {
 		gc.getCanvas().setOnMousePressed(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
 				
-				//if (MyFactory.getSettingDAO().getSettings().getMapUnlocked(map)) 
+				if (MyFactory.getSettingDAO().getSettings().getMapUnlocked(map)) 
 				{
 					MyData.setLevel(level);
 					MyData.setMap(map);
@@ -88,16 +88,16 @@ public class MapSelector extends MyPanel {
 			createMap(gc[i], map);	
 			label1[i].setText(""+map);
 						
-			//if (MyFactory.getSettingDAO().getSettings().getMapUnlocked(map)) 
+			if (MyFactory.getSettingDAO().getSettings().getMapUnlocked(map)) 
 			{
 				label2[i].setText("Score "+MyFactory.getSettingDAO().getSettings().getScore(map));
 				label2[i].setVisible(true);
 				image[i].setVisible(false);				
 			} 
-			//else {
-			//	image[i].setVisible(true);
-			//	label2[i].setVisible(false);	
-			//}
+			else {
+				image[i].setVisible(true);
+				label2[i].setVisible(false);	
+			}
 		}
 	}
 

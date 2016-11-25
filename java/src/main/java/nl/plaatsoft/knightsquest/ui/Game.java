@@ -228,20 +228,12 @@ public class Game extends StackPane {
 		}
 	}
 		
-	public void drawPlayerScore(Player active) {
+	public void drawPlayerScore() {
 		
 		Iterator<Player> iter1 = MyFactory.getPlayerDAO().getPlayers().iterator();
 		while (iter1.hasNext()) {
 			Player player = (Player) iter1.next();
-			
-			String label="";
-			if (player.equals(active)) {
-				label += ">";
-			} else {
-				label += " ";
-			}
-			label += "Player "+player.getId()+": "+player.getLandSize();
-			label5[player.getId()].setText(label);
+			label5[player.getId()].setText("Player "+player.getId()+": "+player.getLandSize());
 		}
 	}
 		
@@ -276,18 +268,15 @@ public class Game extends StackPane {
 					MyFactory.getSoldierDAO().newSoldierArrive(region);
 				}			
 			}
-			
-			/* Rebuild all regions */
-			int regions = MyFactory.getRegionDAO().detectedRegions();		
-			MyFactory.getRegionDAO().rebuildRegions(regions);
-			
-			redraw();
-			checkGameOver();
-			drawPlayerScore(player);
 		}
 		
-		/* Update player score cursus */
-		drawPlayerScore(MyFactory.getPlayerDAO().getHumanPlayer());
+		/* Rebuild all regions */
+		int regions = MyFactory.getRegionDAO().detectedRegions();		
+		MyFactory.getRegionDAO().rebuildRegions(regions);
+		
+		redraw();
+		checkGameOver();
+		drawPlayerScore();
 	}
 	
 
@@ -426,7 +415,7 @@ public class Game extends StackPane {
 		redraw();
 		
 		/* Draw score board */
-		drawPlayerScore(MyFactory.getPlayerDAO().getHumanPlayer());
+		drawPlayerScore();
 	}
 	
 	public void start() {
@@ -453,7 +442,7 @@ public class Game extends StackPane {
 					}
 										
 					redraw();
-					drawPlayerScore(MyFactory.getPlayerDAO().getHumanPlayer());
+					drawPlayerScore();
 					checkGameOver();
 				}
 			}
@@ -485,6 +474,7 @@ public class Game extends StackPane {
 				// Human action button
 				if ((turn==1) || (gameOver)) {
 					Navigator.go(Navigator.MAP_SELECTOR);
+					timer.stop();
 					return;
 				}
 				turn++;
