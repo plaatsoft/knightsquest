@@ -68,12 +68,13 @@ public class Game extends StackPane {
 	private int turn;
 	private Task<Void> task;	
 	private Pane pane3;
-	private static MyLabel label1;
-	private static MyLabel label2;
-	private static MyLabel label3;
-	private static MyLabel label4;
-	private static MyLabel[] label5;
-	private static MyButton btn;
+	private MyLabel label1;
+	private MyLabel label2;
+	private MyLabel label3;
+	private MyLabel label4;
+	private MyLabel[] label5;
+	private MyButton btn;
+	private int mode;
 	
 	public void redraw() {
 		
@@ -418,9 +419,9 @@ public class Game extends StackPane {
 		drawPlayerScore();
 	}
 	
-	public void start() {
+	public void start(int mode) {
 		
-		init();
+		this.mode = mode;
 		
 		// ------------------------------------------------------ 
 		// Human Player Actions
@@ -473,7 +474,11 @@ public class Game extends StackPane {
 								
 				// Human action button
 				if ((turn==1) || (gameOver)) {
-					Navigator.go(Navigator.MAP_SELECTOR);
+					if (mode==1) {
+						Navigator.go(Navigator.MAP_SELECTOR_1P);
+					} else {
+						Navigator.go(Navigator.MAP_SELECTOR_2P);
+					}
 					timer.stop();
 					return;
 				}

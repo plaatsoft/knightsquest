@@ -63,6 +63,7 @@ public class SettingDAO {
 			ois.close();
 		} catch (Exception e) {
 			log.error(e.getMessage());
+			//e.printStackTrace();
 		}
 	}
 

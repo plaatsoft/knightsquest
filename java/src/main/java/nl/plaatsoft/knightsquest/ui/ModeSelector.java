@@ -27,15 +27,15 @@ public class ModeSelector extends MyPanel {
 		int x= (MyFactory.getSettingDAO().getSettings().getWidth()/2)-270;
 		int y= 130;
 		
-		MyButton option1 = new MyButton(x-20, y-20, "", 18, Navigator.MAP_SELECTOR);
+		MyButton option1 = new MyButton(x-20, y-20, "", 18, Navigator.MAP_SELECTOR_1P);
 		option1.setMinWidth(280);
 		option1.setMinHeight(280);
 		getChildren().add(option1);
 		
-		getChildren().add(new MyImageView(x, y, "images/human.png", 1, Navigator.MAP_SELECTOR));
+		getChildren().add(new MyImageView(x, y, "images/human.png", 1, Navigator.MAP_SELECTOR_1P));
 		x+=120;	
 		getChildren().add(new MyLabel(x-15, y+80, "vs", 24 , "black"));		
-		getChildren().add(new MyImageView(x, y, "images/robot.png", 1, Navigator.MAP_SELECTOR));
+		getChildren().add(new MyImageView(x, y, "images/robot.png", 1, Navigator.MAP_SELECTOR_1P));
 		
 		x+=190;	
 		

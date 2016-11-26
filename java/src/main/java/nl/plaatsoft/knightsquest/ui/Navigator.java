@@ -60,18 +60,20 @@ public class Navigator {
 	public static final int INTRO1 = 1;
 	public static final int INTRO2 = 2;
 	public static final int HOME = 4;
-	public static final int GAME = 5;
-	public static final int MODE_SELECTOR = 6;
-	public static final int MAP_SELECTOR = 7;
-	public static final int DONATE = 8;
-	public static final int LOCAL_HIGHSCORE = 9;
-	public static final int GLOBAL_HIGHSCORE = 10;
-	public static final int CREDITS = 11;
-	public static final int RELEASE_NOTES = 12;
-	public static final int HELP = 13;
-	public static final int SETTINGS = 14;
-	public static final int COMMUNICATION = 15;
-	public static final int EXIT = 16;
+	public static final int GAME_1P = 5;
+	public static final int GAME_2P = 6;
+	public static final int MODE_SELECTOR = 7;
+	public static final int MAP_SELECTOR_1P = 8;
+	public static final int MAP_SELECTOR_2P = 9;
+	public static final int DONATE = 10;
+	public static final int LOCAL_HIGHSCORE = 11;
+	public static final int GLOBAL_HIGHSCORE = 12;
+	public static final int CREDITS = 13;
+	public static final int RELEASE_NOTES = 14;
+	public static final int HELP = 15;
+	public static final int SETTINGS = 16;
+	public static final int COMMUNICATION = 17;
+	public static final int EXIT = 18;
 			
 	public static void go(int page) {
 				
@@ -101,19 +103,32 @@ public class Navigator {
 			scene.setRoot(modeSelector);	
 			break;
 			
-		case MAP_SELECTOR:
+		case MAP_SELECTOR_1P:
 			mapSelector = new MapSelector();				
-			mapSelector.draw();						
+			mapSelector.init(1);						
 			scene.setRoot(mapSelector);	
 			break;	
 			
-		case GAME:
+		case MAP_SELECTOR_2P:
+			mapSelector = new MapSelector();				
+			mapSelector.init(2);						
+			scene.setRoot(mapSelector);	
+			break;	
+			
+		case GAME_1P:
 			game = new Game();				
-			game.start();						
+			game.start(1);						
 			scene.setRoot(game);	
 			//setSceneEvents(scene, game);
 			break;	
 			
+		case GAME_2P:
+			game = new Game();				
+			game.start(2);						
+			scene.setRoot(game);	
+			//setSceneEvents(scene, game);
+			break;	
+						
 		case LOCAL_HIGHSCORE:			
 			highScore1 = new HighScore1();
 			highScore1.draw();			

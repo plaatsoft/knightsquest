@@ -47,10 +47,11 @@ public class MapSelector extends MyPanel {
 	final static Logger log = Logger.getLogger(MapSelector.class);
 	
 	private int level = 0;			
-	private static MyLabel[] label1 = new MyLabel[6];
-	private static MyLabel[] label2 = new MyLabel[6];	
-	private static MyImageView[] image = new MyImageView[6];	
-	private static GraphicsContext[] gc = new GraphicsContext[6];
+	private MyLabel[] label1 = new MyLabel[6];
+	private MyLabel[] label2 = new MyLabel[6];	
+	private MyImageView[] image = new MyImageView[6];	
+	private GraphicsContext[] gc = new GraphicsContext[6];
+	private int mode;
 		
 	private void createMap(GraphicsContext gc, int map) {
 				
@@ -74,7 +75,11 @@ public class MapSelector extends MyPanel {
 				{
 					MyData.setLevel(level);
 					MyData.setMap(map);
-					Navigator.go(Navigator.GAME);
+					if (mode==1) {
+						Navigator.go(Navigator.GAME_1P);
+					} else {
+						Navigator.go(Navigator.GAME_2P);
+					}
 				}
 			}
 		});
@@ -167,7 +172,9 @@ public class MapSelector extends MyPanel {
 		createCanvas(5, x, y, size);		
 	}
 	
-	public void draw() {
+	public void init(int mode) {
+		
+		this.mode = mode;
 		
 		level = (MyFactory.getSettingDAO().getSettings().getHighestMap()/10);	
 		
@@ -183,33 +190,35 @@ public class MapSelector extends MyPanel {
 		MyButton close = new MyButton(0, MyFactory.getSettingDAO().getSettings().getHeight()-60, "Close", 18, Navigator.MODE_SELECTOR);
 		getChildren().add(close);
 		
-		if (Constants.MAX_LEVELS>1) {
-			MyButton prev= new MyButton(close.getLayoutX()-70, close.getLayoutY(), "<", 18, Navigator.NONE);
-			prev.setPrefWidth(50);
-			prev.setOnAction(new EventHandler<ActionEvent>() { 
-				public void handle(ActionEvent event) {
-					if (level>0) {
-						level--;
-					}
-					createMaps(level);
+		MyButton prev= new MyButton(close.getLayoutX()-70, close.getLayoutY(), "<", 18, Navigator.NONE);
+		prev.setPrefWidth(50);
+		prev.setOnAction(new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent event) {
+				if (level>0) {
+					level--;
 				}
-			});
+				createMaps(level);
+			}
+		});		
+		getChildren().add(prev);
 		
-			getChildren().add(prev);
-		}
-		
-		if (Constants.MAX_LEVELS>1) {
-			MyButton next= new MyButton(close.getLayoutX()+200, close.getLayoutY(), ">", 18, Navigator.NONE);
-			next.setPrefWidth(50);
-			next.setOnAction(new EventHandler<ActionEvent>() { 
-				public void handle(ActionEvent event) {
-					if (level<(Constants.MAX_LEVELS-1)) {
-						level++;
-					}
-					createMaps(level);
+		MyButton next= new MyButton(close.getLayoutX()+200, close.getLayoutY(), ">", 18, Navigator.NONE);
+		next.setPrefWidth(50);
+		next.setOnAction(new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent event) {
+				if (level<(Constants.MAX_LEVELS-1)) {
+					level++;
 				}
-			});
-			getChildren().add(next);
-		}
+				createMaps(level);
+			}
+		});
+		getChildren().add(next);
+	}
+
+
+	@Override
+	public void draw() {
+		// TODO Auto-generated method stub
+		
 	}
 }
