@@ -1,7 +1,5 @@
 package nl.plaatsoft.knightsquest.ui;
 
-import java.util.UUID;
-
 import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
@@ -12,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -38,8 +37,7 @@ public class Communication extends MyPanel {
 	private boolean stop = false;
 	private ObservableList<String> list = FXCollections.observableArrayList();
 	private UDPServer server;
-	private String id = UUID.randomUUID().toString();
-			
+	
 	private void drawMap(int map) {
 				
 		int size=5;		
@@ -51,6 +49,7 @@ public class Communication extends MyPanel {
 		
 		MyData.setLevel(level);
 		MyData.setMap(map);
+		MyData.setMode(MyData.MODE_2P);
 		
 		MyFactory.getLandDAO().createMap(gc, size, level+1);
 		MyFactory.getLandDAO().draw();		
@@ -77,8 +76,23 @@ public class Communication extends MyPanel {
 		
 		getChildren().add(new MyLabel(x, y-50, "Map", 30));
 		getChildren().add(new MyLabel(x+340, y-50, "Available Players", 30));
-		getChildren().add(new MyListView(x+340, y, 220, 225, list ));
-				
+		
+		MyListView listView = new MyListView(x+340, y, 220, 225, list );
+		listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	        public void handle(MouseEvent event) {
+	            System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem());
+	            MyData.setLevel(level);
+				MyData.setMap(map);				
+	            Navigator.go(Navigator.GAME);
+	            server.sent(UDPMessages.join(MyData.getId(), map, level));
+	            server.close();
+	        }
+	    });		
+		getChildren().add(listView);
+		
+		list.add("Dummy1");
+		list.add("Dummy2");
+		
 		Canvas canvas = new Canvas((Constants.SEGMENT_X * size * 4),(Constants.SEGMENT_Y * size));
 		canvas.setLayoutX(x);
 		canvas.setLayoutY(y);
@@ -103,6 +117,7 @@ public class Communication extends MyPanel {
 		close.setOnAction(new EventHandler<ActionEvent>() { 
 			public void handle(ActionEvent event) {
 				stop = true;
+				task1.cancel();
 				Navigator.go(Navigator.MODE_SELECTOR);
 			}
 		});		
@@ -133,16 +148,19 @@ public class Communication extends MyPanel {
 		});
 		getChildren().add(next);
 				
+		try {
+			server = new UDPServer("192.168.2.255", 20000);
+		} catch (Exception e) {			
+			log.error(e.getMessage());
+		}
+		
 		task1 = new Task<Void>() {
 	        public Void call() throws Exception {
-		
-	        	server = new UDPServer("192.168.2.255", 20000);
-	     		
 	        	while (!stop) {
-	        		server.sent(UDPMessages.ping(id));
+	        		server.sent(UDPMessages.ping(MyData.getId()));
 	        		String json = server.receive();
 	        		if (json.length()>0) {
-	        			//list.add(name);
+	        			stop = true;
 	        		}
 	        		Thread.sleep(1000);
 	        	}	        	

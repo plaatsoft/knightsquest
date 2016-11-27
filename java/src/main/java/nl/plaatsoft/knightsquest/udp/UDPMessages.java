@@ -49,10 +49,12 @@ public class UDPMessages {
 		return msg.toString().getBytes();	
 	}
 		
-	static public byte[] join(String id) {
+	static public byte[] join(String id, int map, int level) {
 		JSONObject msg = createHeader(id);
 		try {
-			msg.put("action", "join"); 
+			msg.put("action", "join");
+			msg.put("map", map);
+			msg.put("level", level); 
 		} catch (JSONException e) {
 			log.error(e.getMessage());
 		} 

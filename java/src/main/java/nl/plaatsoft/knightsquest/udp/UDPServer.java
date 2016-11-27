@@ -25,11 +25,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.log4j.Logger;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UDPServer {
@@ -108,45 +106,6 @@ public class UDPServer {
 			return null;
 		}			
 	}
-
-	private String decode(String id, String data) {
-		
-		String action;
-		
-		try {
-			JSONObject obj = new JSONObject(data);
-			//String product = obj.getString("product");
-			//String version = obj.getString("version");
-			//Long timestamp = obj.getLong("timestamp");
-			String id2 = obj.getString("id");	
-			action =  obj.getString("action");
-			String name =  obj.getString("name");
-			if (action.equals("move")) {			
-				int x1 = obj.getInt("x1");
-				int y1 = obj.getInt("y1");
-				int x2 = obj.getInt("x2");
-				int y2 = obj.getInt("y2");
-			}
-			
-			if (id.toString().equals(id2)) {
-				// Do not log own broadcast messages;
-				return "";
-			}			
-			
-			if (action.equals("ping")) {
-				sent(UDPMessages.pong(id));
-				return "";
-			}
-			
-			if (action.equals("pong")) {
-				return name;
-			}
-		} 
-		catch (JSONException e) {
-			log.error(e.getMessage());
-		}
-		return "";
-	}	
 	
 	public void close() {
 		socket.close();		

@@ -108,7 +108,8 @@ public class Navigator {
 			break;	
 									
 		case GAME:
-			game = new Game();				
+			game = new Game();
+			game.init();		
 			game.start();						
 			scene.setRoot(game);	
 			//setSceneEvents(scene, game);

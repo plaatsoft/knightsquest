@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javafx.animation.AnimationTimer;
 import javafx.concurrent.Task;
@@ -53,6 +55,8 @@ import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
+import nl.plaatsoft.knightsquest.udp.UDPMessages;
+import nl.plaatsoft.knightsquest.udp.UDPServer;
 
 public class Game extends StackPane {
 
@@ -74,6 +78,7 @@ public class Game extends StackPane {
 	private MyLabel label4;
 	private MyLabel[] label5;
 	private MyButton btn;
+	private UDPServer server;
 	
 	public void redraw() {
 		
@@ -237,6 +242,40 @@ public class Game extends StackPane {
 		}
 	}
 		
+	private void decodeMessage(String json) {
+						
+		try {
+			JSONObject obj = new JSONObject(json);
+			
+			String id2 = obj.getString("id");	
+			String action =  obj.getString("action");
+			
+			if (MyData.getId().equals(id2)) {
+				/* do not response on own broadcast */
+				return;
+			}	
+			
+			if (action.equals("abort")) {
+				// Player left 
+			}
+			
+			if (action.equals("move")) {
+				int x1 = obj.getInt("x1");
+				int y1 = obj.getInt("y1");
+				int x2 = obj.getInt("x2");
+				int y2 = obj.getInt("y2");
+			}
+			
+			if (action.equals("turn")) {
+				
+				
+			}				
+		} 
+		catch (JSONException e) {
+			log.error(e.getMessage());
+		}
+	
+	}
 	
 	public void nextTurn() {
 		
@@ -416,6 +455,28 @@ public class Game extends StackPane {
 		
 		/* Draw score board */
 		drawPlayerScore();
+		
+		
+		if (MyData.getMode()==MyData.MODE_2P) {
+		
+			try {
+				server = new UDPServer("192.168.2.255", 20000);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+			
+			Task<Void> task1 = new Task<Void>() {
+				public Void call() throws Exception {
+				
+					while (true) {
+						String json = server.receive();
+						decodeMessage(json);
+						Thread.sleep(1000);
+					}	        	
+				}
+			};
+			new Thread(task1).start();
+		}		
 	}
 	
 	public void start() {
@@ -437,6 +498,9 @@ public class Game extends StackPane {
 						turn++;
 						btn.setText("Turn ["+turn+"]");
 						nextTurn();
+						if (MyData.getMode()==MyData.MODE_2P) {
+							server.sent(UDPMessages.turn(MyData.getId()));
+						}
 					}
 										
 					redraw();
@@ -471,7 +535,11 @@ public class Game extends StackPane {
 								
 				// Human action button
 				if ((turn==1) || (gameOver)) {
-					Navigator.go(Navigator.MAP_SELECTOR);
+					if (MyData.getMode()==MyData.MODE_1P) {
+						Navigator.go(Navigator.MAP_SELECTOR);
+					} else {
+						Navigator.go(Navigator.COMMUNICATION);
+					}
 					timer.stop();
 					return;
 				}

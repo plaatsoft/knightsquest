@@ -74,6 +74,7 @@ public class MapSelector extends MyPanel {
 				{
 					MyData.setLevel(level);
 					MyData.setMap(map);
+					MyData.setMode(MyData.MODE_1P);
 					Navigator.go(Navigator.GAME);
 				}
 			}

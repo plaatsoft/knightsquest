@@ -21,6 +21,8 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
+import java.util.UUID;
+
 import org.apache.log4j.Logger;
 
 import nl.plaatsoft.knightsquest.ui.Constants;
@@ -29,11 +31,24 @@ public class MyData {
 	
 	final static Logger log = Logger.getLogger( MyData.class);
 	
+	public static final int MODE_1P = 1;
+	public static final int MODE_2P = 2;
+	
+	private static String id = UUID.randomUUID().toString();
+	
 	private static int level = 0;
 	private static int map = 1;
+	private static int mode = 1;
 		
 	public static int getPlayers() {
-		return getBots() + 1;
+		
+		int amount=getBots() + 1;
+			
+		if (mode==MODE_2P) {
+			
+			amount = 2;
+		}	
+		return amount; 
 	}
 	
 	public static int getSeed() {
@@ -58,6 +73,11 @@ public class MyData {
 		if (value>5) {
 			value = 5;
 		}
+		
+		if (mode==MODE_2P) {
+			value=0;
+		}
+		
 		return value;
 	}
 	
@@ -72,6 +92,11 @@ public class MyData {
 		if (value>3) {
 			value = 3;
 		}
+		
+		if (mode==MODE_2P) {
+			value=1;
+		}
+		
 		return value;
 	}
 
@@ -131,6 +156,14 @@ public class MyData {
 		MyData.level = level;
 	}
 
+	public static void setMode(int mode) {
+		MyData.mode = mode;
+	}
+	
+	public static int getMode() {
+		return mode;
+	}
+	
 	public static int getMap() {
 		return map;
 	}
@@ -160,5 +193,9 @@ public class MyData {
 		}
 		
 		return value;
+	}
+
+	public static String getId() {
+		return id;
 	}
 }
