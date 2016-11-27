@@ -1,5 +1,7 @@
 package nl.plaatsoft.knightsquest.ui;
 
+import java.util.UUID;
+
 import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
@@ -22,6 +24,7 @@ import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyListView;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
+import nl.plaatsoft.knightsquest.udp.UDPMessages;
 import nl.plaatsoft.knightsquest.udp.UDPServer;
 
 public class Communication extends MyPanel {
@@ -34,6 +37,8 @@ public class Communication extends MyPanel {
 	private Task<Void> task1;
 	private boolean stop = false;
 	private ObservableList<String> list = FXCollections.observableArrayList();
+	private UDPServer server;
+	private String id = UUID.randomUUID().toString();
 			
 	private void drawMap(int map) {
 				
@@ -129,16 +134,17 @@ public class Communication extends MyPanel {
 		getChildren().add(next);
 				
 		task1 = new Task<Void>() {
-	        public Void call() {
+	        public Void call() throws Exception {
 		
-	        	UDPServer.init();
+	        	server = new UDPServer("192.168.2.255", 20000);
 	     		
 	        	while (!stop) {
-	        		UDPServer.sent(UDPServer.ping());
-	        		String name = UDPServer.receive();
-	        		if (name.length()>0) {
-	        			list.add(name);
+	        		server.sent(UDPMessages.ping(id));
+	        		String json = server.receive();
+	        		if (json.length()>0) {
+	        			//list.add(name);
 	        		}
+	        		Thread.sleep(1000);
 	        	}	        	
 	        	return null;	        	
 	        }

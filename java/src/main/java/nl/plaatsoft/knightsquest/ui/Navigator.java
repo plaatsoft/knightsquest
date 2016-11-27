@@ -59,21 +59,19 @@ public class Navigator {
 	public static final int NONE = 0;
 	public static final int INTRO1 = 1;
 	public static final int INTRO2 = 2;
-	public static final int HOME = 4;
-	public static final int GAME_1P = 5;
-	public static final int GAME_2P = 6;
-	public static final int MODE_SELECTOR = 7;
-	public static final int MAP_SELECTOR_1P = 8;
-	public static final int MAP_SELECTOR_2P = 9;
-	public static final int DONATE = 10;
-	public static final int LOCAL_HIGHSCORE = 11;
-	public static final int GLOBAL_HIGHSCORE = 12;
-	public static final int CREDITS = 13;
-	public static final int RELEASE_NOTES = 14;
-	public static final int HELP = 15;
-	public static final int SETTINGS = 16;
-	public static final int COMMUNICATION = 17;
-	public static final int EXIT = 18;
+	public static final int HOME = 3;
+	public static final int GAME = 4;
+	public static final int MODE_SELECTOR = 5;
+	public static final int MAP_SELECTOR = 6;
+	public static final int DONATE = 7;
+	public static final int LOCAL_HIGHSCORE = 8;
+	public static final int GLOBAL_HIGHSCORE = 9;
+	public static final int CREDITS = 10;
+	public static final int RELEASE_NOTES = 11;
+	public static final int HELP = 12;
+	public static final int SETTINGS = 13;
+	public static final int COMMUNICATION = 14;
+	public static final int EXIT = 15;
 			
 	public static void go(int page) {
 				
@@ -103,28 +101,15 @@ public class Navigator {
 			scene.setRoot(modeSelector);	
 			break;
 			
-		case MAP_SELECTOR_1P:
+		case MAP_SELECTOR:
 			mapSelector = new MapSelector();				
-			mapSelector.init(1);						
+			mapSelector.init();						
 			scene.setRoot(mapSelector);	
 			break;	
-			
-		case MAP_SELECTOR_2P:
-			mapSelector = new MapSelector();				
-			mapSelector.init(2);						
-			scene.setRoot(mapSelector);	
-			break;	
-			
-		case GAME_1P:
+									
+		case GAME:
 			game = new Game();				
-			game.start(1);						
-			scene.setRoot(game);	
-			//setSceneEvents(scene, game);
-			break;	
-			
-		case GAME_2P:
-			game = new Game();				
-			game.start(2);						
+			game.start();						
 			scene.setRoot(game);	
 			//setSceneEvents(scene, game);
 			break;	

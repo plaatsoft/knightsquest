@@ -51,7 +51,6 @@ public class MapSelector extends MyPanel {
 	private MyLabel[] label2 = new MyLabel[6];	
 	private MyImageView[] image = new MyImageView[6];	
 	private GraphicsContext[] gc = new GraphicsContext[6];
-	private int mode;
 		
 	private void createMap(GraphicsContext gc, int map) {
 				
@@ -75,11 +74,7 @@ public class MapSelector extends MyPanel {
 				{
 					MyData.setLevel(level);
 					MyData.setMap(map);
-					if (mode==1) {
-						Navigator.go(Navigator.GAME_1P);
-					} else {
-						Navigator.go(Navigator.GAME_2P);
-					}
+					Navigator.go(Navigator.GAME);
 				}
 			}
 		});
@@ -172,10 +167,8 @@ public class MapSelector extends MyPanel {
 		createCanvas(5, x, y, size);		
 	}
 	
-	public void init(int mode) {
-		
-		this.mode = mode;
-		
+	public void init() {
+				
 		level = (MyFactory.getSettingDAO().getSettings().getHighestMap()/10);	
 		
 		Image image1 = new Image("images/background4.jpg");

@@ -23,58 +23,46 @@ package nl.plaatsoft.knightsquest.udp;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javafx.collections.ObservableList;
-import nl.plaatsoft.knightsquest.network.CloudUser;
-import nl.plaatsoft.knightsquest.ui.Constants;
-
 public class UDPServer {
 
 	final static Logger log = Logger.getLogger(UDPServer.class);
 	
-	private static UUID id = UUID.randomUUID();	
-	private static MulticastSocket socket;
-	private static InetAddress group;
+	//private MulticastSocket socket;
+	private DatagramSocket socket;
+	private InetAddress group;
 	
-	private static void show(boolean send, DatagramPacket packet) {
-		if (packet!=null) {
-			String data = new String(packet.getData());
-
-			String text = "";
-			if (send) {
-				text +=" TX:";
-			} else {
-				text +=" RX:";
-			}
-			text += " ["+packet.getAddress()+":"+packet.getPort()+"] "+data;
-			log.info(text);
-		}
-	}
-	
-	public static void init() {
-				
-		log.info("server started" );
+	public UDPServer(String address, int port) throws Exception {
 		
-		try {
-			socket = new MulticastSocket(20000);		
-			socket.setSoTimeout(1000); 
-			group = InetAddress.getByName("224.1.2.255");
-			socket.joinGroup(group);
-		} catch (IOException e) {
-			log.error(e.getMessage());
-		}
+		socket = new DatagramSocket(port);		
+		//socket = new MulticastSocket(port);		
+		socket.setSoTimeout(2000); 
+		group = InetAddress.getByName(address);
+		//socket.joinGroup(group);
 	}
-	
-	public static void sent(byte[] data) {
+
+	private void show(boolean send, DatagramPacket packet) {
+		String data = new String(packet.getData());
+
+		String text = "";
+		if (send) {
+			text +=" TX:";
+		} else {
+			text +=" RX:";
+		}
+		text += " ["+packet.getAddress()+":"+packet.getPort()+"] "+data;
+		log.info(text);	
+	}
+		
+	public void sent(byte[] data) {
 		
 		try {
 			DatagramPacket packet = new DatagramPacket(data, data.length, group, 20000);
@@ -86,41 +74,42 @@ public class UDPServer {
 		}		
 	}
 	
-	public static String receive() {
+	public String receive() {
 				
-		String action="";
-		while (true) {
-			try {		
-				byte[] receiveData = new byte[1024];			
-				DatagramPacket packet = new DatagramPacket(receiveData, receiveData.length);
+		String json = null;
+		try {		
+			byte[] receiveData = new byte[1024];			
+			DatagramPacket packet = new DatagramPacket(receiveData, receiveData.length);
+			show(false, packet);
 			
-				socket.receive(packet);
+			socket.receive(packet);				
+			json = new String(packet.getData(), StandardCharsets.UTF_8);				
 				
-				String data = new String(packet.getData(), StandardCharsets.UTF_8);				
-				action = decode(data);
-				if (action.length()>0) {				
-					show(false, packet);
-				}
-				
-			} catch (IOException e) {
-				log.error(e.getMessage());			
-				break;
-			}			
-		}
-		return action;
+		} catch (IOException e) {
+			log.error(e.getMessage());			
+		}			
+		return json;
 	}
 	
-	public static void terminate() {
-		log.info("server terminated" );
-		try {
-			socket.leaveGroup(group);
-			socket.close();
-		} catch (IOException e) {
-			log.error(e.getMessage());
-		}	
-	}	
+	
+	public String filter(String json, String id) {
 		
-	static private String decode(String data) {
+		try {
+			JSONObject obj = new JSONObject(json);
+			String id2 = obj.getString("id");
+			
+			if (id.toString().equals(id2)) {			
+				return null;
+			}
+			return json;
+			
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return null;
+		}			
+	}
+
+	private String decode(String id, String data) {
 		
 		String action;
 		
@@ -145,7 +134,7 @@ public class UDPServer {
 			}			
 			
 			if (action.equals("ping")) {
-				UDPServer.sent(pong());
+				sent(UDPMessages.pong(id));
 				return "";
 			}
 			
@@ -157,87 +146,9 @@ public class UDPServer {
 			log.error(e.getMessage());
 		}
 		return "";
-	}
-		
-	static public JSONObject createHeader() {
-		Date now = new Date();
-		JSONObject msg = new JSONObject();
-		try {
-			msg.put("product", Constants.APP_NAME);
-			msg.put("version", Constants.APP_VERSION);
-			//msg.put("timestamp", now.getTime());
-			msg.put("id", id); 
-			msg.put("name", CloudUser.getNickname()); 
-		}
-		catch (JSONException e) {
-			log.error(e.getMessage());
-		} 
-		return msg;		
-	}
-	
-	static public byte[] ping() {
-		JSONObject msg = createHeader();
-		try {
-			msg.put("action", "ping"); 
-		} catch (JSONException e) {
-			log.error(e.getMessage());
-		} 
-		return msg.toString().getBytes();		
-	}
-	
-	static public byte[] pong() {
-		JSONObject msg = createHeader();
-		try {
-			msg.put("action", "pong"); 
-		} catch (JSONException e) {
-			log.error(e.getMessage());
-		} 
-		return msg.toString().getBytes();	
-	}
-		
-	static public byte[] join() {
-		JSONObject msg = createHeader();
-		try {
-			msg.put("action", "join"); 
-		} catch (JSONException e) {
-			log.error(e.getMessage());
-		} 
-		return msg.toString().getBytes();
-	}
-	
-	static public byte[] abort() {
-		JSONObject msg = createHeader();
-		try {
-			msg.put("action", "abort"); 
-		} catch (JSONException e) {
-			log.error(e.getMessage());
-		} 
-		return msg.toString().getBytes();
-	}
-		
-	static public byte[] move(int x1, int y1, int x2, int y2) {
-		JSONObject msg = createHeader();
-		try {
-			msg.put("action", "move");
-			msg.put("x1", x1); 
-			msg.put("y1", y1); 
-			msg.put("x2", x2); 
-			msg.put("y2", y2); 
-		} catch (JSONException e) {
-			log.error(e.getMessage());
-		} 
-		return msg.toString().getBytes();
-	}
-	
-	static public byte[] turn() {
-		JSONObject msg = createHeader();
-		try {
-			msg.put("action", "turn"); 
-		} catch (JSONException e) {
-			log.error(e.getMessage());
-		} 
-		return msg.toString().getBytes();
 	}	
 	
-	
+	public void close() {
+		socket.close();		
+	}
 }

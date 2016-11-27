@@ -74,7 +74,6 @@ public class Game extends StackPane {
 	private MyLabel label4;
 	private MyLabel[] label5;
 	private MyButton btn;
-	private int mode;
 	
 	public void redraw() {
 		
@@ -281,7 +280,7 @@ public class Game extends StackPane {
 	}
 	
 
-	public void init () {
+	public void init() {
 		// Clear previous game 
 		MyFactory.clearFactory();
 
@@ -419,9 +418,7 @@ public class Game extends StackPane {
 		drawPlayerScore();
 	}
 	
-	public void start(int mode) {
-		
-		this.mode = mode;
+	public void start() {
 		
 		// ------------------------------------------------------ 
 		// Human Player Actions
@@ -474,11 +471,7 @@ public class Game extends StackPane {
 								
 				// Human action button
 				if ((turn==1) || (gameOver)) {
-					if (mode==1) {
-						Navigator.go(Navigator.MAP_SELECTOR_1P);
-					} else {
-						Navigator.go(Navigator.MAP_SELECTOR_2P);
-					}
+					Navigator.go(Navigator.MAP_SELECTOR);
 					timer.stop();
 					return;
 				}

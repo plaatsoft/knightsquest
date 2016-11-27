@@ -29,6 +29,7 @@ import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.LandDAO;
 import nl.plaatsoft.knightsquest.model.LandEnum;
 import nl.plaatsoft.knightsquest.model.Player;
+import nl.plaatsoft.knightsquest.model.PlayerEnum;
 import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.SoldierDAO;
 import nl.plaatsoft.knightsquest.tools.MyData;
@@ -46,7 +47,7 @@ public class SoldierDAOTest {
 		LandDAO landDAO = new LandDAO();				
 		Land[][] lands = landDAO.getLands();
 		
-		Player player = new Player(size, true);		
+		Player player = new Player(size,  PlayerEnum.BOT);		
 		Region region = new Region(1, player);
 		
 		for (int x=0; x<5;x++) {
