@@ -33,9 +33,7 @@ public class MyData {
 	
 	public static final int MODE_1P = 1;
 	public static final int MODE_2P = 2;
-	
-	private static String id = UUID.randomUUID().toString();
-	
+		
 	private static int level = 0;
 	private static int map = 1;
 	private static int mode = 1;
@@ -193,9 +191,5 @@ public class MyData {
 		}
 		
 		return value;
-	}
-
-	public static String getId() {
-		return id;
 	}
 }

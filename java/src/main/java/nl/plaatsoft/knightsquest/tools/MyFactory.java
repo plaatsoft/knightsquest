@@ -21,6 +21,8 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
+import org.apache.log4j.Logger;
+
 import nl.plaatsoft.knightsquest.model.BuildingDAO;
 import nl.plaatsoft.knightsquest.model.LandDAO;
 import nl.plaatsoft.knightsquest.model.SettingDAO;
@@ -28,9 +30,14 @@ import nl.plaatsoft.knightsquest.model.PlayerDAO;
 import nl.plaatsoft.knightsquest.model.RegionDAO;
 import nl.plaatsoft.knightsquest.model.ScoreDAO;
 import nl.plaatsoft.knightsquest.model.SoldierDAO;
+import nl.plaatsoft.knightsquest.udp.UDPServer;
+import nl.plaatsoft.knightsquest.ui.Communication;
+import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class MyFactory {
     
+	final static Logger log = Logger.getLogger(MyFactory.class);
+	
     private static ScoreDAO scoreDAO; 	
     private static PlayerDAO playerDAO;
     private static LandDAO landDAO;	
@@ -38,6 +45,7 @@ public class MyFactory {
     private static SoldierDAO soldierDAO;
     private static BuildingDAO buildingDAO;
     private static SettingDAO settingDAO;
+    private static UDPServer uDPServer;
 					
 	public static SettingDAO getSettingDAO() {
 		
@@ -103,4 +111,17 @@ public class MyFactory {
 		soldierDAO = null;
 		buildingDAO = null;
 	}
+
+	public static UDPServer getUDPServer() {
+		if (uDPServer==null) {			
+			try {
+				uDPServer = new UDPServer();
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		}
+		return uDPServer;
+	}
+
+
 }
