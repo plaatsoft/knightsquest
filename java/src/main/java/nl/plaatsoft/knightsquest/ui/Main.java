@@ -79,7 +79,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-
+		
 		log.info(Constants.APP_NAME + " v" + Constants.APP_VERSION+" start");
 		
 		String version = System.getProperty("java.version");

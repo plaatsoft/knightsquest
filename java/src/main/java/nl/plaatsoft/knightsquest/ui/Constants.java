@@ -30,7 +30,8 @@ public class Constants {
 	public final static String APP_WS_NAME = "Java-KnightsQuest";
 	public final static String APP_WS_URL = "service.plaatsoft.nl";
 	public final static String APP_DONATE_URL = "http://www.plaatsoft.nl/donate";
-		
+	public final static int APP_UDP_PORT = 20000; 	
+	
 	public final static int MAX_LEVELS = 10; 	
 	
 	public final static int SEGMENT_SIZE_640 = 10;		

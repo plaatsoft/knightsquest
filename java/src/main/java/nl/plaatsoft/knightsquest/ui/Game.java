@@ -43,20 +43,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
+import nl.plaatsoft.knightsquest.cloud.CloudScore;
+import nl.plaatsoft.knightsquest.cloud.CloudUser;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.Player;
 import nl.plaatsoft.knightsquest.model.PlayerEnum;
 import nl.plaatsoft.knightsquest.model.Region;
-import nl.plaatsoft.knightsquest.network.CloudScore;
-import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.model.Score;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
-import nl.plaatsoft.knightsquest.udp.UDPMessages;
-import nl.plaatsoft.knightsquest.udp.UDPServer;
 
 public class Game extends StackPane {
 
@@ -78,7 +75,6 @@ public class Game extends StackPane {
 	private MyLabel label4;
 	private MyLabel[] label5;
 	private MyButton btn;
-	private UDPServer server;
 	
 	public void redraw() {
 		
@@ -145,22 +141,26 @@ public class Game extends StackPane {
 			label2.setText("You win");			
 			
 			int score = calculateScore(player,true);
-			
-			/* Next map unlocked! */
-			int nextMap = MyData.getNextMap(MyData.getMap());
-			if ((nextMap>0) && (!MyFactory.getSettingDAO().getSettings().getMapUnlocked(nextMap))) {
-				label3.setText("Map "+nextMap+" is now unlocked!");		
-				MyFactory.getSettingDAO().getSettings().setMapUnlocked(MyData.getNextMap(MyData.getMap()), true);			
-			}	
-			
 			label4.setText("Total score = "+score);	
-			if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
-				MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
-			}
-			MyFactory.getSettingDAO().save();
 			
 			btn.setText("End ["+turn+"]");		
-			storeScore(score, MyData.getMap());
+			
+			if (MyData.getMode()==MyData.MODE_1P) {
+				
+				/* Next map unlocked! */		
+				int nextMap = MyData.getNextMap(MyData.getMap());
+				if ((nextMap>0) && (!MyFactory.getSettingDAO().getSettings().getMapUnlocked(nextMap))) {
+					label3.setText("Map "+nextMap+" is now unlocked!");		
+					MyFactory.getSettingDAO().getSettings().setMapUnlocked(MyData.getNextMap(MyData.getMap()), true);			
+				}
+					
+				if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
+					MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
+				}
+				MyFactory.getSettingDAO().save();
+				
+				storeScore(score, MyData.getMap());
+			}
 			
 			gameOver=true;
 		}		
@@ -177,13 +177,16 @@ public class Game extends StackPane {
 			int score = calculateScore(human, false);
 					
 			label4.setText("Total score = "+score);	
-			if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
-				MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
-				MyFactory.getSettingDAO().save();
-			}
 			
 			btn.setText("End ["+turn+"]");		
-			storeScore(score, MyData.getMap());
+			
+			if (MyData.getMode()==MyData.MODE_1P) {
+				if (score > MyFactory.getSettingDAO().getSettings().getScore(MyData.getMap())) {
+					MyFactory.getSettingDAO().getSettings().setScore(MyData.getMap(), score);
+					MyFactory.getSettingDAO().save();
+				}
+				storeScore(score, MyData.getMap());
+			}
 			
 			gameOver = true;
 		}
@@ -246,14 +249,7 @@ public class Game extends StackPane {
 						
 		try {
 			JSONObject obj = new JSONObject(json);
-			
-			String id2 = obj.getString("id");	
 			String action =  obj.getString("action");
-			
-			if (MyData.getId().equals(id2)) {
-				/* do not response on own broadcast */
-				return;
-			}	
 			
 			if (action.equals("abort")) {
 				// Player left 
@@ -280,6 +276,10 @@ public class Game extends StackPane {
 	public void nextTurn() {
 		
 		log.info("-------");
+		
+		if (MyData.getMode()==MyData.MODE_2P) {
+			MyFactory.getUDPServer().turn();
+		}
 		
 		MyFactory.getLandDAO().resetSelected();	
 		
@@ -458,18 +458,12 @@ public class Game extends StackPane {
 		
 		
 		if (MyData.getMode()==MyData.MODE_2P) {
-		
-			try {
-				server = new UDPServer("192.168.2.255", 20000);
-			} catch (Exception e) {
-				log.error(e.getMessage());
-			}
 			
 			Task<Void> task1 = new Task<Void>() {
 				public Void call() throws Exception {
 				
 					while (true) {
-						String json = server.receive();
+						String json = MyFactory.getUDPServer().receive();
 						decodeMessage(json);
 						Thread.sleep(1000);
 					}	        	
@@ -496,11 +490,8 @@ public class Game extends StackPane {
 										
 					if (MyFactory.getPlayerDAO().hasPlayerNoMoves(MyFactory.getPlayerDAO().getHumanPlayer())) {
 						turn++;
-						btn.setText("Turn ["+turn+"]");
+						btn.setText("Turn ["+turn+"]");						
 						nextTurn();
-						if (MyData.getMode()==MyData.MODE_2P) {
-							server.sent(UDPMessages.turn(MyData.getId()));
-						}
 					}
 										
 					redraw();

@@ -23,8 +23,6 @@ import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyListView;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
-import nl.plaatsoft.knightsquest.udp.UDPMessages;
-import nl.plaatsoft.knightsquest.udp.UDPServer;
 
 public class Communication extends MyPanel {
 	
@@ -36,7 +34,6 @@ public class Communication extends MyPanel {
 	private Task<Void> task1;
 	private boolean stop = false;
 	private ObservableList<String> list = FXCollections.observableArrayList();
-	private UDPServer server;
 	
 	private void drawMap(int map) {
 				
@@ -80,12 +77,11 @@ public class Communication extends MyPanel {
 		MyListView listView = new MyListView(x+340, y, 220, 225, list );
 		listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 	        public void handle(MouseEvent event) {
-	            System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem());
+	            log.info("clicked on " + listView.getSelectionModel().getSelectedItem());
 	            MyData.setLevel(level);
 				MyData.setMap(map);				
 	            Navigator.go(Navigator.GAME);
-	            server.sent(UDPMessages.join(MyData.getId(), map, level));
-	            server.close();
+	            MyFactory.getUDPServer().join(map, level);
 	        }
 	    });		
 		getChildren().add(listView);
@@ -147,18 +143,15 @@ public class Communication extends MyPanel {
 			}
 		});
 		getChildren().add(next);
-				
-		try {
-			server = new UDPServer("192.168.2.255", 20000);
-		} catch (Exception e) {			
-			log.error(e.getMessage());
-		}
-		
+						
 		task1 = new Task<Void>() {
 	        public Void call() throws Exception {
+	        	MyFactory.getUDPServer().init(Constants.APP_UDP_PORT);
+	        	
 	        	while (!stop) {
-	        		server.sent(UDPMessages.ping(MyData.getId()));
-	        		String json = server.receive();
+	        		
+	        		MyFactory.getUDPServer().ping();
+	        		String json = MyFactory.getUDPServer().receive();
 	        		if (json.length()>0) {
 	        			stop = true;
 	        		}
