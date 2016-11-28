@@ -21,14 +21,10 @@
 
 package nl.plaatsoft.knightsquest.model;
 
-import org.apache.log4j.Logger;
-
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 
 public class Building {
 
-	final private static Logger log = Logger.getLogger(Building.class);
-	
 	private Land land;	
 	private BuildingEnum type;
 

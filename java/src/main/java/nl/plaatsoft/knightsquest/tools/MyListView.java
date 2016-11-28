@@ -5,7 +5,8 @@ import javafx.scene.control.ListView;
 
 public class MyListView extends ListView<Object> {
 
-	public MyListView(int x, int y, int width, int height, ObservableList items) {
+	@SuppressWarnings("unchecked")
+	public MyListView(int x, int y, int width, int height, @SuppressWarnings("rawtypes") ObservableList items) {
 
 		setLayoutX(x);
 		setLayoutY(y);

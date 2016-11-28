@@ -122,10 +122,8 @@ public class Settings extends MyPanel {
     	    	
     	int offset = ((MyFactory.getSettingDAO().getSettings().getWidth()-640)/2);    	
     	int x1 = 100 + offset;
-    	int x2 = 250 + offset;
     	int x3 = 480 + offset;
-		
-		
+				
 		int x=(MyFactory.getSettingDAO().getSettings().getWidth()-(MAX*70))/2;
 		
 		for (int i=0; i<MAX ;i++) {

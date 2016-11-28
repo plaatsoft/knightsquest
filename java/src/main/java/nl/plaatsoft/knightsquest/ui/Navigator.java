@@ -21,16 +21,16 @@
 
 package nl.plaatsoft.knightsquest.ui;
 
-import java.util.Iterator;
+//import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
+//import javafx.event.EventHandler;
+//import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Pane;
+//import javafx.scene.input.ScrollEvent;
+//import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 
@@ -171,7 +171,7 @@ public class Navigator {
 	}
 	
 	//handles mouse scrolling
-	private static void setSceneEvents(final Scene scene, final Pane page) {	    
+	/*private static void setSceneEvents(final Scene scene, final Pane page) {	    
 	    scene.setOnScroll(
 	            new EventHandler<ScrollEvent>() {
 	              public void handle(ScrollEvent event) {
@@ -202,7 +202,7 @@ public class Navigator {
 	    		   }
 	           }
 	      });
-	  }
+	  }*/
 	
 	
 	public static Scene getScene() {

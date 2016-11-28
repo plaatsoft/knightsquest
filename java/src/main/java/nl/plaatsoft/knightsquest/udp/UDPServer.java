@@ -93,8 +93,10 @@ public class UDPServer {
 		} else {
 			text +=" RX:";
 		}
-		text += " ["+packet.getAddress().toString().substring(1)+":"+packet.getPort()+"] "+data;
-		log.info(text);	
+		if (packet.getAddress()!=null) {
+			text += " ["+packet.getAddress().toString().substring(1)+":"+packet.getPort()+"] "+data;
+			log.info(text);
+		}
 	}
 		
 	private void sent(byte[] data) {

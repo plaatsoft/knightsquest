@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -35,8 +33,6 @@ import nl.plaatsoft.knightsquest.tools.MyFactory;
 
 public class PlayerDAO {
 
-	private static Logger log = Logger.getLogger( PlayerDAO.class);		
-	
 	private List <Player> players = new ArrayList<Player>();
 	
 	public void getTexture(GraphicsContext gc, int player) { 

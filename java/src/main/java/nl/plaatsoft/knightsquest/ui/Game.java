@@ -256,10 +256,10 @@ public class Game extends StackPane {
 			}
 			
 			if (action.equals("move")) {
-				int x1 = obj.getInt("x1");
-				int y1 = obj.getInt("y1");
-				int x2 = obj.getInt("x2");
-				int y2 = obj.getInt("y2");
+				//int x1 = obj.getInt("x1");
+				//int y1 = obj.getInt("y1");
+				//int x2 = obj.getInt("x2");
+				//int y2 = obj.getInt("y2");
 			}
 			
 			if (action.equals("turn")) {

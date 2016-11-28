@@ -21,8 +21,6 @@
 
 package nl.plaatsoft.knightsquest.tools;
 
-import java.util.UUID;
-
 import org.apache.log4j.Logger;
 
 import nl.plaatsoft.knightsquest.ui.Constants;

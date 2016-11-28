@@ -43,7 +43,7 @@ public class LandDAO {
 	private Land[][] lands = new Land[Constants.SEGMENT_X][Constants.SEGMENT_Y];
 	
 	private Image water;
-	private Image ocean;
+	//private Image ocean;
 	private Image forest;
 	private Image coast;
 	private Image rock;
@@ -51,7 +51,7 @@ public class LandDAO {
 			
 	private void init() {
 		water = new Image("images/water.png");
-		ocean = new Image("images/ocean.png");
+		//ocean = new Image("images/ocean.png");
 		forest = new Image("images/forest.png");
 		coast = new Image("images/coast.png");
 		rock = new Image("images/rock.png");

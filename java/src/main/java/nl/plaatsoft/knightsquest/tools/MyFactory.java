@@ -31,8 +31,6 @@ import nl.plaatsoft.knightsquest.model.RegionDAO;
 import nl.plaatsoft.knightsquest.model.ScoreDAO;
 import nl.plaatsoft.knightsquest.model.SoldierDAO;
 import nl.plaatsoft.knightsquest.udp.UDPServer;
-import nl.plaatsoft.knightsquest.ui.Communication;
-import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class MyFactory {
     
