@@ -25,26 +25,63 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import nl.plaatsoft.knightsquest.cloud.CloudUser;
+import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class UDPServer {
 
 	final static Logger log = Logger.getLogger(UDPServer.class);
 	
-	//private MulticastSocket socket;
-	private DatagramSocket socket;
-	private InetAddress group;
+	private DatagramSocket socket = null;
+	private InetAddress group = null;
+	private String id = UUID.randomUUID().toString();
 	
-	public UDPServer(String address, int port) throws Exception {
+	private String getBroadcastAddress() throws SocketException {
 		
-		socket = new DatagramSocket(port);		
-		//socket = new MulticastSocket(port);		
-		socket.setSoTimeout(2000); 
-		group = InetAddress.getByName(address);
-		//socket.joinGroup(group);
+		@SuppressWarnings("rawtypes")
+		Enumeration e = NetworkInterface.getNetworkInterfaces();		
+		while(e.hasMoreElements()) {
+			NetworkInterface n = (NetworkInterface) e.nextElement();
+			Iterator<InterfaceAddress> iter1 = n.getInterfaceAddresses().iterator();
+			while (iter1.hasNext()) {
+				InterfaceAddress address = (InterfaceAddress) iter1.next();
+				String ip = address.getAddress().toString();
+					
+				int n1 = ip.indexOf(".", 4);
+				if (n1>0) {			
+					if (!ip.equals("/127.0.0.1") && (!ip.startsWith("/169.254"))) {
+						return (address.getBroadcast().toString().substring(1));
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public void init(int port) {
+		
+		try {
+			if (socket==null) {
+				socket = new DatagramSocket(port);		
+				socket.setSoTimeout(2000); 
+				group = InetAddress.getByName(getBroadcastAddress());
+			}			
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 	}
 
 	private void show(boolean send, DatagramPacket packet) {
@@ -56,11 +93,11 @@ public class UDPServer {
 		} else {
 			text +=" RX:";
 		}
-		text += " ["+packet.getAddress()+":"+packet.getPort()+"] "+data;
+		text += " ["+packet.getAddress().toString().substring(1)+":"+packet.getPort()+"] "+data;
 		log.info(text);	
 	}
 		
-	public void sent(byte[] data) {
+	private void sent(byte[] data) {
 		
 		try {
 			DatagramPacket packet = new DatagramPacket(data, data.length, group, 20000);
@@ -110,4 +147,105 @@ public class UDPServer {
 	public void close() {
 		socket.close();		
 	}
+	
+	private JSONObject createHeader() throws JSONException {
+		Date now = new Date();
+		JSONObject msg = new JSONObject();
+		
+		msg.put("product", Constants.APP_NAME);
+		msg.put("version", Constants.APP_VERSION);
+		msg.put("timestamp", now.getTime());
+		msg.put("id", id); 
+		msg.put("name", CloudUser.getNickname()); 
+		
+		return msg;		
+	}
+	
+	public void ping() {
+		
+		JSONObject msg = null; 
+		
+		try {
+			msg = createHeader();
+			msg.put("action", "ping"); 
+		} catch (JSONException e) {
+			log.error(e.getMessage());
+		} 
+		sent(msg.toString().getBytes());		
+	}
+	
+	 public void pong() {
+		 JSONObject msg = null; 
+		try {
+			msg = createHeader();
+			msg.put("action", "pong"); 
+		} catch (JSONException e) {
+			log.error(e.getMessage());
+		} 
+		sent( msg.toString().getBytes());	
+	}
+		
+	public void join(int map, int level) {
+		JSONObject msg = null; 
+		try {
+			msg = createHeader();
+			msg.put("action", "join");
+			msg.put("map", map);
+			msg.put("level", level); 
+		} catch (JSONException e) {
+			log.error(e.getMessage());
+		} 
+		sent(msg.toString().getBytes());
+	}
+	
+	public void abort() {
+		JSONObject msg = null; 
+		try {
+			msg = createHeader();
+			msg.put("action", "abort"); 
+		} catch (JSONException e) {
+			log.error(e.getMessage());
+		} 
+		sent(msg.toString().getBytes());
+	}
+		
+	public void move(int x1, int y1, int x2, int y2) {
+		JSONObject msg = null; 
+		try {
+			msg = createHeader();
+			msg.put("action", "move");
+			msg.put("x1", x1); 
+			msg.put("y1", y1); 
+			msg.put("x2", x2); 
+			msg.put("y2", y2); 
+		} catch (JSONException e) {
+			log.error(e.getMessage());
+		} 
+		sent(msg.toString().getBytes());
+	}
+	
+	public void create(int x2, int y2) {
+		JSONObject msg = null; 
+		try {
+			msg = createHeader();
+			msg.put("action", "create");
+			msg.put("x2", x2); 
+			msg.put("y2", y2); 
+		} catch (JSONException e) {
+			log.error(e.getMessage());
+		} 
+		sent(msg.toString().getBytes());
+	}
+	
+	public void turn() {
+		JSONObject msg = null; 
+		try {
+			msg = createHeader();
+			msg.put("action", "turn"); 
+		} catch (JSONException e) {
+			log.error(e.getMessage());
+		} 
+		sent(msg.toString().getBytes());
+	}
+	
 }
