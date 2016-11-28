@@ -31,6 +31,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
 import nl.plaatsoft.knightsquest.ui.Constants;
@@ -368,7 +369,11 @@ public class LandDAO {
 		}
 		
 		// Add land to new region
-		srcRegion.getLands().add(destination);		
+		srcRegion.getLands().add(destination);
+		
+		if ((source.getPlayer().getType()!=PlayerEnum.BOT) && (MyData.getMode()==MyData.MODE_2P)) {
+			MyFactory.getUDPServer().move(source.getX(),source.getY(),destination.getX(),destination.getY());
+		}
 	}
 	
 	private void createSoldier(Land source, Land destination) {
@@ -392,6 +397,10 @@ public class LandDAO {
 		
 		// Add land to new region
 		srcRegion.getLands().add(destination);
+		
+		if ((source.getPlayer().getType()!=PlayerEnum.BOT) && (MyData.getMode()==MyData.MODE_2P)) {
+			MyFactory.getUDPServer().create(destination.getX(),destination.getY());
+		}
 	}
 		
 	public void resetSelected() {
