@@ -2,15 +2,13 @@ package nl.plaatsoft.knightquest.udp;
 
 import static org.junit.Assert.*;
 
-import java.util.UUID;
-
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.plaatsoft.knightsquest.udp.UDPMessages;
 import nl.plaatsoft.knightsquest.udp.UDPServer;
+import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class UDPServerTest {
 
@@ -22,9 +20,9 @@ public class UDPServerTest {
 	@Before
 	public void before() {
 		
-		id = UUID.randomUUID().toString();		
 		try {
-			server = new UDPServer("192.168.2.255", 20000);
+			server = new UDPServer();
+			server.init(Constants.APP_UDP_PORT);
 		} catch (Exception e) {
 			log.error(e.getMessage());			
 		}
@@ -33,7 +31,7 @@ public class UDPServerTest {
 	@Test
 	public void pingTest() {
 				
-		server.sent(UDPMessages.ping(id));
+		server.ping();
 		String json = server.receive();
 		assertEquals("No message", true, json.length()>0);
 	}
@@ -41,7 +39,7 @@ public class UDPServerTest {
 	@Test
 	public void joinTest() {
 				
-		server.sent(UDPMessages.join(id));
+		server.join(1,1);
 		String json = server.receive();
 		assertEquals("No message", true, json.length()>0);
 	}
@@ -49,7 +47,7 @@ public class UDPServerTest {
 	@Test
 	public void moveTest() {
 				
-		server.sent(UDPMessages.move(id, 1, 2, 1, 2));
+		server.move(1, 2, 1, 2);
 		String json = server.receive();
 		assertEquals("No message", true, json.length()>0);
 	}
@@ -57,7 +55,7 @@ public class UDPServerTest {
 	@Test
 	public void pongTest() {
 				
-		server.sent(UDPMessages.pong(id));
+		server.pong();
 		String json = server.receive();
 		assertEquals("No message", true, json.length()>0);
 	}
@@ -65,7 +63,7 @@ public class UDPServerTest {
 	@Test
 	public void turnTest() {
 				
-		server.sent(UDPMessages.turn(id));
+		server.turn();
 		String json = server.receive();
 		assertEquals("No message", true, json.length()>0);
 	}
@@ -73,7 +71,7 @@ public class UDPServerTest {
 	@Test
 	public void filterTest() {
 				
-		server.sent(UDPMessages.turn(id));
+		server.turn();
 		String json = server.receive();
 		json = server.filter(json, id);
 		assertEquals("Filter is not working", null, json);

@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import nl.plaatsoft.knightsquest.cloud.CloudUser;
+import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class UDPServer {

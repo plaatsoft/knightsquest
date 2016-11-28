@@ -35,7 +35,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.text.TextAlignment;
-import nl.plaatsoft.knightsquest.cloud.CloudUser;
+import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
