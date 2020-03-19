@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import nl.plaatsoft.knightsquest.udp.UDPServer;
+import nl.plaatsoft.knightsquest.network.UDPServer;
 import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class UDPServerTest {

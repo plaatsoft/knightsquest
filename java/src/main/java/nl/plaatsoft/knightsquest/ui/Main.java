@@ -38,8 +38,7 @@ import nl.plaatsoft.knightsquest.tools.MyMusic;
 public class Main extends Application {
 
 	final static Logger log = Logger.getLogger( Main.class);
-	
-	
+		
 	@Override
 	public void start(Stage primaryStage) {
 

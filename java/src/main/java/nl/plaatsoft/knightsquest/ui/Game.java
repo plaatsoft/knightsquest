@@ -43,6 +43,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
 import nl.plaatsoft.knightsquest.network.CloudScore;
 import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.model.Land;
@@ -54,6 +55,7 @@ import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
+import nl.plaatsoft.knightsquest.tools.MySound;
 
 public class Game extends StackPane {
 
@@ -137,6 +139,9 @@ public class Game extends StackPane {
 	public void playerWin(Player player) {
 		
 		if (!gameOver) {
+			
+			MySound.play(player, MySound.CLIP_END);
+					 	
 			label1.setText("Game Over");
 			label2.setText("You win");			
 			
@@ -166,8 +171,10 @@ public class Game extends StackPane {
 		}		
 	}
 	
-	public void playerLose() {
+	public void playerLose(Player player) {
 		
+		MySound.play(player, MySound.CLIP_END);
+	 	
 		Player human = MyFactory.getPlayerDAO().getHumanPlayer();
 		
 		if (!gameOver) {
@@ -218,7 +225,7 @@ public class Game extends StackPane {
 
 			if (!humanAlive) {
 				// Human dead
-				playerLose();
+				playerLose(MyFactory.getPlayerDAO().getHumanPlayer());
 				
 				// Bots alive, continue game in auto mode.
 				timer.start();
@@ -231,7 +238,7 @@ public class Game extends StackPane {
 			if (humanAlive) {					
 				playerWin(winner);				
 			} else {		
-				playerLose();
+				playerLose(MyFactory.getPlayerDAO().getHumanPlayer());
 			}
 		}
 	}
@@ -276,6 +283,8 @@ public class Game extends StackPane {
 	public void nextTurn() {
 		
 		log.info("-------");
+		
+		MySound.play(MyFactory.getPlayerDAO().getHumanPlayer(), MySound.CLIP_TURN);
 		
 		if (MyData.getMode()==MyData.MODE_2P) {
 			MyFactory.getUDPServer().turn();

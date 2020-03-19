@@ -32,6 +32,7 @@ public class Setting implements Serializable {
 	private double x;
 	private double y;
 	private boolean musicOn;
+	private boolean SoundEffectsOn;
 	private String resolution;
 	private boolean[] mapUnlocked = new boolean[Constants.MAX_LEVELS*10];
 	private int[] score = new int[Constants.MAX_LEVELS*10];
@@ -138,6 +139,14 @@ public class Setting implements Serializable {
 			}
 		}
 		return 1;
+	}
+
+	public boolean isSoundEffectsOn() {
+		return SoundEffectsOn;
+	}
+
+	public void setSoundEffectsOn(boolean soundEffectsOn) {
+		SoundEffectsOn = soundEffectsOn;
 	}
 		
 }

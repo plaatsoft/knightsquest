@@ -28,6 +28,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
 import nl.plaatsoft.knightsquest.model.Region;
 import nl.plaatsoft.knightsquest.model.Land;
 import nl.plaatsoft.knightsquest.model.LandEnum;
@@ -37,6 +38,7 @@ import nl.plaatsoft.knightsquest.model.SoldierEnum;
 import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyRandom;
+import nl.plaatsoft.knightsquest.tools.MySound;
 import nl.plaatsoft.knightsquest.ui.Constants;
 
 public class RegionDAO {
@@ -258,6 +260,8 @@ public class RegionDAO {
 						// No food, soldiers die
 						land.getSoldier().setType(SoldierEnum.CROSS);
 						land.getSoldier().setEnabled(false);
+						
+						MySound.play(land.getPlayer(), MySound.CLIP_DIE);								
 					}
 				}
 			}
@@ -290,6 +294,7 @@ public class RegionDAO {
 					if ((land.getSoldier() != null) && (land.getSoldier().getType() == SoldierEnum.TOWER)) {
 						land.getSoldier().setType(SoldierEnum.CROSS);
 						land.getSoldier().setEnabled(false);
+						MySound.play(land.getPlayer(), MySound.CLIP_CASTLE);		
 					}
 				}
 			}

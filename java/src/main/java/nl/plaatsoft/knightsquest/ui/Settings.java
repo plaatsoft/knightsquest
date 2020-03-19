@@ -19,8 +19,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 package nl.plaatsoft.knightsquest.ui;
+
+import org.apache.log4j.Logger;
 
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -35,15 +36,19 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.text.TextAlignment;
+
 import nl.plaatsoft.knightsquest.network.CloudUser;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
+import nl.plaatsoft.knightsquest.tools.MyMusic;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
-import nl.plaatsoft.knightsquest.tools.MySwitch;
+import nl.plaatsoft.knightsquest.tools.MyToggleButton;
 import nl.plaatsoft.knightsquest.tools.MyComboBox;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 
 public class Settings extends MyPanel {
+	
+	final static Logger log = Logger.getLogger(Settings.class);
 	
 	private final static int MAX=8;
 	private Label[] label = new Label[MAX];
@@ -138,21 +143,51 @@ public class Settings extends MyPanel {
 		
 		y+=150;		
 
-		getChildren().add (new MyLabel(x1, y, "Music", 20));
+		getChildren().add (new MyLabel(x1, y, "Music", 18));
 		
-		y+=30;
-		getChildren().add(new MySwitch(x1-10,y));	
+		MyToggleButton btn2 = new MyToggleButton(x1-10,y+30,MyFactory.getSettingDAO().getSettings().isMusicOn(),18);		
+		getChildren().add(btn2);
+		btn2.setOnAction(new EventHandler<ActionEvent>() { 
+            public void handle(ActionEvent event) {
+            	if (MyFactory.getSettingDAO().getSettings().isMusicOn()) {
+            		btn2.setText("Off");            	
+        			MyFactory.getSettingDAO().getSettings().setMusicOn(false);
+        			MyFactory.getSettingDAO().save();
+        			MyMusic.stop();
+        		} else {
+        			btn2.setText("On");
+        			MyFactory.getSettingDAO().getSettings().setMusicOn(true);
+        			MyFactory.getSettingDAO().save();
+        			MyMusic.play();
+        		} 
+            }
+        });
+		
+		getChildren().add (new MyLabel(0, y, "Sound Effects", 18));
+		
+		MyToggleButton btn3 = new MyToggleButton(0,y+30,MyFactory.getSettingDAO().getSettings().isSoundEffectsOn(),18);		
+		getChildren().add(btn3);
+		btn3.setOnAction(new EventHandler<ActionEvent>() { 
+            public void handle(ActionEvent event) {
+            	if (MyFactory.getSettingDAO().getSettings().isSoundEffectsOn()) {
+            		btn3.setText("Off");            	
+        			MyFactory.getSettingDAO().getSettings().setSoundEffectsOn(false);
+        			MyFactory.getSettingDAO().save();
+        		} else {
+        			btn3.setText("On");
+        			MyFactory.getSettingDAO().getSettings().setSoundEffectsOn(true);
+        			MyFactory.getSettingDAO().save();
+        		} 
+            }
+        });
+		
 		        
         /* --------------------------------------- */
-        
-        y-=30;     
-        
+            
 		getChildren().add (new MyLabel(x3, y, "Size", 20 ));
-		
-		y+=30;	
-		
+				
         String[] options2 = {"640x480", "800x600", "1024x768"};
-        MyComboBox comboBox1 = new MyComboBox(x3-20, y, MyFactory.getSettingDAO().getSettings().getResolution(), options2);
+        MyComboBox comboBox1 = new MyComboBox(x3-20, y+30, MyFactory.getSettingDAO().getSettings().getResolution(), options2, 18);
         comboBox1.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event) {
         		String value =  comboBox1.getSelectionModel().getSelectedItem().toString();

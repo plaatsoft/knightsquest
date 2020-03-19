@@ -23,6 +23,7 @@ import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyListView;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
+import nl.plaatsoft.knightsquest.tools.MySound;
 
 public class Communication extends MyPanel {
 	
@@ -82,6 +83,8 @@ public class Communication extends MyPanel {
 				MyData.setMap(map);				
 	            Navigator.go(Navigator.GAME);
 	            MyFactory.getUDPServer().join(map, level);
+	            
+	            MySound.play(MyFactory.getPlayerDAO().getHumanPlayer(), MySound.CLIP_START);		
 	        }
 	    });		
 		getChildren().add(listView);

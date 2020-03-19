@@ -34,13 +34,14 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-
+import javafx.scene.media.AudioClip;
 import nl.plaatsoft.knightsquest.tools.MyButton;
 import nl.plaatsoft.knightsquest.tools.MyData;
 import nl.plaatsoft.knightsquest.tools.MyFactory;
 import nl.plaatsoft.knightsquest.tools.MyImageView;
 import nl.plaatsoft.knightsquest.tools.MyLabel;
 import nl.plaatsoft.knightsquest.tools.MyPanel;
+import nl.plaatsoft.knightsquest.tools.MySound;
 
 public class MapSelector extends MyPanel {
 
@@ -76,6 +77,8 @@ public class MapSelector extends MyPanel {
 					MyData.setMap(map);
 					MyData.setMode(MyData.MODE_1P);
 					Navigator.go(Navigator.GAME);
+					
+					MySound.play(MyFactory.getPlayerDAO().getHumanPlayer(), MySound.CLIP_START);			
 				}
 			}
 		});
